@@ -5,6 +5,6 @@ export default defineConfig({
   base: '/SingleBackgammon/',
   plugins: [react()],
   build: {
-    outDir: 'docs',
+    outDir: 'public',
   },
 });
