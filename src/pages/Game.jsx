@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Board from '../components/Board.jsx';
 import Dice from '../components/Dice.jsx';
@@ -7,6 +7,9 @@ import ChatPanel from '../components/ChatPanel.jsx';
 import BackgammonEngine from 'backgammon-engine';
 
 export default function Game() {
+  useEffect(() => {
+    console.log('Game page component mounted');
+  }, []);
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get('room');
   const navigate = useNavigate();

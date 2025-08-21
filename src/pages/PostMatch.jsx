@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function PostMatch() {
+  useEffect(() => {
+    console.log('PostMatch page component mounted');
+  }, []);
   const [summary, setSummary] = useState(null);
 
   useEffect(() => {

@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Profile() {
+  useEffect(() => {
+    console.log('Profile page component mounted');
+  }, []);
   const [profile, setProfile] = useState(() => {
     try {
       return (
