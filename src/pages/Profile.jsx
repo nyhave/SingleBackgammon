@@ -8,10 +8,12 @@ export default function Profile() {
           name: '',
           interests: '',
           playStyle: 'casual',
+          bio: '',
+          favoriteGames: '',
         }
       );
     } catch {
-      return { name: '', interests: '', playStyle: 'casual' };
+      return { name: '', interests: '', playStyle: 'casual', bio: '', favoriteGames: '' };
     }
   });
   const [editing, setEditing] = useState(!profile.name);
@@ -45,11 +47,23 @@ export default function Profile() {
         </div>
         <div>
           <label>
+            Favorite Games
+            <input name="favoriteGames" value={profile.favoriteGames} onChange={handleChange} />
+          </label>
+        </div>
+        <div>
+          <label>
             Play Style
             <select name="playStyle" value={profile.playStyle} onChange={handleChange}>
               <option value="casual">Casual</option>
               <option value="competitive">Competitive</option>
             </select>
+          </label>
+        </div>
+        <div>
+          <label>
+            Bio
+            <textarea name="bio" value={profile.bio} onChange={handleChange} />
           </label>
         </div>
         <button type="submit">Save Profile</button>
@@ -61,7 +75,9 @@ export default function Profile() {
     <div>
       <h1>{profile.name}</h1>
       {profile.interests && <p>Interests: {profile.interests}</p>}
+      {profile.favoriteGames && <p>Favorite games: {profile.favoriteGames}</p>}
       <p>Play style: {profile.playStyle}</p>
+      {profile.bio && <p>{profile.bio}</p>}
       <button onClick={() => setEditing(true)}>Edit Profile</button>
     </div>
   );

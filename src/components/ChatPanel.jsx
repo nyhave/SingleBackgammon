@@ -7,7 +7,7 @@ const PROMPTS = [
   "Do you prefer aggressive or defensive play?"
 ];
 
-export default function ChatPanel() {
+export default function ChatPanel({ roomId, onInteraction = () => {} }) {
   const [ws, setWs] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -23,14 +23,29 @@ export default function ChatPanel() {
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:8080');
+    socket.onopen = () => {
+      if (roomId) {
+        socket.send(JSON.stringify({ type: 'join-room', roomId }));
+      }
+    };
     socket.onmessage = (event) => {
-      setMessages((msgs) => [...msgs, { from: 'them', text: event.data }]);
-      lastMessageTimeRef.current = Date.now();
-      setLastWasPrompt(false);
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'chat') {
+          setMessages((msgs) => [...msgs, { from: 'them', text: data.text }]);
+          lastMessageTimeRef.current = Date.now();
+          setLastWasPrompt(false);
+          onInteraction();
+        } else if (data.type === 'system') {
+          setMessages((msgs) => [...msgs, { from: 'system', text: data.text }]);
+        }
+      } catch {
+        // ignore malformed messages
+      }
     };
     setWs(socket);
     return () => socket.close();
-  }, []);
+  }, [roomId, onInteraction]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,11 +72,14 @@ export default function ChatPanel() {
 
   const sendMessage = () => {
     if (ws && input.trim()) {
-      ws.send(input);
-      setMessages((msgs) => [...msgs, { from: 'me', text: input }]);
+      ws.send(
+        JSON.stringify({ type: 'chat', roomId, text: input.trim() })
+      );
+      setMessages((msgs) => [...msgs, { from: 'me', text: input.trim() }]);
       setInput('');
       lastMessageTimeRef.current = Date.now();
       setLastWasPrompt(false);
+      onInteraction();
     }
   };
 
