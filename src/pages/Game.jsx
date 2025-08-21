@@ -4,7 +4,7 @@ import Board from '../components/Board.jsx';
 import Dice from '../components/Dice.jsx';
 import GameControls from '../components/GameControls.jsx';
 import ChatPanel from '../components/ChatPanel.jsx';
-import BackgammonEngine from 'backgammon-engine';
+import BackgammonEngine from '../engine/BackgammonEngine.js';
 
 export default function Game() {
   useEffect(() => {
