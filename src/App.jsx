@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout.jsx';
 import Home from './pages/Home.jsx';
@@ -7,6 +8,9 @@ import Game from './pages/Game.jsx';
 import PostMatch from './pages/PostMatch.jsx';
 
 export default function App() {
+  useEffect(() => {
+    console.log('App component mounted with routes: /, profile, lobby, game, post-match');
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
