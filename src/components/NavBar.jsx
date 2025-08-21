@@ -13,16 +13,16 @@ export default function NavBar() {
       <NavLink to="/" className={linkClass} end>
         Home
       </NavLink>
-      <NavLink to="/profile" className={linkClass}>
+      <NavLink to="profile" className={linkClass}>
         Profile
       </NavLink>
-      <NavLink to="/lobby" className={linkClass}>
+      <NavLink to="lobby" className={linkClass}>
         Lobby
       </NavLink>
-      <NavLink to="/game" className={linkClass}>
+      <NavLink to="game" className={linkClass}>
         Game
       </NavLink>
-      <NavLink to="/post-match" className={linkClass}>
+      <NavLink to="post-match" className={linkClass}>
         Post Match
       </NavLink>
     </nav>
