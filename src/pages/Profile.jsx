@@ -1,3 +1,69 @@
+import { useState } from 'react';
+
 export default function Profile() {
-  return <h1>Profile</h1>;
+  const [profile, setProfile] = useState(() => {
+    try {
+      return (
+        JSON.parse(localStorage.getItem('profile')) || {
+          name: '',
+          interests: '',
+          playStyle: 'casual',
+        }
+      );
+    } catch {
+      return { name: '', interests: '', playStyle: 'casual' };
+    }
+  });
+  const [editing, setEditing] = useState(!profile.name);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile((p) => ({ ...p, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem('profile', JSON.stringify(profile));
+    setEditing(false);
+  };
+
+  if (editing) {
+    return (
+      <form onSubmit={handleSubmit}>
+        <h1>Create Profile</h1>
+        <div>
+          <label>
+            Display Name
+            <input name="name" value={profile.name} onChange={handleChange} required />
+          </label>
+        </div>
+        <div>
+          <label>
+            Interests
+            <input name="interests" value={profile.interests} onChange={handleChange} />
+          </label>
+        </div>
+        <div>
+          <label>
+            Play Style
+            <select name="playStyle" value={profile.playStyle} onChange={handleChange}>
+              <option value="casual">Casual</option>
+              <option value="competitive">Competitive</option>
+            </select>
+          </label>
+        </div>
+        <button type="submit">Save Profile</button>
+      </form>
+    );
+  }
+
+  return (
+    <div>
+      <h1>{profile.name}</h1>
+      {profile.interests && <p>Interests: {profile.interests}</p>}
+      <p>Play style: {profile.playStyle}</p>
+      <button onClick={() => setEditing(true)}>Edit Profile</button>
+    </div>
+  );
 }
+
