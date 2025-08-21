@@ -7,6 +7,8 @@ import Lobby from './pages/Lobby.jsx';
 import Game from './pages/Game.jsx';
 import PostMatch from './pages/PostMatch.jsx';
 
+console.log('App.jsx module loaded');
+
 export default function App() {
   const location = useLocation();
 

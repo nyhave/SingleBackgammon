@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+console.log('Dice.jsx module loaded');
+
 export default function Dice({ values = [] }) {
   useEffect(() => {
     console.log('Dice component mounted');

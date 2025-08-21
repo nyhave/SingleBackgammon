@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
+console.log('NavBar.jsx module loaded');
+
 const linkClass = ({ isActive }) =>
   `hover:underline${isActive ? ' font-bold' : ''}`;
 

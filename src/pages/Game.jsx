@@ -6,6 +6,8 @@ import GameControls from '../components/GameControls.jsx';
 import ChatPanel from '../components/ChatPanel.jsx';
 import BackgammonEngine from '../engine/BackgammonEngine.js';
 
+console.log('Game.jsx module loaded');
+
 export default function Game() {
   useEffect(() => {
     console.log('Game page component mounted');

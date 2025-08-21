@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
+console.log('ChatPanel.jsx module loaded');
+
 const PROMPTS = [
   "What's your strategy for the next move?",
   "That was a bold roll! How do you feel?",

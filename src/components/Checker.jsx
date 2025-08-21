@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+console.log('Checker.jsx module loaded');
+
 export default function Checker({ color }) {
   useEffect(() => {
     console.log('Checker component mounted');

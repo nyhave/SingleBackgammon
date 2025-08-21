@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+console.log('PostMatch.jsx module loaded');
+
 export default function PostMatch() {
   useEffect(() => {
     console.log('PostMatch page component mounted');
