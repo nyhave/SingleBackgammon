@@ -17,6 +17,15 @@
           window.logs.push('ERROR: ' + args.join(' '));
           origError.apply(console, args);
         };
+        window.addEventListener('error', (event) => {
+          window.logs.push('ERROR: ' + event.message);
+          origError(event.message);
+        });
+        window.addEventListener('unhandledrejection', (event) => {
+          const message = (event.reason && event.reason.message) || event.reason;
+          window.logs.push('ERROR: Unhandled promise rejection: ' + message);
+          origError('Unhandled promise rejection:', message);
+        });
       })();
     </script>
     <script
