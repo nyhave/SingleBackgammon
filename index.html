@@ -13,6 +13,12 @@
     >
       Show Console
     </button>
+    <button
+      id="clear-cache-button"
+      style="position: fixed; bottom: 10px; left: 10px; z-index: 1000;"
+    >
+      Clear Cache
+    </button>
     <div
       id="console-modal"
       style="display: none; position: fixed; top: 10%; left: 10%; width: 80%; height: 80%; background: #fff; border: 1px solid #000; z-index: 1001; padding: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);"
@@ -54,6 +60,17 @@
           });
         document.getElementById('copy-console').addEventListener('click', () => {
           navigator.clipboard.writeText(output.textContent);
+        });
+
+        const clearCacheButton = document.getElementById('clear-cache-button');
+        clearCacheButton.addEventListener('click', async () => {
+          if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map((name) => caches.delete(name)));
+          }
+          localStorage.clear();
+          sessionStorage.clear();
+          location.reload();
         });
       })();
     </script>
