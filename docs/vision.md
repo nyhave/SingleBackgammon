@@ -13,10 +13,9 @@
 
 ## 3. Spilforløb
 - **Backgammon med twist:** Spillet følger standard backgammon-regler, men inkluderer et par unikke features:
-  1. **Samtalekort:** Ved bestemte game milestones (fx når en brik føres ud), trækkes et samtalekort med sjove eller tankevækkende spørgsmål.
-  2. **Power-ups:** Spillerne kan optjene små fordele i form af "bonus-rul" eller "beskyttelsesskjold", men kun hvis de besvarer et personligt spørgsmål ærligt eller udfører en lille udfordring (fx "fortæl om dit favoritsted i verden").
-  3. **Match-progress-bar:** En bar viser, hvor godt kemien mellem spillerne udvikler sig, baseret på deres interaktioner og respons på samtalekortene.
-- **Chat og video:** Under spillet har spillerne mulighed for at chatte og kan slå video til for en mere personlig oplevelse.
+  1. **Samtalekort:** Undervejs i spillet vil hver spiller efter sit træk blive opfordret til at starte en samtale med et bestemt emne i chatten. Der skal kun ske, hvis der ikke har været skrevet i chatten i 5 minutter og aldrig efter 2 træk i træk.
+  2. **Match-progress-bar:** En bar viser, hvor godt kemien mellem spillerne udvikler sig, baseret på deres interaktioner og respons på samtalekortene.
+- **Chat og video:** Under spillet har spillerne mulighed for at chatte og kan slå video til for en mere personlig oplevelse. Videoen kan først slås til, når den fulde profil har været afsløret
 
 ## 4. Efter kampen
 - **Match-resultat:** Når spillet slutter, vises scoren og "kemibarometeret," der indikerer, hvor god en match de to er.
@@ -25,8 +24,6 @@
 
 ## 5. Sociale funktioner
 - **Ranking og challenges:** Spillerne kan udfordre hinanden til nye kampe, deltage i turneringer og optjene trofæer.
-- **Venner og grupper:** Mulighed for at oprette eller deltage i interessegrupper (fx "Vinelskere" eller "Rejsenørder") og spille round-robin-turneringer med andre singler i gruppen.
-- **Events og speed-dating matches:** Platformen arrangerer virtuelle events, hvor man spiller korte backgammon-runder med flere forskellige modstandere for at møde mange potentielle matches.
 
 ## 6. Sikkerhed og komfort
 - **Moderation:** Spilleplatformen har en aktiv moderation for at sikre god tone og tryg interaktion.
@@ -34,8 +31,6 @@
 - **Privatliv:** Deling af profiloplysninger sker kun, hvis begge parter ønsker at fortsætte kontakten efter spillet.
 
 ## 7. Monetisering og incitamenter
-- **Gratis spil:** Basisbrugere kan spille et vist antal kampe om dagen og deltage i åbne events.
-- **Premium:** Betalende medlemmer får adgang til eksklusive turneringer, ubegrænset matchmaking og flere specialkort eller power-ups.
-- **Belønninger:** Spillere optjener badges og kosmetiske bræt-brik-temaer gennem aktivitet og "chemistry achievements".
-
+- **Gratis spil:** Basisbrugere kan spille et vist antal kampe om dagen.
+- **Premium:** Betalende medlemmer får adgang til flere spil pr dag.
 **Kort sagt:** "Backgammon Blinddate" forener taktisk brætspil med den sociale spænding ved online dating. Spillet opfordrer til ægte samtaler og fælles oplevelser over backgammon-brættet og skaber et unikt sted, hvor strategi og romantik mødes.
