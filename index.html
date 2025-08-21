@@ -4,6 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Single Backgammon</title>
+    <script>
+      (function () {
+        window.logs = [];
+        const origLog = console.log;
+        const origError = console.error;
+        console.log = function (...args) {
+          window.logs.push(args.join(' '));
+          origLog.apply(console, args);
+        };
+        console.error = function (...args) {
+          window.logs.push('ERROR: ' + args.join(' '));
+          origError.apply(console, args);
+        };
+      })();
+    </script>
     <script
       src="https://cdn.tailwindcss.com"
       onload="console.log('Tailwind CSS loaded successfully.')"
@@ -41,17 +56,7 @@
     </div>
     <script>
       (function () {
-        const logs = [];
-        const origLog = console.log;
-        const origError = console.error;
-        console.log = function (...args) {
-          logs.push(args.join(' '));
-          origLog.apply(console, args);
-        };
-        console.error = function (...args) {
-          logs.push('ERROR: ' + args.join(' '));
-          origError.apply(console, args);
-        };
+        const logs = window.logs || [];
         const modal = document.getElementById('console-modal');
         const output = document.getElementById('console-output');
         document.getElementById('console-button').addEventListener('click', () => {
