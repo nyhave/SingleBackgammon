@@ -7,6 +7,56 @@
   </head>
   <body>
     <div id="root"></div>
+    <button
+      id="console-button"
+      style="position: fixed; bottom: 10px; right: 10px; z-index: 1000;"
+    >
+      Show Console
+    </button>
+    <div
+      id="console-modal"
+      style="display: none; position: fixed; top: 10%; left: 10%; width: 80%; height: 80%; background: #fff; border: 1px solid #000; z-index: 1001; padding: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);"
+    >
+      <div style="height: 100%; display: flex; flex-direction: column;">
+        <pre
+          id="console-output"
+          style="flex: 1; overflow: auto; background: #f0f0f0; padding: 10px;"
+        ></pre>
+        <div style="text-align: right; margin-top: 10px;">
+          <button id="copy-console">Copy</button>
+          <button id="dismiss-console">Dismiss</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        const logs = [];
+        const origLog = console.log;
+        const origError = console.error;
+        console.log = function (...args) {
+          logs.push(args.join(' '));
+          origLog.apply(console, args);
+        };
+        console.error = function (...args) {
+          logs.push('ERROR: ' + args.join(' '));
+          origError.apply(console, args);
+        };
+        const modal = document.getElementById('console-modal');
+        const output = document.getElementById('console-output');
+        document.getElementById('console-button').addEventListener('click', () => {
+          output.textContent = logs.join('\n');
+          modal.style.display = 'block';
+        });
+        document
+          .getElementById('dismiss-console')
+          .addEventListener('click', () => {
+            modal.style.display = 'none';
+          });
+        document.getElementById('copy-console').addEventListener('click', () => {
+          navigator.clipboard.writeText(output.textContent);
+        });
+      })();
+    </script>
     <!-- If the app fails to load, try clearing your browser cache -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
