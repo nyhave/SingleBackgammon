@@ -22,29 +22,35 @@ export default function ChatPanel({ roomId, onInteraction = () => {} }) {
   });
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8080');
-    socket.onopen = () => {
-      if (roomId) {
-        socket.send(JSON.stringify({ type: 'join-room', roomId }));
-      }
-    };
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === 'chat') {
-          setMessages((msgs) => [...msgs, { from: 'them', text: data.text }]);
-          lastMessageTimeRef.current = Date.now();
-          setLastWasPrompt(false);
-          onInteraction();
-        } else if (data.type === 'system') {
-          setMessages((msgs) => [...msgs, { from: 'system', text: data.text }]);
+    let socket;
+    try {
+      socket = new WebSocket('ws://localhost:8080');
+      socket.onopen = () => {
+        if (roomId) {
+          socket.send(JSON.stringify({ type: 'join-room', roomId }));
         }
-      } catch {
-        // ignore malformed messages
-      }
-    };
-    setWs(socket);
-    return () => socket.close();
+      };
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === 'chat') {
+            setMessages((msgs) => [...msgs, { from: 'them', text: data.text }]);
+            lastMessageTimeRef.current = Date.now();
+            setLastWasPrompt(false);
+            onInteraction();
+          } else if (data.type === 'system') {
+            setMessages((msgs) => [...msgs, { from: 'system', text: data.text }]);
+          }
+        } catch {
+          // ignore malformed messages
+        }
+      };
+      setWs(socket);
+    } catch (err) {
+      console.error('Failed to connect to chat server', err);
+      setMessages((msgs) => [...msgs, { from: 'system', text: 'Chat unavailable' }]);
+    }
+    return () => socket?.close();
   }, [roomId, onInteraction]);
 
   useEffect(() => {
@@ -102,8 +108,11 @@ export default function ChatPanel({ roomId, onInteraction = () => {} }) {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKey}
           style={{ flex: 1 }}
+          disabled={!ws}
         />
-        <button onClick={sendMessage}>Send</button>
+        <button onClick={sendMessage} disabled={!ws}>
+          Send
+        </button>
       </div>
     </div>
   );

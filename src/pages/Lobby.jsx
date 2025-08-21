@@ -4,22 +4,29 @@ import { useNavigate } from 'react-router-dom';
 export default function Lobby() {
   const [ws, setWs] = useState(null);
   const [status, setStatus] = useState('idle');
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8080');
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === 'match') {
-          navigate(`/game?room=${data.roomId}`);
+    let socket;
+    try {
+      socket = new WebSocket('ws://localhost:8080');
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === 'match') {
+            navigate(`/game?room=${data.roomId}`);
+          }
+        } catch {
+          // ignore
         }
-      } catch {
-        // ignore
-      }
-    };
-    setWs(socket);
-    return () => socket.close();
+      };
+      setWs(socket);
+    } catch (err) {
+      console.error('Failed to connect to lobby server', err);
+      setError(true);
+    }
+    return () => socket?.close();
   }, [navigate]);
 
   const joinLobby = () => {
@@ -32,10 +39,12 @@ export default function Lobby() {
   return (
     <div>
       <h1>Lobby</h1>
-      {status === 'waiting' ? (
+      {error ? (
+        <p>Lobby server unavailable.</p>
+      ) : status === 'waiting' ? (
         <p>Waiting for an opponent...</p>
       ) : (
-        <button onClick={joinLobby}>Find Match</button>
+        <button onClick={joinLobby} disabled={!ws}>Find Match</button>
       )}
     </div>
   );
