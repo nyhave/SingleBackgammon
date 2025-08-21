@@ -1,26 +1,24 @@
 import { NavLink } from 'react-router-dom';
 
-const linkStyle = ({ isActive }) => ({
-  marginRight: '1rem',
-  fontWeight: isActive ? 'bold' : 'normal',
-});
+const linkClass = ({ isActive }) =>
+  `hover:underline${isActive ? ' font-bold' : ''}`;
 
 export default function NavBar() {
   return (
-    <nav>
-      <NavLink to="/" style={linkStyle} end>
+    <nav className="bg-gray-800 p-4 text-white flex gap-4">
+      <NavLink to="/" className={linkClass} end>
         Home
       </NavLink>
-      <NavLink to="/profile" style={linkStyle}>
+      <NavLink to="/profile" className={linkClass}>
         Profile
       </NavLink>
-      <NavLink to="/lobby" style={linkStyle}>
+      <NavLink to="/lobby" className={linkClass}>
         Lobby
       </NavLink>
-      <NavLink to="/game" style={linkStyle}>
+      <NavLink to="/game" className={linkClass}>
         Game
       </NavLink>
-      <NavLink to="/post-match" style={linkStyle}>
+      <NavLink to="/post-match" className={linkClass}>
         Post Match
       </NavLink>
     </nav>
