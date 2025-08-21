@@ -77,14 +77,23 @@
     <!-- If the app fails to load, try clearing your browser cache -->
     <script type="module">
       console.log('Attempting to load built bundle...');
+      const fallbackToSource = (err) => {
+        console.error('Failed to load built bundle, falling back to source.', err);
+        import('./src/main.jsx').then(() =>
+          console.log('Loaded source entry.')
+        );
+      };
+
       import('./assets/index-BXQJKMwX.js')
-        .then(() => console.log('Loaded built bundle successfully.'))
-        .catch((err) => {
-          console.error('Failed to load built bundle, falling back to source.', err);
-          import('./src/main.jsx').then(() =>
-            console.log('Loaded source entry.')
-          );
-        });
+        .then(() => {
+          console.log('Loaded built bundle successfully.');
+          setTimeout(() => {
+            if (!document.getElementById('root').hasChildNodes()) {
+              fallbackToSource(new Error('Built bundle rendered nothing.'));
+            }
+          }, 1000);
+        })
+        .catch(fallbackToSource);
     </script>
   </body>
 </html>
