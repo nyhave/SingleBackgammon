@@ -1,4 +1,9 @@
+import { useEffect } from 'react';
+
 export default function Checker({ color }) {
+  useEffect(() => {
+    console.log('Checker component mounted');
+  }, []);
   const colorClass =
     color === 'white' ? 'bg-white' : color === 'black' ? 'bg-black' : 'bg-transparent';
 

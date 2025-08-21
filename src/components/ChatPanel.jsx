@@ -8,6 +8,9 @@ const PROMPTS = [
 ];
 
 export default function ChatPanel({ roomId, onInteraction = () => {} }) {
+  useEffect(() => {
+    console.log('ChatPanel component mounted');
+  }, []);
   const [ws, setWs] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');

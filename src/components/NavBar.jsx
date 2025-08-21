@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const linkClass = ({ isActive }) =>
   `hover:underline${isActive ? ' font-bold' : ''}`;
 
 export default function NavBar() {
+  useEffect(() => {
+    console.log('NavBar component mounted');
+  }, []);
   return (
     <nav className="bg-gray-800 p-4 text-white flex gap-4">
       <NavLink to="/" className={linkClass} end>

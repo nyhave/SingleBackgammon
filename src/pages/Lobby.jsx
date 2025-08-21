@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Lobby() {
+  useEffect(() => {
+    console.log('Lobby page component mounted');
+  }, []);
   const [ws, setWs] = useState(null);
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(false);
