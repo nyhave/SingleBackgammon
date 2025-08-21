@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout.jsx';
 import Home from './pages/Home.jsx';
 import Profile from './pages/Profile.jsx';
@@ -20,6 +20,7 @@ export default function App() {
         <Route path="game" element={<Game />} />
         <Route path="post-match" element={<PostMatch />} />
       </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
