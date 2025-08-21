@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+console.log('GameControls.jsx module loaded');
+
 export default function GameControls({ onRoll, onReset, onEnd }) {
   useEffect(() => {
     console.log('GameControls component mounted');

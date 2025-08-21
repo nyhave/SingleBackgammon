@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+console.log('Profile.jsx module loaded');
+
 export default function Profile() {
   useEffect(() => {
     console.log('Profile page component mounted');

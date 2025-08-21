@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+console.log('Lobby.jsx module loaded');
+
 export default function Lobby() {
   useEffect(() => {
     console.log('Lobby page component mounted');

@@ -1,6 +1,8 @@
 import Checker from './Checker.jsx';
 import { useEffect } from 'react';
 
+console.log('Board.jsx module loaded');
+
 // Render a 24-point board. If no board data is provided, we fall back to an
 // empty board so the layout is still visible.
 const EMPTY_BOARD = Array.from({ length: 24 }, () => ({ color: null, count: 0 }));
