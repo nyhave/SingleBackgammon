@@ -6,5 +6,11 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'public',
+    // Disable minification and tree-shaking so console logs remain in the
+    // production bundle, making it easier to debug issues in the deployed app.
+    minify: false,
+    rollupOptions: {
+      treeshake: false,
+    },
   },
 });
