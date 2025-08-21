@@ -7,13 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "echo \"No tests\""
+    "test": "echo \"No tests\"",
+    "lobby": "node server.js"
   },
   "dependencies": {
     "backgammon-engine": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "ws": "^8.15.0"
   },
   "devDependencies": {
     "vite": "^5.2.0",
