@@ -77,11 +77,11 @@
     <!-- If the app fails to load, try clearing your browser cache -->
     <script type="module">
       console.log('Attempting to load built bundle...');
-      import('/assets/index-BXQJKMwX.js')
+      import('./assets/index-BXQJKMwX.js')
         .then(() => console.log('Loaded built bundle successfully.'))
         .catch((err) => {
           console.error('Failed to load built bundle, falling back to source.', err);
-          import('/src/main.jsx').then(() =>
+          import('./src/main.jsx').then(() =>
             console.log('Loaded source entry.')
           );
         });
