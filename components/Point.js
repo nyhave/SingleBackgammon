@@ -33,7 +33,7 @@ const Point = ({ point, index, selected, onClick }) => {
     },
     React.createElement('div', {
       className: `absolute w-0 h-0 border-l-[16px] border-r-[16px] ${
-        isTop ? 'border-b-[96px]' : 'border-t-[96px]'
+        isTop ? 'border-b-[128px]' : 'border-t-[128px]'
       } border-l-transparent border-r-transparent ${colorClass} ${
         isTop ? 'top-0' : 'bottom-0'
       } left-1/2 -translate-x-1/2`,
