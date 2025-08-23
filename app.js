@@ -47,29 +47,35 @@ const Point = (point, index) => {
   );
 };
 
-// Board component rendering 24 points
-const Board = () => {
-  const initialPoints = React.useMemo(() => {
-    const pts = Array(24)
-      .fill(null)
-      .map(() => ({ color: null, count: 0 }));
+// initial setup for the board state
+const createInitialPoints = () => {
+  const pts = Array(24)
+    .fill(null)
+    .map(() => ({ color: null, count: 0 }));
 
-    // White checkers
-    pts[0] = { color: 'white', count: 5 }; // point 13
-    pts[11] = { color: 'white', count: 2 }; // point 24
-    pts[16] = { color: 'white', count: 3 }; // point 8
-    pts[18] = { color: 'white', count: 5 }; // point 6
+  // White checkers
+  pts[0] = { color: 'white', count: 5 }; // point 13
+  pts[11] = { color: 'white', count: 2 }; // point 24
+  pts[16] = { color: 'white', count: 3 }; // point 8
+  pts[18] = { color: 'white', count: 5 }; // point 6
 
-    // Black checkers
-    pts[23] = { color: 'black', count: 2 }; // point 1
-    pts[12] = { color: 'black', count: 5 }; // point 12
-    pts[4] = { color: 'black', count: 3 }; // point 17
-    pts[6] = { color: 'black', count: 5 }; // point 19
+  // Black checkers
+  pts[23] = { color: 'black', count: 2 }; // point 1
+  pts[12] = { color: 'black', count: 5 }; // point 12
+  pts[4] = { color: 'black', count: 3 }; // point 17
+  pts[6] = { color: 'black', count: 5 }; // point 19
 
-    return pts;
-  }, []);
+  return pts;
+};
 
-  const [points] = React.useState(initialPoints);
+// Game definition handled by boardgame.io
+const Backgammon = {
+  setup: () => ({ points: createInitialPoints() }),
+};
+
+// Board component rendering 24 points using game state
+const Board = ({ G }) => {
+  const points = G.points;
 
   return React.createElement(
     'div',
@@ -87,7 +93,9 @@ const Board = () => {
   );
 };
 
-const App = () => React.createElement(Board);
+const { Client } = boardgameio;
+
+const App = Client({ game: Backgammon, board: Board });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(React.createElement(App));
