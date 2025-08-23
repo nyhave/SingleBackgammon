@@ -28,61 +28,52 @@ const createInitialPoints = () => {
   return pts;
 };
 
-const Backgammon = {
-  setup: () => ({ points: createInitialPoints(), dice: rollDice() }),
-  turn: {
-    onBegin(G) {
-      G.dice = rollDice();
-    },
-  },
-  moves: {
-    moveChecker(G, ctx, from, to) {
-      const color = ctx.currentPlayer === '0' ? 'white' : 'black';
-      const distance = Math.abs(to - from);
-      if (!Array.isArray(G.dice) || !G.dice.includes(distance)) return G;
-      const source = G.points[from];
-      const target = G.points[to];
-      if (source.color !== color || source.count === 0) return G;
-      if (target.color && target.color !== color && target.count > 1) return G;
+const moveChecker = (state, player, from, to) => {
+  const color = player === '0' ? 'white' : 'black';
+  const distance = Math.abs(to - from);
+  if (!Array.isArray(state.dice) || !state.dice.includes(distance)) return state;
+  const source = state.points[from];
+  const target = state.points[to];
+  if (source.color !== color || source.count === 0) return state;
+  if (target.color && target.color !== color && target.count > 1) return state;
 
-      const points = G.points.map((p) => ({ ...p }));
-      const src = points[from];
-      const tgt = points[to];
+  const points = state.points.map((p) => ({ ...p }));
+  const src = points[from];
+  const tgt = points[to];
 
-      src.count--;
-      if (src.count === 0) src.color = null;
+  src.count--;
+  if (src.count === 0) src.color = null;
 
-      if (tgt.color && tgt.color !== color && tgt.count === 1) {
-        tgt.color = color;
-        tgt.count = 1;
-      } else {
-        if (!tgt.color) tgt.color = color;
-        tgt.count++;
-      }
+  if (tgt.color && tgt.color !== color && tgt.count === 1) {
+    tgt.color = color;
+    tgt.count = 1;
+  } else {
+    if (!tgt.color) tgt.color = color;
+    tgt.count++;
+  }
 
-      const dice = [...G.dice];
-      const dieIndex = dice.indexOf(distance);
-      if (dieIndex >= 0) dice.splice(dieIndex, 1);
-      if (dice.length === 0) ctx.events.endTurn();
+  const dice = [...state.dice];
+  const dieIndex = dice.indexOf(distance);
+  if (dieIndex >= 0) dice.splice(dieIndex, 1);
 
-      return { ...G, points, dice };
-    },
-  },
-  endIf: (G) => {
-    if (!Array.isArray(G?.points)) return;
-    const whiteTotal = G.points
-      .filter((p) => p.color === 'white')
-      .reduce((sum, p) => sum + p.count, 0);
-    const blackTotal = G.points
-      .filter((p) => p.color === 'black')
-      .reduce((sum, p) => sum + p.count, 0);
-    const whiteHome =
-      G.points[23].color === 'white' && G.points[23].count === whiteTotal;
-    const blackHome =
-      G.points[0].color === 'black' && G.points[0].count === blackTotal;
-    if (whiteHome) return { winner: '0' };
-    if (blackHome) return { winner: '1' };
-  },
+  return { points, dice };
 };
 
-export { rollDie, createInitialPoints, Backgammon };
+const getWinner = (points) => {
+  if (!Array.isArray(points)) return null;
+  const whiteTotal = points
+    .filter((p) => p.color === 'white')
+    .reduce((sum, p) => sum + p.count, 0);
+  const blackTotal = points
+    .filter((p) => p.color === 'black')
+    .reduce((sum, p) => sum + p.count, 0);
+  const whiteHome =
+    points[23].color === 'white' && points[23].count === whiteTotal;
+  const blackHome =
+    points[0].color === 'black' && points[0].count === blackTotal;
+  if (whiteHome) return '0';
+  if (blackHome) return '1';
+  return null;
+};
+
+export { rollDie, rollDice, createInitialPoints, moveChecker, getWinner };
