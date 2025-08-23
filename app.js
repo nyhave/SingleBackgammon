@@ -72,9 +72,10 @@ const Point = ({ point, index, selected, onClick }) => {
   );
 };
 
-// Simple component to render dice values as squares with numbers.
+// Simple component to render dice values using traditional pip faces.
 const Dice = ({ values }) => {
   if (!Array.isArray(values)) return null;
+  const faces = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685'];
   return React.createElement(
     'div',
     { className: 'flex space-x-2 justify-center mt-2' },
@@ -84,13 +85,17 @@ const Dice = ({ values }) => {
         {
           key: i,
           className:
-            'w-8 h-8 flex items-center justify-center border border-gray-800 rounded bg-white',
+            'w-8 h-8 flex items-center justify-center border border-gray-800 rounded bg-white text-2xl',
+          'aria-label': `Die showing ${value}`,
         },
-        value
+        faces[value - 1]
       )
     )
   );
 };
+
+// Utility to roll a single six-sided die.
+const rollDie = () => Math.floor(Math.random() * 6) + 1;
 
 // initial setup for the board state
 const createInitialPoints = () => {
@@ -115,7 +120,12 @@ const createInitialPoints = () => {
 
 // Game definition handled by boardgame.io
 const Backgammon = {
-  setup: () => ({ points: createInitialPoints(), dice: [] }),
+  setup: () => {
+    const d1 = rollDie();
+    const d2 = rollDie();
+    const dice = d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
+    return { points: createInitialPoints(), dice };
+  },
   moves: {
     moveChecker(G, ctx, from, to) {
       const color = ctx.currentPlayer === '0' ? 'white' : 'black';
@@ -144,10 +154,9 @@ const Backgammon = {
   },
   turn: {
     onBegin(G, ctx) {
-      // ctx.random is undefined when the Random plugin isn't used,
-      // so roll dice using Math.random instead to avoid runtime errors.
-      const rollDie = () => Math.floor(Math.random() * 6) + 1;
-      G.dice = [rollDie(), rollDie()];
+      const d1 = rollDie();
+      const d2 = rollDie();
+      G.dice = d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
     },
   },
 };
