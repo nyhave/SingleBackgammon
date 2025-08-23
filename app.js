@@ -3,8 +3,15 @@
 // which causes React to warn that the element type is invalid.
 import { Client } from 'https://esm.sh/boardgame.io/react';
 
-// Represents a single point on the board
-const Point = (point, index, selected, onClick) => {
+// Represents a single point on the board.
+//
+// Previously this was implemented as a simple function returning a React
+// element. While React can handle arrays of elements as children, calling
+// that function directly and returning the element occasionally resulted in
+// "Objects are not valid as a React child" errors when React attempted to
+// reconcile the array.  Rewriting it as a standard component makes the
+// intent explicit and avoids the error.
+const Point = ({ point, index, selected, onClick }) => {
   const isTop = index < 12;
   const colorClass = index % 2 === 0
     ? isTop
@@ -29,7 +36,6 @@ const Point = (point, index, selected, onClick) => {
   return React.createElement(
     'div',
     {
-      key: index,
       'data-point': index,
       onClick,
       className: `relative w-8 h-32 flex justify-center items-center cursor-pointer ${
@@ -50,7 +56,7 @@ const Point = (point, index, selected, onClick) => {
           isTop ? 'justify-end' : 'justify-start'
         } items-center ${isTop ? 'bottom-0' : 'top-0'}`,
       },
-      checkers
+      ...checkers
     )
   );
 };
@@ -169,16 +175,28 @@ const Board = ({ G, ctx, moves, events }) => {
     React.createElement(
       'div',
       { className: 'grid grid-cols-12 gap-1' },
-      points
-        .slice(0, 12)
-        .map((p, i) => Point(p, i, selected === i, () => handlePointClick(i)))
+      ...points.slice(0, 12).map((p, i) =>
+        React.createElement(Point, {
+          key: i,
+          point: p,
+          index: i,
+          selected: selected === i,
+          onClick: () => handlePointClick(i),
+        })
+      )
     ),
     React.createElement(
       'div',
       { className: 'grid grid-cols-12 gap-1' },
-      points
-        .slice(12)
-        .map((p, i) => Point(p, i + 12, selected === i + 12, () => handlePointClick(i + 12)))
+      ...points.slice(12).map((p, i) =>
+        React.createElement(Point, {
+          key: i + 12,
+          point: p,
+          index: i + 12,
+          selected: selected === i + 12,
+          onClick: () => handlePointClick(i + 12),
+        })
+      )
     ),
     React.createElement(
       'button',
