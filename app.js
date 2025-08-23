@@ -156,6 +156,7 @@ const Backgammon = {
 const Board = ({ G, ctx, moves, events }) => {
   const points = G.points;
   const [selected, setSelected] = React.useState(null);
+  const [showInstructions, setShowInstructions] = React.useState(true);
 
   const handlePointClick = (index) => {
     if (ctx.currentPlayer !== '0') return;
@@ -196,6 +197,36 @@ const Board = ({ G, ctx, moves, events }) => {
   return React.createElement(
     'div',
     { className: 'mx-auto text-center' },
+    showInstructions &&
+      React.createElement(
+        'div',
+        {
+          className:
+            'fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50',
+        },
+        React.createElement(
+          'div',
+          { className: 'bg-white p-4 rounded shadow max-w-sm text-left' },
+          React.createElement(
+            'h2',
+            { className: 'text-lg font-bold mb-2' },
+            'How to Play'
+          ),
+          React.createElement(
+            'p',
+            { className: 'mb-4 text-sm' },
+            'Click one of your white checkers, then click a destination point allowed by the dice. Press End Turn to roll and let the black player move. Bear off all your checkers first to win.'
+          ),
+          React.createElement(
+            'button',
+            {
+              className: 'mt-2 px-4 py-2 bg-blue-500 text-white rounded',
+              onClick: () => setShowInstructions(false),
+            },
+            'Start'
+          )
+        )
+      ),
     React.createElement(
       'div',
       { className: 'mb-4 flex flex-col items-center' },
