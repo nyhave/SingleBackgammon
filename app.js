@@ -96,6 +96,15 @@ const Dice = ({ values }) => {
 // Utility to roll a single six-sided die.
 const rollDie = () => Math.floor(Math.random() * 6) + 1;
 
+// Roll two dice and return the appropriate array of values.
+// Doubles are represented by four copies of the value as in standard
+// backgammon rules.
+const rollDiceValues = () => {
+  const d1 = rollDie();
+  const d2 = rollDie();
+  return d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
+};
+
 // initial setup for the board state
 const createInitialPoints = () => {
   const pts = Array(24)
@@ -119,12 +128,10 @@ const createInitialPoints = () => {
 
 // Game definition handled by boardgame.io
 const Backgammon = {
-  setup: () => ({ points: createInitialPoints(), dice: [] }),
+  setup: () => ({ points: createInitialPoints(), dice: rollDiceValues() }),
   turn: {
     onBegin(G) {
-      const d1 = rollDie();
-      const d2 = rollDie();
-      G.dice = d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
+      G.dice = rollDiceValues();
     },
   },
   moves: {
