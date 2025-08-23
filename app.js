@@ -1,5 +1,4 @@
 import { Client } from 'https://esm.sh/boardgame.io/client';
-import { Random } from 'https://esm.sh/boardgame.io/random';
 
 // Represents a single point on the board
 const Point = (point, index, selected, onClick) => {
@@ -108,7 +107,6 @@ const Backgammon = {
       G.dice = [ctx.random.D6(), ctx.random.D6()];
     },
   },
-  plugins: [Random()],
 };
 
 // Board component rendering 24 points using game state
