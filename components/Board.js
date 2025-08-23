@@ -6,6 +6,7 @@ import {
   createInitialPoints,
   moveChecker as applyMove,
   getWinner,
+  allInHome,
 } from '../game.js';
 
 const Board = () => {
@@ -55,12 +56,23 @@ const Board = () => {
       const color = currentPlayer === '0' ? 'white' : 'black';
       const direction = currentPlayer === '0' ? 1 : -1;
       const targets = new Set();
+      const inHome = allInHome(points, color);
       dice.forEach((die) => {
         const dest = from + die * direction;
         if (dest >= 0 && dest <= 23) {
           const t = points[dest];
           if (!t.color || t.color === color || t.count === 1) {
             targets.add(dest);
+          }
+        } else if (inHome) {
+          if (color === 'white') {
+            const noBehind = points.slice(0, from).every((p) => p.color !== 'white');
+            if (dest > 23 && noBehind) targets.add(dest);
+          } else {
+            const noBehind = points
+              .slice(from + 1)
+              .every((p) => p.color !== 'black');
+            if (dest < 0 && noBehind) targets.add(dest);
           }
         }
       });
@@ -81,6 +93,14 @@ const Board = () => {
       moveChecker(selected, index);
       setSelected(null);
       setPossibleMoves([]);
+    } else if (
+      index === selected &&
+      possibleMoves.some((m) => m < 0 || m > 23)
+    ) {
+      const off = possibleMoves.find((m) => m < 0 || m > 23);
+      moveChecker(selected, off);
+      setSelected(null);
+      setPossibleMoves([]);
     } else if (point.color === 'white' && point.count > 0) {
       setSelected(index);
       setPossibleMoves(calculateMoves(index));
@@ -94,6 +114,7 @@ const Board = () => {
     const color = currentPlayer === '0' ? 'white' : 'black';
     const direction = currentPlayer === '0' ? 1 : -1;
     const possible = [];
+    const inHome = allInHome(points, color);
 
     for (let i = 0; i < 24; i++) {
       const p = points[i];
@@ -104,6 +125,18 @@ const Board = () => {
             const t = points[dest];
             if (!t.color || t.color === color || t.count === 1) {
               possible.push([i, dest]);
+            }
+          } else if (inHome) {
+            if (color === 'white') {
+              const noBehind = points
+                .slice(0, i)
+                .every((pnt) => pnt.color !== 'white');
+              if (dest > 23 && noBehind) possible.push([i, dest]);
+            } else {
+              const noBehind = points
+                .slice(i + 1)
+                .every((pnt) => pnt.color !== 'black');
+              if (dest < 0 && noBehind) possible.push([i, dest]);
             }
           }
         });
@@ -187,7 +220,7 @@ const Board = () => {
             React.createElement(
               'li',
               null,
-              'Once all your checkers are in your home board you can bear them off.'
+              'Once all your checkers are in your home board you can bear them off by double-clicking a checker.'
             )
           ),
           React.createElement(

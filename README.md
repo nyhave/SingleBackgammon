@@ -4,7 +4,7 @@ Single Backgammon is a single-player backgammon implementation built with plain 
 
 ## How to play
 
-Roll the dice with the **Roll** button or press **Enter**. Selecting a checker highlights its legal destinations; click a highlighted point to move. Use the **Help** button at any time to read instructions.
+Roll the dice with the **Roll** button or press **Enter**. Selecting a checker highlights its legal destinations; click a highlighted point to move. Once all your checkers are in your home board, double-click a checker to bear it off. Use the **Help** button at any time to read instructions.
 
 ## Features so far
 
@@ -14,6 +14,7 @@ Roll the dice with the **Roll** button or press **Enter**. Selecting a checker h
 - Startup instructions overlay and an in-game help dialog explain the rules.
 - A cache-clearing reload button is available for development or troubleshooting.
 - A log button captures the current game state to the console for debugging.
+- Checkers can be borne off from the home board by double-clicking.
 
 ## Development
 

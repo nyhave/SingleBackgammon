@@ -28,18 +28,56 @@ const createInitialPoints = () => {
   return pts;
 };
 
+const allInHome = (points, color) => {
+  if (color === 'white') {
+    for (let i = 0; i < 18; i++) {
+      if (points[i].color === 'white') return false;
+    }
+  } else {
+    for (let i = 6; i < 24; i++) {
+      if (points[i].color === 'black') return false;
+    }
+  }
+  return true;
+};
+
 export const moveChecker = (state, player, from, to) => {
   const color = player === '0' ? 'white' : 'black';
-  const distance = Math.abs(to - from);
-  if (!state.dice.includes(distance)) return null;
+  const direction = color === 'white' ? 1 : -1;
+  const distance = (to - from) * direction;
+  if (distance <= 0 || !state.dice.includes(distance)) return null;
 
   const source = state.points[from];
-  const target = state.points[to];
   if (source.color !== color || source.count === 0) return null;
-  if (target.color && target.color !== color && target.count > 1) return null;
 
   const points = state.points.map((p) => ({ ...p }));
   const src = points[from];
+
+  if (to < 0 || to > 23) {
+    if (!allInHome(state.points, color)) return null;
+    if (color === 'white') {
+      for (let i = 0; i < from; i++) {
+        if (state.points[i].color === 'white') return null;
+      }
+    } else {
+      for (let i = from + 1; i < 24; i++) {
+        if (state.points[i].color === 'black') return null;
+      }
+    }
+
+    src.count--;
+    if (src.count === 0) src.color = null;
+
+    const dice = [...state.dice];
+    const dieIndex = dice.indexOf(distance);
+    dice.splice(dieIndex, 1);
+
+    return { points, dice };
+  }
+
+  const target = state.points[to];
+  if (target.color && target.color !== color && target.count > 1) return null;
+
   const tgt = points[to];
 
   src.count--;
@@ -67,13 +105,9 @@ const getWinner = (points) => {
   const blackTotal = points
     .filter((p) => p.color === 'black')
     .reduce((sum, p) => sum + p.count, 0);
-  const whiteHome =
-    points[23].color === 'white' && points[23].count === whiteTotal;
-  const blackHome =
-    points[0].color === 'black' && points[0].count === blackTotal;
-  if (whiteHome) return '0';
-  if (blackHome) return '1';
+  if (whiteTotal === 0) return '0';
+  if (blackTotal === 0) return '1';
   return null;
 };
 
-export { rollDie, rollDice, createInitialPoints, getWinner };
+export { rollDie, rollDice, createInitialPoints, getWinner, allInHome };
