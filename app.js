@@ -104,7 +104,10 @@ const Backgammon = {
   },
   turn: {
     onBegin(G, ctx) {
-      G.dice = [ctx.random.D6(), ctx.random.D6()];
+      // ctx.random is undefined when the Random plugin isn't used,
+      // so roll dice using Math.random instead to avoid runtime errors.
+      const rollDie = () => Math.floor(Math.random() * 6) + 1;
+      G.dice = [rollDie(), rollDie()];
     },
   },
 };
