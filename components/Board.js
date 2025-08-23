@@ -7,9 +7,10 @@ const Board = ({ G, ctx, moves, events }) => {
   const [selected, setSelected] = React.useState(null);
   const [showInstructions, setShowInstructions] = React.useState(true);
   const [autoPlay, setAutoPlay] = React.useState(false);
+  const [stepPlay, setStepPlay] = React.useState(false);
 
   const handlePointClick = (index) => {
-    if (autoPlay || ctx.currentPlayer !== '0') return;
+    if (autoPlay || stepPlay || ctx.currentPlayer !== '0') return;
     const point = points[index];
     if (selected === null) {
       if (point.color === 'white' && point.count > 0) {
@@ -21,10 +22,7 @@ const Board = ({ G, ctx, moves, events }) => {
     }
   };
 
-  React.useEffect(() => {
-    const isAI = autoPlay || ctx.currentPlayer === '1';
-    if (!isAI || ctx.gameover) return;
-
+  const makeAIMove = React.useCallback(() => {
     const color = ctx.currentPlayer === '0' ? 'white' : 'black';
     const direction = ctx.currentPlayer === '0' ? 1 : -1;
     const possible = [];
@@ -44,18 +42,20 @@ const Board = ({ G, ctx, moves, events }) => {
       }
     }
 
-    const makeMove = () => {
-      if (possible.length > 0) {
-        const [from, to] = possible[Math.floor(Math.random() * possible.length)];
-        moves.moveChecker(from, to);
-      } else {
-        events.endTurn();
-      }
-    };
+    if (possible.length > 0) {
+      const [from, to] = possible[Math.floor(Math.random() * possible.length)];
+      moves.moveChecker(from, to);
+    } else {
+      events.endTurn();
+    }
+  }, [ctx.currentPlayer, points, G.dice, moves, events]);
 
-    const timer = setTimeout(makeMove, 500);
+  React.useEffect(() => {
+    const isAuto = autoPlay || (!stepPlay && ctx.currentPlayer === '1');
+    if (!isAuto || ctx.gameover) return;
+    const timer = setTimeout(makeAIMove, 500);
     return () => clearTimeout(timer);
-  }, [ctx.turn, G.dice, autoPlay]);
+  }, [ctx.turn, G.dice, autoPlay, stepPlay, makeAIMove, ctx.gameover]);
 
   return React.createElement(
     'div',
@@ -94,7 +94,7 @@ const Board = ({ G, ctx, moves, events }) => {
               className: 'mt-2 ml-2 px-4 py-2 bg-green-500 text-white rounded',
               onClick: () => {
                 setShowInstructions(false);
-                setAutoPlay(true);
+                setStepPlay(true);
               },
             },
             'Autoplay'
@@ -146,20 +146,32 @@ const Board = ({ G, ctx, moves, events }) => {
     React.createElement(
       'div',
       { className: 'mt-4 flex justify-center space-x-2' },
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-blue-500 text-white rounded',
-          onClick: () => events.endTurn(),
-          disabled: autoPlay,
-        },
-        'End Turn'
-      ),
+      stepPlay
+        ? React.createElement(
+            'button',
+            {
+              className: 'px-4 py-2 bg-blue-500 text-white rounded',
+              onClick: () => makeAIMove(),
+            },
+            'Next'
+          )
+        : React.createElement(
+            'button',
+            {
+              className: 'px-4 py-2 bg-blue-500 text-white rounded',
+              onClick: () => events.endTurn(),
+              disabled: autoPlay,
+            },
+            'End Turn'
+          ),
       React.createElement(
         'button',
         {
           className: 'px-4 py-2 bg-green-500 text-white rounded',
-          onClick: () => setAutoPlay(true),
+          onClick: () => {
+            setAutoPlay(true);
+            setStepPlay(false);
+          },
           disabled: autoPlay,
         },
         'Autoplay'
