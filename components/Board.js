@@ -3,7 +3,8 @@ import Point from './Point.js';
 import Dice from './Dice.js';
 
 const Board = ({ G, ctx, moves, events }) => {
-  const points = G.points;
+  // Ensure points is always an array to prevent runtime errors during rendering
+  const points = Array.isArray(G?.points) ? G.points : [];
   const [selected, setSelected] = React.useState(null);
   const [possibleMoves, setPossibleMoves] = React.useState([]);
   const [showInstructions, setShowInstructions] = React.useState(false);
@@ -40,7 +41,7 @@ const Board = ({ G, ctx, moves, events }) => {
         const dest = from + die * direction;
         if (dest >= 0 && dest <= 23) {
           const t = points[dest];
-          if (!t.color || t.color === color || t.count === 1) {
+          if (!t || !t.color || t.color === color || t.count === 1) {
             targets.add(dest);
           }
         }
@@ -53,6 +54,7 @@ const Board = ({ G, ctx, moves, events }) => {
   const handlePointClick = (index) => {
     if (autoPlay || stepPlay || ctx.currentPlayer !== '0') return;
     const point = points[index];
+    if (!point) return;
     if (selected === null) {
       if (point.color === 'white' && point.count > 0) {
         setSelected(index);
