@@ -14,16 +14,16 @@ const createInitialPoints = () => {
     .map(() => ({ color: null, count: 0 }));
 
   // White checkers
-  pts[0] = { color: 'white', count: 5 }; // point 13
-  pts[11] = { color: 'white', count: 2 }; // point 24
+  pts[0] = { color: 'white', count: 2 }; // point 24
+  pts[11] = { color: 'white', count: 5 }; // point 13
   pts[16] = { color: 'white', count: 3 }; // point 8
   pts[18] = { color: 'white', count: 5 }; // point 6
 
   // Black checkers
   pts[23] = { color: 'black', count: 2 }; // point 1
   pts[12] = { color: 'black', count: 5 }; // point 12
-  pts[4] = { color: 'black', count: 3 }; // point 17
-  pts[6] = { color: 'black', count: 5 }; // point 19
+  pts[7] = { color: 'black', count: 3 }; // point 17
+  pts[5] = { color: 'black', count: 5 }; // point 19
 
   return pts;
 };
