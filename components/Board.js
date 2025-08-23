@@ -114,7 +114,10 @@ const Board = ({ G, ctx, moves, events }) => {
         },
         React.createElement(
           'div',
-          { className: 'bg-white p-4 rounded shadow max-w-sm text-left' },
+          {
+            className:
+              'bg-white p-4 rounded shadow max-w-sm text-left overflow-y-auto max-h-[90vh]',
+          },
           React.createElement(
             'h2',
             { className: 'text-lg font-bold mb-2' },
@@ -122,8 +125,62 @@ const Board = ({ G, ctx, moves, events }) => {
           ),
           React.createElement(
             'p',
+            { className: 'mb-2 text-sm' },
+            'Move all your white checkers around the board and bear them off before the computer does.'
+          ),
+          React.createElement(
+            'ol',
+            { className: 'mb-2 list-decimal pl-5 text-sm space-y-1' },
+            React.createElement('li', null, 'Click a white checker to select it.'),
+            React.createElement(
+              'li',
+              null,
+              'Click a destination point that matches one of the dice values.'
+            ),
+            React.createElement(
+              'li',
+              null,
+              'Hitting a lone opposing checker sends it to the bar.'
+            ),
+            React.createElement(
+              'li',
+              null,
+              'Once all your checkers are in your home board you can bear them off.'
+            )
+          ),
+          React.createElement(
+            'p',
+            { className: 'mb-2 text-sm' },
+            'Buttons below the board provide extra options:'
+          ),
+          React.createElement(
+            'ul',
+            { className: 'mb-4 list-disc pl-5 text-sm space-y-1' },
+            React.createElement(
+              'li',
+              null,
+              'End Turn: roll the dice and pass play to the computer opponent.'
+            ),
+            React.createElement(
+              'li',
+              null,
+              'Step: watch the computer play one move at a time. Press Next for each move.'
+            ),
+            React.createElement(
+              'li',
+              null,
+              'Autoplay: let the computer control both sides automatically.'
+            ),
+            React.createElement(
+              'li',
+              null,
+              'Reload Game: clear cached data and restart the match.'
+            )
+          ),
+          React.createElement(
+            'p',
             { className: 'mb-4 text-sm' },
-            'Click one of your white checkers, then click a destination point allowed by the dice. Press End Turn to roll and let the black player move. Bear off all your checkers first to win.'
+            'First player to bear off all their checkers wins.'
           ),
           React.createElement(
             'button',
