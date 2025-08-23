@@ -120,6 +120,13 @@ const createInitialPoints = () => {
 // Game definition handled by boardgame.io
 const Backgammon = {
   setup: () => ({ points: createInitialPoints(), dice: [] }),
+  turn: {
+    onBegin(G) {
+      const d1 = rollDie();
+      const d2 = rollDie();
+      G.dice = d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
+    },
+  },
   moves: {
     moveChecker(G, ctx, from, to) {
       const color = ctx.currentPlayer === '0' ? 'white' : 'black';
@@ -145,11 +152,6 @@ const Backgammon = {
       if (dieIndex >= 0) G.dice.splice(dieIndex, 1);
       if (G.dice.length === 0) ctx.events.endTurn();
     },
-    rollDice(G) {
-      const d1 = rollDie();
-      const d2 = rollDie();
-      G.dice = d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
-    },
   },
 };
 
@@ -173,10 +175,6 @@ const Board = ({ G, ctx, moves, events }) => {
   };
 
   React.useEffect(() => {
-    if (!Array.isArray(G.dice) || G.dice.length === 0) {
-      moves.rollDice();
-      return;
-    }
     if (ctx.currentPlayer === '1') {
       const possible = [];
       for (let i = 0; i < 24; i++) {
