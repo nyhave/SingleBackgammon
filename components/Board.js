@@ -19,6 +19,7 @@ const Board = () => {
   const [showInstructions, setShowInstructions] = React.useState(false);
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
+  const [lastMove, setLastMove] = React.useState(null);
 
   const endTurn = () => {
     setCurrentPlayer((p) => (p === '0' ? '1' : '0'));
@@ -31,6 +32,7 @@ const Board = () => {
     if (!result.points) return;
     setPoints(result.points);
     setDice(result.dice);
+    setLastMove({ from, to });
     if (result.dice.length === 0) endTurn();
     const winner = getWinner(result.points);
     if (winner) setGameover({ winner });
@@ -330,6 +332,8 @@ const Board = () => {
           index: i,
           selected: selected === i,
           highlighted: possibleMoves.includes(i),
+          movedFrom: lastMove && lastMove.from === i,
+          movedTo: lastMove && lastMove.to === i,
           onClick: () => handlePointClick(i),
         })
       )
@@ -344,6 +348,8 @@ const Board = () => {
           index: i + 12,
           selected: selected === i + 12,
           highlighted: possibleMoves.includes(i + 12),
+          movedFrom: lastMove && lastMove.from === i + 12,
+          movedTo: lastMove && lastMove.to === i + 12,
           onClick: () => handlePointClick(i + 12),
         })
       )
