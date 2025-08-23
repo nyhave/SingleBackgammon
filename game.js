@@ -62,6 +62,7 @@ const Backgammon = {
     },
   },
   endIf: (G) => {
+    if (!Array.isArray(G?.points)) return;
     const whiteTotal = G.points
       .filter((p) => p.color === 'white')
       .reduce((sum, p) => sum + p.count, 0);
