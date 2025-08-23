@@ -29,7 +29,7 @@ const Board = () => {
 
   const moveChecker = (from, to) => {
     const result = applyMove({ points, dice }, currentPlayer, from, to);
-    if (!result.points) return;
+    if (!result) return;
     setPoints(result.points);
     setDice(result.dice);
     setLastMove({ from, to });
@@ -59,7 +59,7 @@ const Board = () => {
         const dest = from + die * direction;
         if (dest >= 0 && dest <= 23) {
           const t = points[dest];
-          if (!t || !t.color || t.color === color || t.count === 1) {
+          if (!t.color || t.color === color || t.count === 1) {
             targets.add(dest);
           }
         }
@@ -72,7 +72,6 @@ const Board = () => {
   const handlePointClick = (index) => {
     if (autoPlay || stepPlay || currentPlayer !== '0') return;
     const point = points[index];
-    if (!point) return;
     if (selected === null) {
       if (point.color === 'white' && point.count > 0) {
         setSelected(index);

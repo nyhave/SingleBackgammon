@@ -1,8 +1,7 @@
 import React from 'https://esm.sh/react@18.3.1';
 
-const Dice = ({ values }) => {
-  if (!Array.isArray(values)) return null;
-  return React.createElement(
+const Dice = ({ values }) =>
+  React.createElement(
     'div',
     { className: 'flex space-x-2 justify-center mt-2' },
     values.map((value, i) =>
@@ -18,6 +17,5 @@ const Dice = ({ values }) => {
       )
     )
   );
-};
 
 export default Dice;
