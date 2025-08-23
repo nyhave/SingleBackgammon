@@ -9,6 +9,7 @@ const Point = ({ point, index, selected, highlighted, onClick }) => {
     : isTop
       ? 'border-b-orange-700'
       : 'border-t-orange-700';
+  const number = index < 12 ? index + 13 : 24 - index;
 
   const checkers = [];
   for (let i = 0; i < point.count; i++) {
@@ -46,6 +47,15 @@ const Point = ({ point, index, selected, highlighted, onClick }) => {
         } items-center ${isTop ? 'bottom-0' : 'top-0'} pointer-events-none`,
       },
       ...checkers
+    ),
+    React.createElement(
+      'span',
+      {
+        className: `absolute text-xs text-gray-600 ${
+          isTop ? 'top-1' : 'bottom-1'
+        } left-1 pointer-events-none`,
+      },
+      number
     )
   );
 };
