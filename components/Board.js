@@ -9,6 +9,18 @@ const Board = ({ G, ctx, moves, events }) => {
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
 
+  const clearCacheAndReload = async () => {
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+    }
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((reg) => reg.unregister()));
+    }
+    window.location.reload();
+  };
+
   const handlePointClick = (index) => {
     if (autoPlay || stepPlay || ctx.currentPlayer !== '0') return;
     const point = points[index];
@@ -175,6 +187,14 @@ const Board = ({ G, ctx, moves, events }) => {
           disabled: autoPlay,
         },
         'Autoplay'
+      ),
+      React.createElement(
+        'button',
+        {
+          className: 'px-4 py-2 bg-red-500 text-white rounded',
+          onClick: clearCacheAndReload,
+        },
+        'Reload Game'
       )
     )
   );
