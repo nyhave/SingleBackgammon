@@ -1,4 +1,7 @@
-import { Client } from 'https://esm.sh/boardgame.io/client';
+// Import the React-specific client from boardgame.io.
+// Using the generic client ("boardgame.io/client") returns a plain object
+// which causes React to warn that the element type is invalid.
+import { Client } from 'https://esm.sh/boardgame.io/react';
 
 // Represents a single point on the board
 const Point = (point, index, selected, onClick) => {
