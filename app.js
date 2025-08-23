@@ -10,7 +10,11 @@ const App = Client({ game: Backgammon, board: Board });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  React.createElement(ErrorBoundary, null, React.createElement(App))
+  React.createElement(
+    ErrorBoundary,
+    null,
+    React.createElement(App, { playerID: '0' })
+  )
 );
 
 if ('serviceWorker' in navigator) {
