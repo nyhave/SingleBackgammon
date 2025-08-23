@@ -1,6 +1,13 @@
-// Import the React-specific client from boardgame.io.
-// Using the generic client ("boardgame.io/client") returns a plain object
-// which causes React to warn that the element type is invalid.
+// Import React and ReactDOM as ES modules to ensure boardgame.io shares the
+// same React instance. Mixing UMD and ESM builds can lead to runtime errors
+// like "Objects are not valid as a React child" because multiple copies of
+// React get loaded.  Loading everything from esm.sh keeps dependencies
+// consistent across the app.
+import React from 'https://esm.sh/react@18.3.1';
+import ReactDOM from 'https://esm.sh/react-dom@18.3.1/client';
+// Import the React-specific client from boardgame.io. Using the generic
+// client ("boardgame.io/client") returns a plain object which causes React
+// to warn that the element type is invalid.
 import { Client } from 'https://esm.sh/boardgame.io/react';
 
 // Represents a single point on the board.
