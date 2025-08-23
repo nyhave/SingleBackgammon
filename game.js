@@ -2,6 +2,12 @@
 
 const rollDie = () => Math.floor(Math.random() * 6) + 1;
 
+const rollDice = () => {
+  const d1 = rollDie();
+  const d2 = rollDie();
+  return d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
+};
+
 const createInitialPoints = () => {
   const pts = Array(24)
     .fill(null)
@@ -23,12 +29,10 @@ const createInitialPoints = () => {
 };
 
 const Backgammon = {
-  setup: () => ({ points: createInitialPoints(), dice: [] }),
+  setup: () => ({ points: createInitialPoints(), dice: rollDice() }),
   turn: {
     onBegin(G) {
-      const d1 = rollDie();
-      const d2 = rollDie();
-      G.dice = d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
+      G.dice = rollDice();
     },
   },
   moves: {
