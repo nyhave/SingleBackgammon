@@ -106,7 +106,7 @@ const Board = ({ G, ctx, moves, events }) => {
               className: 'mt-2 ml-2 px-4 py-2 bg-green-500 text-white rounded',
               onClick: () => {
                 setShowInstructions(false);
-                setStepPlay(true);
+                setAutoPlay(true);
               },
             },
             'Autoplay'
@@ -175,6 +175,27 @@ const Board = ({ G, ctx, moves, events }) => {
               disabled: autoPlay,
             },
             'End Turn'
+          ),
+      stepPlay
+        ? React.createElement(
+            'button',
+            {
+              className: 'px-4 py-2 bg-gray-500 text-white rounded',
+              onClick: () => setStepPlay(false),
+            },
+            'Stop'
+          )
+        : React.createElement(
+            'button',
+            {
+              className: 'px-4 py-2 bg-yellow-500 text-white rounded',
+              onClick: () => {
+                setStepPlay(true);
+                setAutoPlay(false);
+              },
+              disabled: autoPlay,
+            },
+            'Step'
           ),
       React.createElement(
         'button',
