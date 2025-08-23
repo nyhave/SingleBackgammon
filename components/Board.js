@@ -9,6 +9,15 @@ const Board = ({ G, ctx, moves, events }) => {
   const [showInstructions, setShowInstructions] = React.useState(false);
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
+  const [logging, setLogging] = React.useState(false);
+
+  const logGameState = React.useCallback(
+    (label) => {
+      // Clone game state to avoid reactive proxies in logs
+      console.log(label, JSON.parse(JSON.stringify(G)));
+    },
+    [G]
+  );
 
   const clearCacheAndReload = async () => {
     if ('caches' in window) {
@@ -63,6 +72,9 @@ const Board = ({ G, ctx, moves, events }) => {
   };
 
   const makeAIMove = React.useCallback(() => {
+    if (logging) {
+      logGameState(`Game state before AI move on turn ${ctx.turn}`);
+    }
     const color = ctx.currentPlayer === '0' ? 'white' : 'black';
     const direction = ctx.currentPlayer === '0' ? 1 : -1;
     const possible = [];
@@ -88,7 +100,7 @@ const Board = ({ G, ctx, moves, events }) => {
     } else {
       events.endTurn();
     }
-  }, [ctx.currentPlayer, points, G.dice, moves, events]);
+  }, [ctx.currentPlayer, points, G.dice, moves, events, logging, logGameState, ctx.turn]);
 
   React.useEffect(() => {
     const isAuto = autoPlay || (!stepPlay && ctx.currentPlayer === '1');
@@ -101,6 +113,12 @@ const Board = ({ G, ctx, moves, events }) => {
     setSelected(null);
     setPossibleMoves([]);
   }, [ctx.turn]);
+
+  React.useEffect(() => {
+    if (logging) {
+      logGameState(`Game state at start of turn ${ctx.turn}`);
+    }
+  }, [ctx.turn, logging, logGameState]);
 
   React.useEffect(() => {
     const handleKeyDown = (e) => {
@@ -311,6 +329,18 @@ const Board = ({ G, ctx, moves, events }) => {
           onClick: clearCacheAndReload,
         },
         'Reload Game'
+      ),
+      React.createElement(
+        'button',
+        {
+          className: 'px-4 py-2 bg-purple-500 text-white rounded',
+          onClick: () => {
+            setLogging(true);
+            logGameState('Game state at start');
+          },
+          disabled: logging,
+        },
+        'Log'
       ),
       React.createElement(
         'button',
