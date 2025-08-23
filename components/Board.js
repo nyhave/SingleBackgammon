@@ -183,7 +183,7 @@ const Board = ({ G, ctx, moves, events }) => {
           React.createElement(
             'p',
             { className: 'mb-2 text-sm' },
-            'Buttons below the board provide extra options:'
+            'Buttons above the board provide extra options:'
           ),
           React.createElement(
             'ul',
@@ -242,35 +242,7 @@ const Board = ({ G, ctx, moves, events }) => {
     ),
     React.createElement(
       'div',
-      { className: 'grid grid-cols-12 gap-1' },
-      ...points.slice(0, 12).map((p, i) =>
-        React.createElement(Point, {
-          key: i,
-          point: p,
-          index: i,
-          selected: selected === i,
-          highlighted: possibleMoves.includes(i),
-          onClick: () => handlePointClick(i),
-        })
-      )
-    ),
-    React.createElement(
-      'div',
-      { className: 'grid grid-cols-12 gap-1' },
-      ...points.slice(12).map((p, i) =>
-        React.createElement(Point, {
-          key: i + 12,
-          point: p,
-          index: i + 12,
-          selected: selected === i + 12,
-          highlighted: possibleMoves.includes(i + 12),
-          onClick: () => handlePointClick(i + 12),
-        })
-      )
-    ),
-    React.createElement(
-      'div',
-      { className: 'mt-4 flex justify-center space-x-2' },
+      { className: 'mb-4 flex justify-center space-x-2' },
       stepPlay
         ? React.createElement(
             'button',
@@ -349,6 +321,34 @@ const Board = ({ G, ctx, moves, events }) => {
           onClick: () => setShowInstructions(true),
         },
         'Help'
+      )
+    ),
+    React.createElement(
+      'div',
+      { className: 'grid grid-cols-12 gap-1' },
+      ...points.slice(0, 12).map((p, i) =>
+        React.createElement(Point, {
+          key: i,
+          point: p,
+          index: i,
+          selected: selected === i,
+          highlighted: possibleMoves.includes(i),
+          onClick: () => handlePointClick(i),
+        })
+      )
+    ),
+    React.createElement(
+      'div',
+      { className: 'grid grid-cols-12 gap-1' },
+      ...points.slice(12).map((p, i) =>
+        React.createElement(Point, {
+          key: i + 12,
+          point: p,
+          index: i + 12,
+          selected: selected === i + 12,
+          highlighted: possibleMoves.includes(i + 12),
+          onClick: () => handlePointClick(i + 12),
+        })
       )
     )
   );
