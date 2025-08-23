@@ -6,9 +6,10 @@ const Board = ({ G, ctx, moves, events }) => {
   const points = G.points;
   const [selected, setSelected] = React.useState(null);
   const [showInstructions, setShowInstructions] = React.useState(true);
+  const [autoPlay, setAutoPlay] = React.useState(false);
 
   const handlePointClick = (index) => {
-    if (ctx.currentPlayer !== '0') return;
+    if (autoPlay || ctx.currentPlayer !== '0') return;
     const point = points[index];
     if (selected === null) {
       if (point.color === 'white' && point.count > 0) {
@@ -21,30 +22,40 @@ const Board = ({ G, ctx, moves, events }) => {
   };
 
   React.useEffect(() => {
-    if (ctx.currentPlayer === '1') {
-      const possible = [];
-      for (let i = 0; i < 24; i++) {
-        const p = points[i];
-        if (p.color === 'black' && p.count > 0) {
-          G.dice.forEach((die) => {
-            const dest = i - die;
-            if (dest >= 0) {
-              const t = points[dest];
-              if (!t.color || t.color === 'black' || t.count === 1) {
-                possible.push([i, dest]);
-              }
+    const isAI = autoPlay || ctx.currentPlayer === '1';
+    if (!isAI || ctx.gameover) return;
+
+    const color = ctx.currentPlayer === '0' ? 'white' : 'black';
+    const direction = ctx.currentPlayer === '0' ? 1 : -1;
+    const possible = [];
+
+    for (let i = 0; i < 24; i++) {
+      const p = points[i];
+      if (p.color === color && p.count > 0) {
+        G.dice.forEach((die) => {
+          const dest = i + die * direction;
+          if (dest >= 0 && dest <= 23) {
+            const t = points[dest];
+            if (!t.color || t.color === color || t.count === 1) {
+              possible.push([i, dest]);
             }
-          });
-        }
+          }
+        });
       }
+    }
+
+    const makeMove = () => {
       if (possible.length > 0) {
         const [from, to] = possible[Math.floor(Math.random() * possible.length)];
         moves.moveChecker(from, to);
       } else {
         events.endTurn();
       }
-    }
-  }, [ctx.turn, G.dice]);
+    };
+
+    const timer = setTimeout(makeMove, 500);
+    return () => clearTimeout(timer);
+  }, [ctx.turn, G.dice, autoPlay]);
 
   return React.createElement(
     'div',
@@ -76,6 +87,17 @@ const Board = ({ G, ctx, moves, events }) => {
               onClick: () => setShowInstructions(false),
             },
             'Start'
+          ),
+          React.createElement(
+            'button',
+            {
+              className: 'mt-2 ml-2 px-4 py-2 bg-green-500 text-white rounded',
+              onClick: () => {
+                setShowInstructions(false);
+                setAutoPlay(true);
+              },
+            },
+            'Autoplay'
           )
         )
       ),
@@ -87,7 +109,13 @@ const Board = ({ G, ctx, moves, events }) => {
         null,
         `Current player: ${ctx.currentPlayer === '0' ? 'White' : 'Black'}`
       ),
-      React.createElement(Dice, { values: G.dice })
+      React.createElement(Dice, { values: G.dice }),
+      ctx.gameover &&
+        React.createElement(
+          'div',
+          { className: 'mt-2' },
+          `Winner: ${ctx.gameover.winner === '0' ? 'White' : 'Black'}`
+        )
     ),
     React.createElement(
       'div',
@@ -116,12 +144,26 @@ const Board = ({ G, ctx, moves, events }) => {
       )
     ),
     React.createElement(
-      'button',
-      {
-        className: 'mt-4 px-4 py-2 bg-blue-500 text-white rounded',
-        onClick: () => events.endTurn(),
-      },
-      'End Turn'
+      'div',
+      { className: 'mt-4 flex justify-center space-x-2' },
+      React.createElement(
+        'button',
+        {
+          className: 'px-4 py-2 bg-blue-500 text-white rounded',
+          onClick: () => events.endTurn(),
+          disabled: autoPlay,
+        },
+        'End Turn'
+      ),
+      React.createElement(
+        'button',
+        {
+          className: 'px-4 py-2 bg-green-500 text-white rounded',
+          onClick: () => setAutoPlay(true),
+          disabled: autoPlay,
+        },
+        'Autoplay'
+      )
     )
   );
 };
