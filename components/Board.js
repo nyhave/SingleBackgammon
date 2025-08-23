@@ -5,6 +5,7 @@ import Dice from './Dice.js';
 const Board = ({ G, ctx, moves, events }) => {
   const points = G.points;
   const [selected, setSelected] = React.useState(null);
+  const [possibleMoves, setPossibleMoves] = React.useState([]);
   const [showInstructions, setShowInstructions] = React.useState(false);
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
@@ -21,16 +22,43 @@ const Board = ({ G, ctx, moves, events }) => {
     window.location.reload();
   };
 
+  const calculateMoves = React.useCallback(
+    (from) => {
+      const color = ctx.currentPlayer === '0' ? 'white' : 'black';
+      const direction = ctx.currentPlayer === '0' ? 1 : -1;
+      const targets = new Set();
+      G.dice.forEach((die) => {
+        const dest = from + die * direction;
+        if (dest >= 0 && dest <= 23) {
+          const t = points[dest];
+          if (!t.color || t.color === color || t.count === 1) {
+            targets.add(dest);
+          }
+        }
+      });
+      return Array.from(targets);
+    },
+    [ctx.currentPlayer, G.dice, points]
+  );
+
   const handlePointClick = (index) => {
     if (autoPlay || stepPlay || ctx.currentPlayer !== '0') return;
     const point = points[index];
     if (selected === null) {
       if (point.color === 'white' && point.count > 0) {
         setSelected(index);
+        setPossibleMoves(calculateMoves(index));
       }
-    } else {
+    } else if (possibleMoves.includes(index)) {
       moves.moveChecker(selected, index);
       setSelected(null);
+      setPossibleMoves([]);
+    } else if (point.color === 'white' && point.count > 0) {
+      setSelected(index);
+      setPossibleMoves(calculateMoves(index));
+    } else {
+      setSelected(null);
+      setPossibleMoves([]);
     }
   };
 
@@ -68,6 +96,11 @@ const Board = ({ G, ctx, moves, events }) => {
     const timer = setTimeout(makeAIMove, 500);
     return () => clearTimeout(timer);
   }, [ctx.turn, G.dice, autoPlay, stepPlay, makeAIMove, ctx.gameover]);
+
+  React.useEffect(() => {
+    setSelected(null);
+    setPossibleMoves([]);
+  }, [ctx.turn]);
 
   return React.createElement(
     'div',
@@ -138,6 +171,7 @@ const Board = ({ G, ctx, moves, events }) => {
           point: p,
           index: i,
           selected: selected === i,
+          highlighted: possibleMoves.includes(i),
           onClick: () => handlePointClick(i),
         })
       )
@@ -151,6 +185,7 @@ const Board = ({ G, ctx, moves, events }) => {
           point: p,
           index: i + 12,
           selected: selected === i + 12,
+          highlighted: possibleMoves.includes(i + 12),
           onClick: () => handlePointClick(i + 12),
         })
       )
