@@ -21,6 +21,7 @@ const Board = () => {
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
   const [lastMove, setLastMove] = React.useState(null);
+  const [scores, setScores] = React.useState({ white: 0, black: 0 });
 
   const endTurn = () => {
     setCurrentPlayer((p) => (p === '0' ? '1' : '0'));
@@ -36,7 +37,13 @@ const Board = () => {
     setLastMove({ from, to });
     if (result.dice.length === 0) endTurn();
     const winner = getWinner(result.points);
-    if (winner) setGameover({ winner });
+    if (winner) {
+      setGameover({ winner });
+      setScores((s) => ({
+        white: s.white + (winner === '0' ? 1 : 0),
+        black: s.black + (winner === '1' ? 1 : 0),
+      }));
+    }
   };
 
   const clearCacheAndReload = async () => {
@@ -49,6 +56,19 @@ const Board = () => {
       await Promise.all(registrations.map((reg) => reg.unregister()));
     }
     window.location.reload();
+  };
+
+  const newGame = () => {
+    setPoints(createInitialPoints());
+    setDice(rollDice());
+    setCurrentPlayer('0');
+    setTurn(0);
+    setGameover(null);
+    setSelected(null);
+    setPossibleMoves([]);
+    setAutoPlay(false);
+    setStepPlay(false);
+    setLastMove(null);
   };
 
   const calculateMoves = React.useCallback(
@@ -228,30 +248,35 @@ const Board = () => {
             { className: 'mb-2 text-sm' },
             'Buttons above the board provide extra options:'
           ),
-          React.createElement(
-            'ul',
-            { className: 'mb-4 list-disc pl-5 text-sm space-y-1' },
             React.createElement(
-              'li',
-              null,
-              'End Turn: roll the dice and pass play to the computer opponent.'
+              'ul',
+              { className: 'mb-4 list-disc pl-5 text-sm space-y-1' },
+              React.createElement(
+                'li',
+                null,
+                'End Turn: roll the dice and pass play to the computer opponent.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Step: watch the computer play one move at a time. Press Next for each move.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Autoplay: let the computer control both sides automatically.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'New Game: reset the board and keep the running score.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Reload Game: clear cached data and restart the match.'
+              )
             ),
-            React.createElement(
-              'li',
-              null,
-              'Step: watch the computer play one move at a time. Press Next for each move.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Autoplay: let the computer control both sides automatically.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Reload Game: clear cached data and restart the match.'
-            )
-          ),
           React.createElement(
             'p',
             { className: 'mb-4 text-sm' },
@@ -267,6 +292,11 @@ const Board = () => {
           )
         )
       ),
+    React.createElement(
+      'div',
+      { className: 'mb-4' },
+      `Score - White: ${scores.white} | Black: ${scores.black}`
+    ),
     React.createElement(
       'div',
       { className: 'mb-4 flex flex-col items-center' },
@@ -336,6 +366,14 @@ const Board = () => {
           disabled: autoPlay,
         },
         'Autoplay'
+      ),
+      React.createElement(
+        'button',
+        {
+          className: 'px-4 py-2 bg-purple-500 text-white rounded',
+          onClick: newGame,
+        },
+        'New Game'
       ),
       React.createElement(
         'button',
