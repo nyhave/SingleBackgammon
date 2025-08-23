@@ -24,6 +24,7 @@ const Point = (point, index) => {
   return React.createElement(
     'div',
     {
+      key: index,
       'data-point': index,
       className: 'relative w-8 h-32 flex justify-center items-center',
     },
