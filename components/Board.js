@@ -5,7 +5,7 @@ import Dice from './Dice.js';
 const Board = ({ G, ctx, moves, events }) => {
   const points = G.points;
   const [selected, setSelected] = React.useState(null);
-  const [showInstructions, setShowInstructions] = React.useState(true);
+  const [showInstructions, setShowInstructions] = React.useState(false);
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
 
@@ -98,7 +98,7 @@ const Board = ({ G, ctx, moves, events }) => {
               className: 'mt-2 px-4 py-2 bg-blue-500 text-white rounded',
               onClick: () => setShowInstructions(false),
             },
-            'Start'
+            'Close'
           ),
           React.createElement(
             'button',
@@ -195,6 +195,14 @@ const Board = ({ G, ctx, moves, events }) => {
           onClick: clearCacheAndReload,
         },
         'Reload Game'
+      ),
+      React.createElement(
+        'button',
+        {
+          className: 'px-4 py-2 bg-gray-500 text-white rounded',
+          onClick: () => setShowInstructions(true),
+        },
+        'Help'
       )
     )
   );
