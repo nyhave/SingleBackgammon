@@ -36,14 +36,14 @@ const Point = ({ point, index, selected, highlighted, onClick }) => {
         isTop ? 'border-b-[128px]' : 'border-t-[128px]'
       } border-l-transparent border-r-transparent ${colorClass} ${
         isTop ? 'top-0' : 'bottom-0'
-      } left-1/2 -translate-x-1/2`,
+      } left-1/2 -translate-x-1/2 pointer-events-none`,
     }),
     React.createElement(
       'div',
       {
         className: `absolute w-full h-full flex flex-col ${
           isTop ? 'justify-end' : 'justify-start'
-        } items-center ${isTop ? 'bottom-0' : 'top-0'}`,
+        } items-center ${isTop ? 'bottom-0' : 'top-0'} pointer-events-none`,
       },
       ...checkers
     )
