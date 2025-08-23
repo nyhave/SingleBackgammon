@@ -31,11 +31,12 @@ const createInitialPoints = () => {
 export const moveChecker = (state, player, from, to) => {
   const color = player === '0' ? 'white' : 'black';
   const distance = Math.abs(to - from);
-  if (!Array.isArray(state.dice) || !state.dice.includes(distance)) return state;
+  if (!state.dice.includes(distance)) return null;
+
   const source = state.points[from];
   const target = state.points[to];
-  if (source.color !== color || source.count === 0) return state;
-  if (target.color && target.color !== color && target.count > 1) return state;
+  if (source.color !== color || source.count === 0) return null;
+  if (target.color && target.color !== color && target.count > 1) return null;
 
   const points = state.points.map((p) => ({ ...p }));
   const src = points[from];
@@ -44,23 +45,22 @@ export const moveChecker = (state, player, from, to) => {
   src.count--;
   if (src.count === 0) src.color = null;
 
-  if (tgt.color && tgt.color !== color && tgt.count === 1) {
+  if (tgt.color && tgt.color !== color) {
     tgt.color = color;
     tgt.count = 1;
   } else {
-    if (!tgt.color) tgt.color = color;
-    tgt.count++;
+    tgt.color = color;
+    tgt.count += 1;
   }
 
   const dice = [...state.dice];
   const dieIndex = dice.indexOf(distance);
-  if (dieIndex >= 0) dice.splice(dieIndex, 1);
+  dice.splice(dieIndex, 1);
 
   return { points, dice };
 };
 
 const getWinner = (points) => {
-  if (!Array.isArray(points)) return null;
   const whiteTotal = points
     .filter((p) => p.color === 'white')
     .reduce((sum, p) => sum + p.count, 0);
