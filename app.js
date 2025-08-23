@@ -72,10 +72,9 @@ const Point = ({ point, index, selected, onClick }) => {
   );
 };
 
-// Simple component to render dice values using traditional pip faces.
+// Simple component to render dice values with clear numeric faces.
 const Dice = ({ values }) => {
   if (!Array.isArray(values)) return null;
-  const faces = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685'];
   return React.createElement(
     'div',
     { className: 'flex space-x-2 justify-center mt-2' },
@@ -85,10 +84,10 @@ const Dice = ({ values }) => {
         {
           key: i,
           className:
-            'w-8 h-8 flex items-center justify-center border border-gray-800 rounded bg-white text-2xl',
+            'w-10 h-10 flex items-center justify-center border border-gray-800 rounded bg-white text-2xl font-bold',
           'aria-label': `Die showing ${value}`,
         },
-        faces[value - 1]
+        value
       )
     )
   );
@@ -169,8 +168,11 @@ const Board = ({ G, ctx, moves, events }) => {
 
   const handlePointClick = (index) => {
     if (ctx.currentPlayer !== '0') return;
+    const point = points[index];
     if (selected === null) {
-      setSelected(index);
+      if (point.color === 'white' && point.count > 0) {
+        setSelected(index);
+      }
     } else {
       moves.moveChecker(selected, index);
       setSelected(null);
