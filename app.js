@@ -1,3 +1,5 @@
+import { Client } from 'https://esm.sh/boardgame.io/client';
+
 // Represents a single point on the board
 const Point = (point, index, selected, onClick) => {
   const isTop = index < 12;
@@ -182,8 +184,6 @@ const Board = ({ G, ctx, moves, events }) => {
     )
   );
 };
-
-const { Client } = boardgameio;
 
 const App = Client({ game: Backgammon, board: Board });
 
