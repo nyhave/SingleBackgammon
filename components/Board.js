@@ -20,6 +20,14 @@ const Board = () => {
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
   const [logging, setLogging] = React.useState(false);
+  const [lastMove, setLastMove] = React.useState(null);
+
+  React.useEffect(() => {
+    if (lastMove) {
+      const timer = setTimeout(() => setLastMove(null), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [lastMove]);
 
   const logGameState = React.useCallback(
     (label) => {
@@ -43,6 +51,7 @@ const Board = () => {
   const moveChecker = (from, to) => {
     const result = applyMove({ points, dice }, currentPlayer, from, to);
     if (!result.points) return;
+    setLastMove({ from, to });
     setPoints(result.points);
     setDice(result.dice);
     if (result.dice.length === 0) endTurn();
@@ -365,6 +374,8 @@ const Board = () => {
           index: i,
           selected: selected === i,
           highlighted: possibleMoves.includes(i),
+          movedFrom: lastMove?.from === i,
+          movedTo: lastMove?.to === i,
           onClick: () => handlePointClick(i),
         })
       )
@@ -379,6 +390,8 @@ const Board = () => {
           index: i + 12,
           selected: selected === i + 12,
           highlighted: possibleMoves.includes(i + 12),
+          movedFrom: lastMove?.from === i + 12,
+          movedTo: lastMove?.to === i + 12,
           onClick: () => handlePointClick(i + 12),
         })
       )
