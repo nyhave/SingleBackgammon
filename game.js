@@ -28,7 +28,7 @@ const createInitialPoints = () => {
   return pts;
 };
 
-const moveChecker = (state, player, from, to) => {
+export const moveChecker = (state, player, from, to) => {
   const color = player === '0' ? 'white' : 'black';
   const distance = Math.abs(to - from);
   if (!Array.isArray(state.dice) || !state.dice.includes(distance)) return state;
@@ -76,4 +76,4 @@ const getWinner = (points) => {
   return null;
 };
 
-export { rollDie, rollDice, createInitialPoints, moveChecker, getWinner };
+export { rollDie, rollDice, createInitialPoints, getWinner };
