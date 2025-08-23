@@ -1,6 +1,6 @@
 import React from 'https://esm.sh/react@18.3.1';
 
-const Point = ({ point, index, selected, onClick }) => {
+const Point = ({ point, index, selected, highlighted, onClick }) => {
   const isTop = index < 12;
   const colorClass = index % 2 === 0
     ? isTop
@@ -29,7 +29,7 @@ const Point = ({ point, index, selected, onClick }) => {
       onClick,
       className: `relative w-8 h-32 flex justify-center items-center cursor-pointer ${
         selected ? 'bg-green-200' : ''
-      }`,
+      } ${highlighted ? 'bg-blue-200' : ''}`,
     },
     React.createElement('div', {
       className: `absolute w-0 h-0 border-l-[16px] border-r-[16px] ${
