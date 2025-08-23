@@ -17,7 +17,7 @@ const Point = ({
     : isTop
       ? 'border-b-orange-700'
       : 'border-t-orange-700';
-  const number = index < 12 ? index + 13 : 24 - index;
+  const number = 24 - index;
 
   const checkers = [];
   for (let i = 0; i < point.count; i++) {

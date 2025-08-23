@@ -324,18 +324,20 @@ const Board = () => {
     React.createElement(
       'div',
       { className: 'grid grid-cols-12 gap-1' },
-      ...points.slice(0, 12).map((p, i) =>
-        React.createElement(Point, {
-          key: i,
+      ...points.slice(0, 12).map((_, i) => {
+        const idx = 11 - i;
+        const p = points[idx];
+        return React.createElement(Point, {
+          key: idx,
           point: p,
-          index: i,
-          selected: selected === i,
-          highlighted: possibleMoves.includes(i),
-          movedFrom: lastMove && lastMove.from === i,
-          movedTo: lastMove && lastMove.to === i,
-          onClick: () => handlePointClick(i),
-        })
-      )
+          index: idx,
+          selected: selected === idx,
+          highlighted: possibleMoves.includes(idx),
+          movedFrom: lastMove && lastMove.from === idx,
+          movedTo: lastMove && lastMove.to === idx,
+          onClick: () => handlePointClick(idx),
+        });
+      })
     ),
     React.createElement(
       'div',
