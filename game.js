@@ -39,26 +39,33 @@ const Backgammon = {
     moveChecker(G, ctx, from, to) {
       const color = ctx.currentPlayer === '0' ? 'white' : 'black';
       const distance = Math.abs(to - from);
-      if (!Array.isArray(G.dice) || !G.dice.includes(distance)) return;
+      if (!Array.isArray(G.dice) || !G.dice.includes(distance)) return G;
       const source = G.points[from];
       const target = G.points[to];
-      if (source.color !== color || source.count === 0) return;
-      if (target.color && target.color !== color && target.count > 1) return;
+      if (source.color !== color || source.count === 0) return G;
+      if (target.color && target.color !== color && target.count > 1) return G;
 
-      source.count--;
-      if (source.count === 0) source.color = null;
+      const points = G.points.map((p) => ({ ...p }));
+      const src = points[from];
+      const tgt = points[to];
 
-      if (target.color && target.color !== color && target.count === 1) {
-        target.color = color;
-        target.count = 1;
+      src.count--;
+      if (src.count === 0) src.color = null;
+
+      if (tgt.color && tgt.color !== color && tgt.count === 1) {
+        tgt.color = color;
+        tgt.count = 1;
       } else {
-        if (!target.color) target.color = color;
-        target.count++;
+        if (!tgt.color) tgt.color = color;
+        tgt.count++;
       }
 
-      const dieIndex = G.dice.indexOf(distance);
-      if (dieIndex >= 0) G.dice.splice(dieIndex, 1);
-      if (G.dice.length === 0) ctx.events.endTurn();
+      const dice = [...G.dice];
+      const dieIndex = dice.indexOf(distance);
+      if (dieIndex >= 0) dice.splice(dieIndex, 1);
+      if (dice.length === 0) ctx.events.endTurn();
+
+      return { ...G, points, dice };
     },
   },
   endIf: (G) => {
