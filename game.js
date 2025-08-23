@@ -57,6 +57,20 @@ const Backgammon = {
       if (G.dice.length === 0) ctx.events.endTurn();
     },
   },
+  endIf: (G) => {
+    const whiteTotal = G.points
+      .filter((p) => p.color === 'white')
+      .reduce((sum, p) => sum + p.count, 0);
+    const blackTotal = G.points
+      .filter((p) => p.color === 'black')
+      .reduce((sum, p) => sum + p.count, 0);
+    const whiteHome =
+      G.points[23].color === 'white' && G.points[23].count === whiteTotal;
+    const blackHome =
+      G.points[0].color === 'black' && G.points[0].count === blackTotal;
+    if (whiteHome) return { winner: '0' };
+    if (blackHome) return { winner: '1' };
+  },
 };
 
 export { rollDie, createInitialPoints, Backgammon };
