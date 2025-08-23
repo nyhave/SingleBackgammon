@@ -120,12 +120,7 @@ const createInitialPoints = () => {
 
 // Game definition handled by boardgame.io
 const Backgammon = {
-  setup: () => {
-    const d1 = rollDie();
-    const d2 = rollDie();
-    const dice = d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
-    return { points: createInitialPoints(), dice };
-  },
+  setup: () => ({ points: createInitialPoints(), dice: [] }),
   moves: {
     moveChecker(G, ctx, from, to) {
       const color = ctx.currentPlayer === '0' ? 'white' : 'black';
@@ -151,9 +146,7 @@ const Backgammon = {
       if (dieIndex >= 0) G.dice.splice(dieIndex, 1);
       if (G.dice.length === 0) ctx.events.endTurn();
     },
-  },
-  turn: {
-    onBegin(G, ctx) {
+    rollDice(G) {
       const d1 = rollDie();
       const d2 = rollDie();
       G.dice = d1 === d2 ? [d1, d1, d1, d1] : [d1, d2];
@@ -178,7 +171,11 @@ const Board = ({ G, ctx, moves, events }) => {
   };
 
   React.useEffect(() => {
-    if (ctx.currentPlayer === '1' && Array.isArray(G.dice)) {
+    if (!Array.isArray(G.dice) || G.dice.length === 0) {
+      moves.rollDice();
+      return;
+    }
+    if (ctx.currentPlayer === '1') {
       const possible = [];
       for (let i = 0; i < 24; i++) {
         const p = points[i];
@@ -201,7 +198,7 @@ const Board = ({ G, ctx, moves, events }) => {
         events.endTurn();
       }
     }
-  }, [ctx.turn]);
+  }, [ctx.turn, G.dice]);
 
   return React.createElement(
     'div',
