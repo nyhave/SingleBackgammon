@@ -100,7 +100,7 @@ const Backgammon = {
     moveChecker(G, ctx, from, to) {
       const color = ctx.currentPlayer === '0' ? 'white' : 'black';
       const distance = Math.abs(to - from);
-      if (!G.dice.includes(distance)) return;
+      if (!Array.isArray(G.dice) || !G.dice.includes(distance)) return;
       const source = G.points[from];
       const target = G.points[to];
       if (source.color !== color || source.count === 0) return;
@@ -148,7 +148,7 @@ const Board = ({ G, ctx, moves, events }) => {
   };
 
   React.useEffect(() => {
-    if (ctx.currentPlayer === '1') {
+    if (ctx.currentPlayer === '1' && Array.isArray(G.dice)) {
       const possible = [];
       for (let i = 0; i < 24; i++) {
         const p = points[i];
@@ -180,7 +180,7 @@ const Board = ({ G, ctx, moves, events }) => {
       'div',
       { className: 'mb-4' },
       `Current player: ${ctx.currentPlayer === '0' ? 'White' : 'Black'} | Dice: ${
-        G.dice.join(', ')
+        Array.isArray(G.dice) ? G.dice.join(', ') : ''
       }`
     ),
     React.createElement(
