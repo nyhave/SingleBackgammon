@@ -99,17 +99,6 @@ const Board = ({ G, ctx, moves, events }) => {
               onClick: () => setShowInstructions(false),
             },
             'Close'
-          ),
-          React.createElement(
-            'button',
-            {
-              className: 'mt-2 ml-2 px-4 py-2 bg-green-500 text-white rounded',
-              onClick: () => {
-                setShowInstructions(false);
-                setAutoPlay(true);
-              },
-            },
-            'Autoplay'
           )
         )
       ),
