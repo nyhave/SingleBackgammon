@@ -19,20 +19,6 @@ const Board = () => {
   const [showInstructions, setShowInstructions] = React.useState(false);
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
-  const [logging, setLogging] = React.useState(false);
-
-  const logGameState = React.useCallback(
-    (label) => {
-      console.log(label, {
-        points,
-        dice,
-        currentPlayer,
-        turn,
-        gameover,
-      });
-    },
-    [points, dice, currentPlayer, turn, gameover]
-  );
 
   const endTurn = () => {
     setCurrentPlayer((p) => (p === '0' ? '1' : '0'));
@@ -104,9 +90,6 @@ const Board = () => {
   };
 
   const makeAIMove = React.useCallback(() => {
-    if (logging) {
-      logGameState(`Game state before AI move on turn ${turn}`);
-    }
     const color = currentPlayer === '0' ? 'white' : 'black';
     const direction = currentPlayer === '0' ? 1 : -1;
     const possible = [];
@@ -132,7 +115,7 @@ const Board = () => {
     } else {
       endTurn();
     }
-  }, [currentPlayer, points, dice, moveChecker, endTurn, logging, logGameState, turn]);
+  }, [currentPlayer, points, dice, moveChecker, endTurn]);
 
   React.useEffect(() => {
     const isAuto = autoPlay || (!stepPlay && currentPlayer === '1');
@@ -145,12 +128,6 @@ const Board = () => {
     setSelected(null);
     setPossibleMoves([]);
   }, [turn]);
-
-  React.useEffect(() => {
-    if (logging) {
-      logGameState(`Game state at start of turn ${turn}`);
-    }
-  }, [turn, logging, logGameState]);
 
   React.useEffect(() => {
     const handleKeyDown = (e) => {
@@ -333,18 +310,6 @@ const Board = () => {
           onClick: clearCacheAndReload,
         },
         'Reload Game'
-      ),
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-purple-500 text-white rounded',
-          onClick: () => {
-            setLogging(true);
-            logGameState('Game state at start');
-          },
-          disabled: logging,
-        },
-        'Log'
       ),
       React.createElement(
         'button',
