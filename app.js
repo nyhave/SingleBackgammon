@@ -8,7 +8,11 @@ import ReactDOM from 'https://esm.sh/react-dom@18.3.1/client';
 // Import the React-specific client from boardgame.io. Using the generic
 // client ("boardgame.io/client") returns a plain object which causes React
 // to warn that the element type is invalid.
-import { Client } from 'https://esm.sh/boardgame.io/react';
+// Explicitly pull React and ReactDOM in as peer dependencies so that
+// boardgame.io uses the same instances and doesn't bundle its own
+// copies.  Without this, React hooks can fail at runtime with errors
+// like "Invalid hook call" because multiple React versions are loaded.
+import { Client } from 'https://esm.sh/boardgame.io@0.50.2/react?deps=react@18.3.1,react-dom@18.3.1';
 
 // Represents a single point on the board.
 //
