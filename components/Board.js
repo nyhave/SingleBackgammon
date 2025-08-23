@@ -102,6 +102,20 @@ const Board = ({ G, ctx, moves, events }) => {
     setPossibleMoves([]);
   }, [ctx.turn]);
 
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        if (stepPlay) {
+          makeAIMove();
+        } else if (!autoPlay) {
+          events.endTurn();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [autoPlay, stepPlay, events, makeAIMove]);
+
   return React.createElement(
     'div',
     { className: 'mx-auto text-center' },
