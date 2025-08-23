@@ -7,7 +7,15 @@
     const message = args
       .map((arg) => {
         try {
-          return typeof arg === 'string' ? arg : JSON.stringify(arg);
+          if (arg instanceof Error) {
+            return arg.stack || arg.message || String(arg);
+          } else if (typeof arg === 'object' && arg !== null) {
+            if (arg.stack || arg.message) {
+              return `${arg.message || ''}${arg.stack ? `\n${arg.stack}` : ''}`.trim();
+            }
+            return JSON.stringify(arg);
+          }
+          return String(arg);
         } catch (e) {
           return String(arg);
         }
