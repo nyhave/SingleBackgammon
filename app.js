@@ -72,6 +72,26 @@ const Point = ({ point, index, selected, onClick }) => {
   );
 };
 
+// Simple component to render dice values as squares with numbers.
+const Dice = ({ values }) => {
+  if (!Array.isArray(values)) return null;
+  return React.createElement(
+    'div',
+    { className: 'flex space-x-2 justify-center mt-2' },
+    values.map((value, i) =>
+      React.createElement(
+        'div',
+        {
+          key: i,
+          className:
+            'w-8 h-8 flex items-center justify-center border border-gray-800 rounded bg-white',
+        },
+        value
+      )
+    )
+  );
+};
+
 // initial setup for the board state
 const createInitialPoints = () => {
   const pts = Array(24)
@@ -178,10 +198,13 @@ const Board = ({ G, ctx, moves, events }) => {
     { className: 'mx-auto text-center' },
     React.createElement(
       'div',
-      { className: 'mb-4' },
-      `Current player: ${ctx.currentPlayer === '0' ? 'White' : 'Black'} | Dice: ${
-        Array.isArray(G.dice) ? G.dice.join(', ') : ''
-      }`
+      { className: 'mb-4 flex flex-col items-center' },
+      React.createElement(
+        'div',
+        null,
+        `Current player: ${ctx.currentPlayer === '0' ? 'White' : 'Black'}`
+      ),
+      React.createElement(Dice, { values: G.dice })
     ),
     React.createElement(
       'div',
