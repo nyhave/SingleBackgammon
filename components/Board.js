@@ -1,10 +1,19 @@
 import React from 'https://esm.sh/react@18.3.1';
 import Point from './Point.js';
 import Dice from './Dice.js';
+import {
+  rollDice,
+  createInitialPoints,
+  moveChecker as applyMove,
+  getWinner,
+} from '../game.js';
 
-const Board = ({ G, ctx, moves, events }) => {
-  // Ensure points is always an array to prevent runtime errors during rendering
-  const points = Array.isArray(G?.points) ? G.points : [];
+const Board = () => {
+  const [points, setPoints] = React.useState(createInitialPoints());
+  const [dice, setDice] = React.useState(rollDice());
+  const [currentPlayer, setCurrentPlayer] = React.useState('0');
+  const [turn, setTurn] = React.useState(0);
+  const [gameover, setGameover] = React.useState(null);
   const [selected, setSelected] = React.useState(null);
   const [possibleMoves, setPossibleMoves] = React.useState([]);
   const [showInstructions, setShowInstructions] = React.useState(false);
@@ -14,11 +23,32 @@ const Board = ({ G, ctx, moves, events }) => {
 
   const logGameState = React.useCallback(
     (label) => {
-      // Clone game state to avoid reactive proxies in logs
-      console.log(label, JSON.parse(JSON.stringify(G)));
+      console.log(label, {
+        points,
+        dice,
+        currentPlayer,
+        turn,
+        gameover,
+      });
     },
-    [G]
+    [points, dice, currentPlayer, turn, gameover]
   );
+
+  const endTurn = () => {
+    setCurrentPlayer((p) => (p === '0' ? '1' : '0'));
+    setTurn((t) => t + 1);
+    setDice(rollDice());
+  };
+
+  const moveChecker = (from, to) => {
+    const result = applyMove({ points, dice }, currentPlayer, from, to);
+    if (!result.points) return;
+    setPoints(result.points);
+    setDice(result.dice);
+    if (result.dice.length === 0) endTurn();
+    const winner = getWinner(result.points);
+    if (winner) setGameover({ winner });
+  };
 
   const clearCacheAndReload = async () => {
     if ('caches' in window) {
@@ -34,10 +64,10 @@ const Board = ({ G, ctx, moves, events }) => {
 
   const calculateMoves = React.useCallback(
     (from) => {
-      const color = ctx.currentPlayer === '0' ? 'white' : 'black';
-      const direction = ctx.currentPlayer === '0' ? 1 : -1;
+      const color = currentPlayer === '0' ? 'white' : 'black';
+      const direction = currentPlayer === '0' ? 1 : -1;
       const targets = new Set();
-      G.dice.forEach((die) => {
+      dice.forEach((die) => {
         const dest = from + die * direction;
         if (dest >= 0 && dest <= 23) {
           const t = points[dest];
@@ -48,11 +78,11 @@ const Board = ({ G, ctx, moves, events }) => {
       });
       return Array.from(targets);
     },
-    [ctx.currentPlayer, G.dice, points]
+    [currentPlayer, dice, points]
   );
 
   const handlePointClick = (index) => {
-    if (autoPlay || stepPlay || ctx.currentPlayer !== '0') return;
+    if (autoPlay || stepPlay || currentPlayer !== '0') return;
     const point = points[index];
     if (!point) return;
     if (selected === null) {
@@ -61,7 +91,7 @@ const Board = ({ G, ctx, moves, events }) => {
         setPossibleMoves(calculateMoves(index));
       }
     } else if (possibleMoves.includes(index)) {
-      moves.moveChecker(selected, index);
+      moveChecker(selected, index);
       setSelected(null);
       setPossibleMoves([]);
     } else if (point.color === 'white' && point.count > 0) {
@@ -75,16 +105,16 @@ const Board = ({ G, ctx, moves, events }) => {
 
   const makeAIMove = React.useCallback(() => {
     if (logging) {
-      logGameState(`Game state before AI move on turn ${ctx.turn}`);
+      logGameState(`Game state before AI move on turn ${turn}`);
     }
-    const color = ctx.currentPlayer === '0' ? 'white' : 'black';
-    const direction = ctx.currentPlayer === '0' ? 1 : -1;
+    const color = currentPlayer === '0' ? 'white' : 'black';
+    const direction = currentPlayer === '0' ? 1 : -1;
     const possible = [];
 
     for (let i = 0; i < 24; i++) {
       const p = points[i];
       if (p.color === color && p.count > 0) {
-        G.dice.forEach((die) => {
+        dice.forEach((die) => {
           const dest = i + die * direction;
           if (dest >= 0 && dest <= 23) {
             const t = points[dest];
@@ -98,29 +128,29 @@ const Board = ({ G, ctx, moves, events }) => {
 
     if (possible.length > 0) {
       const [from, to] = possible[Math.floor(Math.random() * possible.length)];
-      moves.moveChecker(from, to);
+      moveChecker(from, to);
     } else {
-      events.endTurn();
+      endTurn();
     }
-  }, [ctx.currentPlayer, points, G.dice, moves, events, logging, logGameState, ctx.turn]);
+  }, [currentPlayer, points, dice, moveChecker, endTurn, logging, logGameState, turn]);
 
   React.useEffect(() => {
-    const isAuto = autoPlay || (!stepPlay && ctx.currentPlayer === '1');
-    if (!isAuto || ctx.gameover) return;
+    const isAuto = autoPlay || (!stepPlay && currentPlayer === '1');
+    if (!isAuto || gameover) return;
     const timer = setTimeout(makeAIMove, 500);
     return () => clearTimeout(timer);
-  }, [ctx.turn, G.dice, autoPlay, stepPlay, makeAIMove, ctx.gameover]);
+  }, [turn, dice, autoPlay, stepPlay, makeAIMove, gameover, currentPlayer]);
 
   React.useEffect(() => {
     setSelected(null);
     setPossibleMoves([]);
-  }, [ctx.turn]);
+  }, [turn]);
 
   React.useEffect(() => {
     if (logging) {
-      logGameState(`Game state at start of turn ${ctx.turn}`);
+      logGameState(`Game state at start of turn ${turn}`);
     }
-  }, [ctx.turn, logging, logGameState]);
+  }, [turn, logging, logGameState]);
 
   React.useEffect(() => {
     const handleKeyDown = (e) => {
@@ -128,13 +158,13 @@ const Board = ({ G, ctx, moves, events }) => {
         if (stepPlay) {
           makeAIMove();
         } else if (!autoPlay) {
-          events.endTurn();
+          endTurn();
         }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [autoPlay, stepPlay, events, makeAIMove]);
+  }, [autoPlay, stepPlay, makeAIMove, endTurn]);
 
   return React.createElement(
     'div',
@@ -232,14 +262,14 @@ const Board = ({ G, ctx, moves, events }) => {
       React.createElement(
         'div',
         null,
-        `Current player: ${ctx.currentPlayer === '0' ? 'White' : 'Black'}`
+        `Current player: ${currentPlayer === '0' ? 'White' : 'Black'}`
       ),
-      React.createElement(Dice, { values: G.dice }),
-      ctx.gameover &&
+      React.createElement(Dice, { values: dice }),
+      gameover &&
         React.createElement(
           'div',
           { className: 'mt-2' },
-          `Winner: ${ctx.gameover.winner === '0' ? 'White' : 'Black'}`
+          `Winner: ${gameover.winner === '0' ? 'White' : 'Black'}`
         )
     ),
     React.createElement(
@@ -258,7 +288,7 @@ const Board = ({ G, ctx, moves, events }) => {
             'button',
             {
               className: 'px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => events.endTurn(),
+              onClick: () => endTurn(),
               disabled: autoPlay,
             },
             'End Turn'
