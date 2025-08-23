@@ -1,5 +1,5 @@
 // Represents a single point on the board
-const Point = (point, index) => {
+const Point = (point, index, selected, onClick) => {
   const isTop = index < 12;
   const colorClass = index % 2 === 0
     ? isTop
@@ -26,7 +26,10 @@ const Point = (point, index) => {
     {
       key: index,
       'data-point': index,
-      className: 'relative w-8 h-32 flex justify-center items-center',
+      onClick,
+      className: `relative w-8 h-32 flex justify-center items-center cursor-pointer ${
+        selected ? 'bg-green-200' : ''
+      }`,
     },
     React.createElement('div', {
       className: `absolute w-0 h-0 border-l-[16px] border-r-[16px] ${
@@ -70,25 +73,112 @@ const createInitialPoints = () => {
 
 // Game definition handled by boardgame.io
 const Backgammon = {
-  setup: () => ({ points: createInitialPoints() }),
+  setup: () => ({ points: createInitialPoints(), dice: [] }),
+  moves: {
+    moveChecker(G, ctx, from, to) {
+      const color = ctx.currentPlayer === '0' ? 'white' : 'black';
+      const distance = Math.abs(to - from);
+      if (!G.dice.includes(distance)) return;
+      const source = G.points[from];
+      const target = G.points[to];
+      if (source.color !== color || source.count === 0) return;
+      if (target.color && target.color !== color && target.count > 1) return;
+
+      source.count--;
+      if (source.count === 0) source.color = null;
+
+      if (target.color && target.color !== color && target.count === 1) {
+        target.color = color;
+        target.count = 1;
+      } else {
+        if (!target.color) target.color = color;
+        target.count++;
+      }
+
+      const dieIndex = G.dice.indexOf(distance);
+      if (dieIndex >= 0) G.dice.splice(dieIndex, 1);
+      if (G.dice.length === 0) ctx.events.endTurn();
+    },
+  },
+  turn: {
+    onBegin(G, ctx) {
+      G.dice = [ctx.random.D6(), ctx.random.D6()];
+    },
+  },
 };
 
 // Board component rendering 24 points using game state
-const Board = ({ G }) => {
+const Board = ({ G, ctx, moves, events }) => {
   const points = G.points;
+  const [selected, setSelected] = React.useState(null);
+
+  const handlePointClick = (index) => {
+    if (ctx.currentPlayer !== '0') return;
+    if (selected === null) {
+      setSelected(index);
+    } else {
+      moves.moveChecker(selected, index);
+      setSelected(null);
+    }
+  };
+
+  React.useEffect(() => {
+    if (ctx.currentPlayer === '1') {
+      const possible = [];
+      for (let i = 0; i < 24; i++) {
+        const p = points[i];
+        if (p.color === 'black' && p.count > 0) {
+          G.dice.forEach((die) => {
+            const dest = i - die;
+            if (dest >= 0) {
+              const t = points[dest];
+              if (!t.color || t.color === 'black' || t.count === 1) {
+                possible.push([i, dest]);
+              }
+            }
+          });
+        }
+      }
+      if (possible.length > 0) {
+        const [from, to] = possible[Math.floor(Math.random() * possible.length)];
+        moves.moveChecker(from, to);
+      } else {
+        events.endTurn();
+      }
+    }
+  }, [ctx.turn]);
 
   return React.createElement(
     'div',
-    { className: 'mx-auto' },
+    { className: 'mx-auto text-center' },
     React.createElement(
       'div',
-      { className: 'grid grid-cols-12 gap-1' },
-      points.slice(0, 12).map((p, i) => Point(p, i))
+      { className: 'mb-4' },
+      `Current player: ${ctx.currentPlayer === '0' ? 'White' : 'Black'} | Dice: ${
+        G.dice.join(', ')
+      }`
     ),
     React.createElement(
       'div',
       { className: 'grid grid-cols-12 gap-1' },
-      points.slice(12).map((p, i) => Point(p, i + 12))
+      points
+        .slice(0, 12)
+        .map((p, i) => Point(p, i, selected === i, () => handlePointClick(i)))
+    ),
+    React.createElement(
+      'div',
+      { className: 'grid grid-cols-12 gap-1' },
+      points
+        .slice(12)
+        .map((p, i) => Point(p, i + 12, selected === i + 12, () => handlePointClick(i + 12)))
+    ),
+    React.createElement(
+      'button',
+      {
+        className: 'mt-4 px-4 py-2 bg-blue-500 text-white rounded',
+        onClick: () => events.endTurn(),
+      },
+      'End Turn'
     )
   );
 };
