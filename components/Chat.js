@@ -51,7 +51,11 @@ const Chat = () => {
       messages.map((msg, i) =>
         React.createElement(
           'div',
-          { key: i, className: 'p-1 bg-white rounded shadow whitespace-pre-wrap' },
+          {
+            key: i,
+            className:
+              'p-1 bg-white rounded shadow whitespace-pre-wrap break-all',
+          },
           msg
         )
       )
