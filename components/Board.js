@@ -1,6 +1,7 @@
 import React from 'https://esm.sh/react@18.3.1';
 import Point from './Point.js';
 import Dice from './Dice.js';
+import Bar from './Bar.js';
 import {
   rollDice,
   createInitialPoints,
@@ -318,6 +319,11 @@ const Board = () => {
             React.createElement(
               'li',
               null,
+              'Checkers on the bar must re-enter before you can move others.'
+            ),
+            React.createElement(
+              'li',
+              null,
               'Once all your checkers are in your home board you can bear them off by double-clicking a checker.'
             )
           ),
@@ -377,8 +383,19 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'mb-2' },
-      `Bar - White: ${bar.white} | Black: ${bar.black}`
+      { className: 'mb-2 flex justify-center space-x-8' },
+      React.createElement(
+        'div',
+        { className: 'flex flex-col items-center' },
+        React.createElement('span', null, `White bar (${bar.white})`),
+        React.createElement(Bar, { color: 'white', count: bar.white })
+      ),
+      React.createElement(
+        'div',
+        { className: 'flex flex-col items-center' },
+        React.createElement('span', null, `Black bar (${bar.black})`),
+        React.createElement(Bar, { color: 'black', count: bar.black })
+      )
     ),
     React.createElement(
       'div',
