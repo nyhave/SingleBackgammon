@@ -10,7 +10,7 @@ const Dice = ({ values }) =>
         {
           key: i,
           className:
-            'w-10 h-10 flex items-center justify-center border border-gray-800 rounded bg-white text-2xl font-bold',
+            'w-10 h-10 flex items-center justify-center border border-gray-800 rounded bg-white text-black text-2xl font-bold',
           'aria-label': `Die showing ${value}`,
         },
         value
