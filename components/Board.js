@@ -522,7 +522,7 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'grid grid-cols-12 gap-1' },
+      { className: 'grid grid-cols-12 gap-1 mb-4' },
       ...points.slice(0, 12).map((_, i) => {
         const idx = 11 - i;
         const p = points[idx];

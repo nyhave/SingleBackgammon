@@ -21,18 +21,21 @@ const Point = ({
   const isWhiteHome = index >= 18;
   const isBlackHome = index <= 5;
   const homeClass = isWhiteHome
-    ? 'bg-green-100'
+    ? 'bg-white'
     : isBlackHome
-    ? 'bg-red-100'
+    ? 'bg-black'
     : '';
+  const quadrantBorder = index === 6 || index === 17 ? 'border-r-4 border-gray-800' : '';
 
   const checkers = [];
   for (let i = 0; i < point.count; i++) {
     checkers.push(
       React.createElement('div', {
         key: i,
-        className: `w-6 h-6 rounded-full border border-gray-800 mb-1 ${
-          point.color === 'white' ? 'bg-white' : 'bg-black'
+        className: `w-6 h-6 rounded-full border mb-1 ${
+          point.color === 'white'
+            ? 'bg-white border-gray-800'
+            : 'bg-black border-white'
         }`,
       })
     );
@@ -45,9 +48,9 @@ const Point = ({
       onClick,
       className: `relative w-8 h-32 flex justify-center items-center cursor-pointer ${
         homeClass
-      } ${selected ? 'bg-green-200' : ''} ${highlighted ? 'bg-blue-200' : ''} ${
-        movedFrom ? 'bg-red-200' : ''
-      } ${movedTo ? 'bg-yellow-200' : ''}`,
+      } ${quadrantBorder} ${selected ? 'bg-green-200' : ''} ${
+        highlighted ? 'bg-blue-200' : ''
+      } ${movedFrom ? 'bg-red-200' : ''} ${movedTo ? 'bg-yellow-200' : ''}`,
     },
     React.createElement('div', {
       className: `absolute w-0 h-0 border-l-[16px] border-r-[16px] ${
@@ -68,9 +71,9 @@ const Point = ({
     React.createElement(
       'span',
       {
-        className: `absolute text-xs text-gray-600 ${
-          isTop ? 'top-1' : 'bottom-1'
-        } left-1 pointer-events-none`,
+        className: `absolute text-xs ${
+          isBlackHome ? 'text-white' : 'text-gray-600'
+        } ${isTop ? 'top-1' : 'bottom-1'} left-1 pointer-events-none`,
       },
       number
     )
