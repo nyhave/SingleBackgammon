@@ -601,16 +601,16 @@ const Board = () => {
       { className: 'flex justify-center space-x-4 mt-2' },
       React.createElement(Rack, { color: 'white', count: offCounts.white }),
       React.createElement(Rack, { color: 'black', count: offCounts.black })
-    ),
-    // Right side area for video placeholder and chat
-    React.createElement(
-      'div',
-      { className: 'w-1/5 p-2 flex flex-col space-y-2 h-full' },
-      React.createElement('div', {
-        className: 'w-full aspect-square bg-black border border-gray-400',
-      }),
-      React.createElement(Chat)
     )
+  ),
+  // Right side area for video placeholder and chat
+  React.createElement(
+    'div',
+    { className: 'w-1/5 p-2 flex flex-col space-y-2 h-full' },
+    React.createElement('div', {
+      className: 'w-full aspect-square bg-black border border-gray-400',
+    }),
+    React.createElement(Chat)
   )
 );
 };
