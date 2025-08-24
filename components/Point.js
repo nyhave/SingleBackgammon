@@ -18,13 +18,7 @@ const Point = ({
       ? 'border-b-orange-700'
       : 'border-t-orange-700';
   const number = 24 - index;
-  const isWhiteHome = index >= 18;
   const isBlackHome = index <= 5;
-  const homeClass = isWhiteHome
-    ? 'bg-white'
-    : isBlackHome
-    ? 'bg-black'
-    : '';
   const quadrantBorder = index === 6 || index === 17 ? 'border-r-4 border-gray-800' : '';
 
   const checkers = [];
@@ -47,8 +41,8 @@ const Point = ({
       'data-point': index,
       onClick,
       className: `relative w-8 h-32 flex justify-center items-center cursor-pointer ${
-        homeClass
-      } ${quadrantBorder} ${selected ? 'bg-green-200' : ''} ${
+        quadrantBorder
+      } ${selected ? 'bg-green-200' : ''} ${
         highlighted ? 'bg-blue-200' : ''
       } ${movedFrom ? 'bg-red-200' : ''} ${movedTo ? 'bg-yellow-200' : ''}`,
     },
