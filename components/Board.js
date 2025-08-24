@@ -23,6 +23,14 @@ const Board = () => {
   const [lastMove, setLastMove] = React.useState(null);
   const [scores, setScores] = React.useState({ white: 0, black: 0 });
 
+  const offCounts = React.useMemo(() => {
+    const counts = { white: 15, black: 15 };
+    points.forEach((p) => {
+      if (p.color) counts[p.color] -= p.count;
+    });
+    return counts;
+  }, [points]);
+
   const endTurn = () => {
     setCurrentPlayer((p) => (p === '0' ? '1' : '0'));
     setTurn((t) => t + 1);
@@ -296,6 +304,42 @@ const Board = () => {
       'div',
       { className: 'mb-4' },
       `Score - White: ${scores.white} | Black: ${scores.black}`
+    ),
+    React.createElement(
+      'div',
+      { className: 'mb-4 flex justify-between' },
+      React.createElement(
+        'div',
+        { className: 'flex items-center' },
+        React.createElement('span', { className: 'mr-2' }, 'White off:'),
+        React.createElement(
+          'div',
+          { className: 'flex space-x-1' },
+          ...Array.from({ length: offCounts.white }).map((_, i) =>
+            React.createElement('div', {
+              key: i,
+              className:
+                'w-4 h-4 rounded-full border border-gray-800 bg-white',
+            })
+          )
+        )
+      ),
+      React.createElement(
+        'div',
+        { className: 'flex items-center' },
+        React.createElement('span', { className: 'mr-2' }, 'Black off:'),
+        React.createElement(
+          'div',
+          { className: 'flex space-x-1' },
+          ...Array.from({ length: offCounts.black }).map((_, i) =>
+            React.createElement('div', {
+              key: i,
+              className:
+                'w-4 h-4 rounded-full border border-gray-800 bg-black',
+            })
+          )
+        )
+      )
     ),
     React.createElement(
       'div',

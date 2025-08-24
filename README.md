@@ -15,6 +15,7 @@ Roll the dice with the **Roll** button or press **Enter**. Selecting a checker h
 - A cache-clearing reload button is available for development or troubleshooting.
 - A log button captures the current game state to the console for debugging.
 - Checkers can be borne off from the home board by double-clicking.
+- Borne-off checkers are displayed next to the board.
 
 ## Development
 
