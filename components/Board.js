@@ -26,6 +26,10 @@ const Board = () => {
   const [stepPlay, setStepPlay] = React.useState(false);
   const [lastMove, setLastMove] = React.useState(null);
   const [scores, setScores] = React.useState({ white: 0, black: 0 });
+  const [playerNames, setPlayerNames] = React.useState({
+    white: 'Christian',
+    black: 'Marianne',
+  });
   const [bar, setBar] = React.useState({ white: 0, black: 0 });
 
   const offCounts = React.useMemo(() => {
@@ -408,9 +412,33 @@ const Board = () => {
       React.createElement(
         'div',
         { className: 'flex items-center justify-between px-4 py-1' },
-        React.createElement('span', { className: 'font-bold' }, scores.white),
+        React.createElement(
+          'div',
+          { className: 'flex flex-col items-center' },
+          React.createElement('input', {
+            value: playerNames.white,
+            onChange: (e) =>
+              setPlayerNames((n) => ({ ...n, white: e.target.value })),
+            className:
+              'mb-1 w-24 text-center font-bold bg-transparent border-b border-white text-white placeholder-white',
+            placeholder: 'Christian',
+          }),
+          React.createElement('span', { className: 'font-bold' }, scores.white)
+        ),
         React.createElement(Dice, { values: displayDice }),
-        React.createElement('span', { className: 'font-bold text-black' }, scores.black)
+        React.createElement(
+          'div',
+          { className: 'flex flex-col items-center text-black' },
+          React.createElement('input', {
+            value: playerNames.black,
+            onChange: (e) =>
+              setPlayerNames((n) => ({ ...n, black: e.target.value })),
+            className:
+              'mb-1 w-24 text-center font-bold bg-transparent border-b border-black text-black placeholder-black',
+            placeholder: 'Marianne',
+          }),
+          React.createElement('span', { className: 'font-bold text-black' }, scores.black)
+        )
       )
     ),
     React.createElement(
