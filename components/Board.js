@@ -300,13 +300,16 @@ const Board = () => {
 
   return React.createElement(
     'div',
-    { className: 'flex flex-col items-center w-full' },
-    showInstructions &&
-      React.createElement(
-        'div',
-        {
-          className:
-            'fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50',
+    { className: 'flex w-full justify-center items-start' },
+    React.createElement(
+      'div',
+      { className: 'flex flex-col items-center' },
+      showInstructions &&
+        React.createElement(
+          'div',
+          {
+            className:
+              'fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50',
         },
         React.createElement(
           'div',
@@ -622,29 +625,30 @@ const Board = () => {
       React.createElement(Bar, { color: 'white', count: bar.white }),
       React.createElement(Bar, { color: 'black', count: bar.black })
     ),
-    React.createElement(
-      'div',
-      { className: 'relative' },
       React.createElement(
         'div',
-        { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
-        React.createElement('div', { className: 'col-span-6' }),
-        React.createElement('div', { className: 'col-span-6 bg-gray-300' })
-      ),
-      React.createElement(
-        'div',
-        { className: 'grid grid-cols-12 gap-1' },
-        ...points.slice(12).map((p, i) =>
-          React.createElement(Point, {
-            key: i + 12,
-            point: p,
-            index: i + 12,
-            selected: selected === i + 12,
-            highlighted: possibleMoves.includes(i + 12),
-            movedFrom: lastMove && lastMove.from === i + 12,
-            movedTo: lastMove && lastMove.to === i + 12,
-            onClick: () => handlePointClick(i + 12),
-          })
+        { className: 'relative' },
+        React.createElement(
+          'div',
+          { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
+          React.createElement('div', { className: 'col-span-6' }),
+          React.createElement('div', { className: 'col-span-6 bg-gray-300' })
+        ),
+        React.createElement(
+          'div',
+          { className: 'grid grid-cols-12 gap-1' },
+          ...points.slice(12).map((p, i) =>
+            React.createElement(Point, {
+              key: i + 12,
+              point: p,
+              index: i + 12,
+              selected: selected === i + 12,
+              highlighted: possibleMoves.includes(i + 12),
+              movedFrom: lastMove && lastMove.from === i + 12,
+              movedTo: lastMove && lastMove.to === i + 12,
+              onClick: () => handlePointClick(i + 12),
+            })
+          )
         )
       )
     ),
