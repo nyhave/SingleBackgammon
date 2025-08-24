@@ -1,7 +1,14 @@
 import React from 'https://esm.sh/react@18.3.1';
 
+const initialMessages = [
+  `Welcome to the chat!\nThis message spans multiple lines\nto preview the layout.`,
+  `Here is a second sample message\nwith several lines\nfor testing purposes.`,
+  `A third example that is a bit longer\nso you can see wrapping\nand spacing within the box.`,
+  `Finally a fourth message\nthat also contains\nmultiple line breaks.`,
+];
+
 const Chat = () => {
-  const [messages, setMessages] = React.useState([]);
+  const [messages, setMessages] = React.useState(initialMessages);
   const [input, setInput] = React.useState('');
 
   const sendMessage = () => {
@@ -20,7 +27,7 @@ const Chat = () => {
       messages.map((msg, i) =>
         React.createElement(
           'div',
-          { key: i, className: 'p-1 bg-white rounded shadow' },
+          { key: i, className: 'p-1 bg-white rounded shadow whitespace-pre-wrap' },
           msg
         )
       )
