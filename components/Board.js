@@ -285,11 +285,6 @@ const Board = () => {
   const controlPanel = React.createElement(
     'div',
     { className: 'w-1/5 p-2 flex flex-col space-y-2' },
-    React.createElement(
-      'div',
-      null,
-      `Current player: ${currentPlayer === '0' ? 'White' : 'Black'}`
-    ),
     waitingForRoll
       ? React.createElement(
           'button',
@@ -513,21 +508,42 @@ const Board = () => {
         },
         React.createElement(
           'div',
-          { className: 'flex flex-col items-center' },
+          {
+            className: `flex flex-col items-center ${
+              currentPlayer === '0'
+                ? 'bg-yellow-300 text-black rounded px-1'
+                : ''
+            }`,
+          },
           React.createElement('input', {
             value: playerNames.white,
             onChange: (e) =>
               setPlayerNames((n) => ({ ...n, white: e.target.value })),
-            className:
-              'mb-1 w-24 text-center font-bold bg-transparent border-b border-white text-white placeholder-white',
+            className: `mb-1 w-24 text-center font-bold bg-transparent border-b ${
+              currentPlayer === '0'
+                ? 'border-black text-black placeholder-black'
+                : 'border-white text-white placeholder-white'
+            }`,
             placeholder: 'Christian',
           }),
-          React.createElement('span', { className: 'font-bold' }, scores.white)
+          React.createElement(
+            'span',
+            {
+              className: `font-bold ${
+                currentPlayer === '0' ? 'text-black' : ''
+              }`,
+            },
+            scores.white
+          )
         ),
         React.createElement(Dice, { values: displayDice }),
         React.createElement(
           'div',
-          { className: 'flex flex-col items-center text-black' },
+          {
+            className: `flex flex-col items-center text-black ${
+              currentPlayer === '1' ? 'bg-yellow-300 rounded px-1' : ''
+            }`,
+          },
           React.createElement('input', {
             value: playerNames.black,
             onChange: (e) =>
