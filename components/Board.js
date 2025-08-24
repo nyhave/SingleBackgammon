@@ -296,10 +296,10 @@ const Board = () => {
 
   return React.createElement(
     'div',
-    { className: 'flex justify-center' },
+    { className: 'w-full' },
     React.createElement(
       'div',
-      { className: 'w-full max-w-[428px] text-center flex-shrink-0' },
+      { className: 'w-full text-center flex-shrink-0' },
       showInstructions &&
         React.createElement(
           'div',
@@ -399,7 +399,7 @@ const Board = () => {
       ),
     React.createElement(
       'div',
-      { className: 'mb-4 bg-green-500 text-white' },
+      { className: 'mb-4 bg-green-500 text-white w-full' },
       React.createElement(
         'div',
         { className: 'text-center font-bold' },
@@ -407,7 +407,7 @@ const Board = () => {
       ),
       React.createElement(
         'div',
-        { className: 'flex items-center justify-between px-4 py-1' },
+        { className: 'flex items-center justify-between px-4 py-1 w-full' },
         React.createElement('span', { className: 'font-bold' }, scores.white),
         React.createElement(Dice, { values: displayDice }),
         React.createElement('span', { className: 'font-bold text-black' }, scores.black)
