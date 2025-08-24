@@ -298,12 +298,118 @@ const Board = () => {
     'Video'
   );
 
-  return React.createElement(
+  const controlPanel = React.createElement(
     'div',
-    { className: 'flex w-full justify-center items-start' },
+    { className: 'w-1/5 p-2 flex flex-col space-y-2' },
     React.createElement(
       'div',
-      { className: 'flex flex-col items-center' },
+      null,
+      `Current player: ${currentPlayer === '0' ? 'White' : 'Black'}`
+    ),
+    waitingForRoll
+      ? React.createElement(
+          'button',
+          {
+            className: 'w-full px-4 py-2 bg-blue-500 text-white rounded',
+            onClick: () => rollForCurrentPlayer(),
+          },
+          'Roll'
+        )
+      : React.createElement(
+          'button',
+          {
+            className: 'w-full px-4 py-2 bg-blue-500 text-white rounded',
+            onClick: () => endTurn(),
+            disabled: autoPlay,
+          },
+          'End Turn'
+        ),
+    React.createElement(
+      'button',
+      {
+        className: 'w-full px-4 py-2 bg-purple-500 text-white rounded',
+        onClick: newGame,
+      },
+      'New Game'
+    ),
+    React.createElement(
+      'button',
+      {
+        className: 'w-full px-4 py-2 bg-red-500 text-white rounded',
+        onClick: clearCacheAndReload,
+      },
+      'Reload Game'
+    ),
+    React.createElement(
+      'button',
+      {
+        className: 'w-full px-4 py-2 bg-gray-500 text-white rounded',
+        onClick: () => setShowInstructions(true),
+      },
+      'Help'
+    ),
+    React.createElement(
+      'div',
+      { className: 'flex flex-col space-y-2' },
+      stepPlay &&
+        !waitingForRoll &&
+        React.createElement(
+          'button',
+          {
+            className: 'w-full px-4 py-2 bg-blue-500 text-white rounded',
+            onClick: () => makeAIMove(),
+          },
+          'Next'
+        ),
+      stepPlay
+        ? React.createElement(
+            'button',
+            {
+              className: 'w-full px-4 py-2 bg-gray-500 text-white rounded',
+              onClick: () => setStepPlay(false),
+            },
+            'Stop'
+          )
+        : React.createElement(
+            'button',
+            {
+              className: 'w-full px-4 py-2 bg-yellow-500 text-white rounded',
+              onClick: () => {
+                setStepPlay(true);
+                setAutoPlay(false);
+              },
+              disabled: autoPlay,
+            },
+            'Step'
+          ),
+      React.createElement(
+        'button',
+        {
+          className: 'w-full px-4 py-2 bg-green-500 text-white rounded',
+          onClick: () => {
+            setAutoPlay(true);
+            setStepPlay(false);
+          },
+          disabled: autoPlay,
+        },
+        'Autoplay'
+      )
+    ),
+    gameover &&
+      React.createElement(
+        'div',
+        { className: 'mt-2 text-center' },
+        `Winner: ${gameover.winner === '0' ? 'White' : 'Black'}`
+      )
+  );
+
+  return React.createElement(
+    'div',
+    { className: 'flex w-full h-screen' },
+    controlPanel,
+    React.createElement(
+      'div',
+      { className: 'w-3/5 flex flex-col items-center' },
       showInstructions &&
         React.createElement(
           'div',
@@ -483,114 +589,7 @@ const Board = () => {
         )
       )
     ),
-    React.createElement(
-      'div',
-      { className: 'mb-4 flex flex-col items-center' },
-      React.createElement(
-        'div',
-        null,
-        `Current player: ${currentPlayer === '0' ? 'White' : 'Black'}`
-      ),
-      React.createElement(
-        'div',
-        { className: 'flex items-center space-x-2 mt-2' },
-        stepPlay &&
-          !waitingForRoll &&
-          React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => makeAIMove(),
-            },
-            'Next'
-          ),
-        stepPlay
-          ? React.createElement(
-              'button',
-              {
-                className: 'px-4 py-2 bg-gray-500 text-white rounded',
-                onClick: () => setStepPlay(false),
-              },
-              'Stop'
-            )
-          : React.createElement(
-              'button',
-              {
-                className: 'px-4 py-2 bg-yellow-500 text-white rounded',
-                onClick: () => {
-                  setStepPlay(true);
-                  setAutoPlay(false);
-                },
-                disabled: autoPlay,
-              },
-              'Step'
-            ),
-        React.createElement(
-          'button',
-          {
-            className: 'px-4 py-2 bg-green-500 text-white rounded',
-            onClick: () => {
-              setAutoPlay(true);
-              setStepPlay(false);
-            },
-            disabled: autoPlay,
-          },
-          'Autoplay'
-        )
-      ),
-      gameover &&
-        React.createElement(
-          'div',
-          { className: 'mt-2' },
-          `Winner: ${gameover.winner === '0' ? 'White' : 'Black'}`
-        )
-    ),
-    React.createElement(
-      'div',
-      { className: 'mb-4 flex justify-center space-x-2 flex-wrap' },
-      waitingForRoll
-        ? React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => rollForCurrentPlayer(),
-            },
-            'Roll'
-          )
-        : React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => endTurn(),
-              disabled: autoPlay,
-            },
-            'End Turn'
-          ),
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-purple-500 text-white rounded',
-          onClick: newGame,
-        },
-        'New Game'
-      ),
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-red-500 text-white rounded',
-          onClick: clearCacheAndReload,
-        },
-        'Reload Game'
-      ),
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-gray-500 text-white rounded',
-          onClick: () => setShowInstructions(true),
-        },
-        'Help'
-      )
-    ),
+    // controls moved to left panel
     React.createElement(
       'div',
       { className: 'relative bg-green-600' },
@@ -654,10 +653,7 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      {
-        className:
-          'ml-2 w-32 flex flex-col space-y-2 md:ml-4 md:w-64 md:space-y-4 flex-shrink-0',
-      },
+      { className: 'w-1/5 p-2 flex flex-col space-y-2' },
       chatPlaceholder,
       videoPlaceholder
     )
