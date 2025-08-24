@@ -6,7 +6,7 @@ const Bar = ({ color, count, onClick }) => {
     checkers.push(
       React.createElement('div', {
         key: i,
-        className: `w-6 h-6 rounded-full border border-gray-800 mr-1 last:mr-0 ${
+        className: `w-3 h-3 rounded-full border border-gray-800 mr-0.5 last:mr-0 ${
           color === 'white' ? 'bg-white' : 'bg-black'
         }`,
       })
@@ -17,7 +17,7 @@ const Bar = ({ color, count, onClick }) => {
     {
       onClick,
       className:
-        'w-32 h-8 flex flex-row items-center justify-center bg-gray-200',
+        'w-16 h-4 flex flex-row items-center justify-center bg-gray-200',
     },
     ...checkers
   );
