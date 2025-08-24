@@ -21,6 +21,7 @@ const Board = () => {
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [stepPlay, setStepPlay] = React.useState(false);
   const [lastMove, setLastMove] = React.useState(null);
+  const [waitingForRoll, setWaitingForRoll] = React.useState(false);
   const [scores, setScores] = React.useState({ white: 0, black: 0 });
 
   const offCounts = React.useMemo(() => {
@@ -34,8 +35,13 @@ const Board = () => {
   const endTurn = () => {
     setCurrentPlayer((p) => (p === '0' ? '1' : '0'));
     setTurn((t) => t + 1);
-    setDice(rollDice());
+    setWaitingForRoll(true);
   };
+
+  const rollForCurrentPlayer = React.useCallback(() => {
+    setDice(rollDice());
+    setWaitingForRoll(false);
+  }, []);
 
   const moveChecker = (from, to) => {
     const result = applyMove({ points, dice }, currentPlayer, from, to);
@@ -77,6 +83,7 @@ const Board = () => {
     setAutoPlay(false);
     setStepPlay(false);
     setLastMove(null);
+    setWaitingForRoll(false);
   };
 
   const calculateMoves = React.useCallback(
@@ -110,7 +117,7 @@ const Board = () => {
   );
 
   const handlePointClick = (index) => {
-    if (autoPlay || stepPlay || currentPlayer !== '0') return;
+    if (autoPlay || stepPlay || currentPlayer !== '0' || waitingForRoll) return;
     const point = points[index];
     if (selected === null) {
       if (point.color === 'white' && point.count > 0) {
@@ -171,13 +178,19 @@ const Board = () => {
       }
     }
 
-    if (possible.length > 0) {
+  if (possible.length > 0) {
       const [from, to] = possible[Math.floor(Math.random() * possible.length)];
       moveChecker(from, to);
     } else {
       endTurn();
     }
   }, [currentPlayer, points, dice, moveChecker, endTurn]);
+
+  React.useEffect(() => {
+    if (waitingForRoll && (currentPlayer === '1' || autoPlay)) {
+      rollForCurrentPlayer();
+    }
+  }, [waitingForRoll, currentPlayer, autoPlay, rollForCurrentPlayer]);
 
   React.useEffect(() => {
     const isAuto = autoPlay || (!stepPlay && currentPlayer === '1');
@@ -194,7 +207,9 @@ const Board = () => {
   React.useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Enter') {
-        if (stepPlay) {
+        if (waitingForRoll && currentPlayer === '0') {
+          rollForCurrentPlayer();
+        } else if (stepPlay) {
           makeAIMove();
         } else if (!autoPlay) {
           endTurn();
@@ -203,7 +218,15 @@ const Board = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [autoPlay, stepPlay, makeAIMove, endTurn]);
+  }, [
+    autoPlay,
+    stepPlay,
+    makeAIMove,
+    endTurn,
+    waitingForRoll,
+    currentPlayer,
+    rollForCurrentPlayer,
+  ]);
 
   return React.createElement(
     'div',
@@ -262,7 +285,12 @@ const Board = () => {
               React.createElement(
                 'li',
                 null,
-                'End Turn: roll the dice and pass play to the computer opponent.'
+                'Roll: start your turn by rolling new dice after the computer finishes.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'End Turn: pass play to the computer opponent.'
               ),
               React.createElement(
                 'li',
@@ -360,7 +388,17 @@ const Board = () => {
     React.createElement(
       'div',
       { className: 'mb-4 flex justify-center space-x-2' },
-      stepPlay
+      waitingForRoll && currentPlayer === '0'
+        ? React.createElement(
+            'button',
+            {
+              className: 'px-4 py-2 bg-blue-500 text-white rounded',
+              onClick: rollForCurrentPlayer,
+              disabled: autoPlay,
+            },
+            'Roll'
+          )
+        : stepPlay
         ? React.createElement(
             'button',
             {

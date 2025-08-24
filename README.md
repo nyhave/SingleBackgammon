@@ -8,7 +8,7 @@ Roll the dice with the **Roll** button or press **Enter**. Selecting a checker h
 
 ## Features so far
 
-- Visual dice with clear face values that roll automatically at game start and at the beginning of each turn.
+- Visual dice with clear face values that roll automatically at game start and for the computer, and by clicking **Roll** to begin the player's turn.
 - Checkers highlight their available moves and can be dragged to legal points.
 - Autoplay mode lets the AI play itself, with a step-through option for pausing and advancing one move at a time.
 - Startup instructions overlay and an in-game help dialog explain the rules.
