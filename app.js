@@ -13,6 +13,28 @@ root.render(
   )
 );
 
+function enforceLandscape() {
+  if (!/iPhone/i.test(window.navigator.userAgent)) {
+    return;
+  }
+
+  const warning = document.getElementById('orientation-warning');
+  const rootEl = document.getElementById('root');
+  const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+
+  if (isPortrait) {
+    warning.classList.remove('hidden');
+    rootEl.classList.add('hidden');
+  } else {
+    warning.classList.add('hidden');
+    rootEl.classList.remove('hidden');
+  }
+}
+
+window.addEventListener('load', enforceLandscape);
+window.addEventListener('resize', enforceLandscape);
+window.addEventListener('orientationchange', enforceLandscape);
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js');
