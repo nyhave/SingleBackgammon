@@ -300,15 +300,12 @@ const Board = () => {
 
   return React.createElement(
     'div',
-    { className: 'flex justify-center' },
-    React.createElement(
-      'div',
-      { className: 'w-[428px] text-center flex-shrink-0' },
-      showInstructions &&
-        React.createElement(
-          'div',
-          {
-            className:
+    { className: 'flex flex-col items-center w-full' },
+    showInstructions &&
+      React.createElement(
+        'div',
+        {
+          className:
             'fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50',
         },
         React.createElement(
@@ -357,35 +354,35 @@ const Board = () => {
             { className: 'mb-2 text-sm' },
             'Buttons above the board provide extra options:'
           ),
+          React.createElement(
+            'ul',
+            { className: 'mb-4 list-disc pl-5 text-sm space-y-1' },
             React.createElement(
-              'ul',
-              { className: 'mb-4 list-disc pl-5 text-sm space-y-1' },
-              React.createElement(
-                'li',
-                null,
-                'End Turn: roll the dice and pass play to the computer opponent.'
-              ),
-              React.createElement(
-                'li',
-                null,
-                'Step: watch the computer play one move at a time. Press Next for each move.'
-              ),
-              React.createElement(
-                'li',
-                null,
-                'Autoplay: let the computer control both sides automatically.'
-              ),
-              React.createElement(
-                'li',
-                null,
-                'New Game: reset the board and keep the running score.'
-              ),
-              React.createElement(
-                'li',
-                null,
-                'Reload Game: clear cached data and restart the match.'
-              )
+              'li',
+              null,
+              'End Turn: roll the dice and pass play to the computer opponent.'
             ),
+            React.createElement(
+              'li',
+              null,
+              'Step: watch the computer play one move at a time. Press Next for each move.'
+            ),
+            React.createElement(
+              'li',
+              null,
+              'Autoplay: let the computer control both sides automatically.'
+            ),
+            React.createElement(
+              'li',
+              null,
+              'New Game: reset the board and keep the running score.'
+            ),
+            React.createElement(
+              'li',
+              null,
+              'Reload Game: clear cached data and restart the match.'
+            )
+          ),
           React.createElement(
             'p',
             { className: 'mb-4 text-sm' },
@@ -403,7 +400,7 @@ const Board = () => {
       ),
     React.createElement(
       'div',
-      { className: 'mb-4 bg-green-500 text-white' },
+      { className: 'mb-4 bg-green-500 text-white w-full' },
       React.createElement(
         'div',
         { className: 'text-center font-bold' },
@@ -411,7 +408,10 @@ const Board = () => {
       ),
       React.createElement(
         'div',
-        { className: 'flex items-center justify-between px-4 py-1' },
+        {
+          className:
+            'flex items-center justify-between px-4 py-1 max-w-[428px] mx-auto',
+        },
         React.createElement(
           'div',
           { className: 'flex flex-col items-center' },
@@ -443,8 +443,11 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'mb-4 flex justify-between' },
+      { className: 'w-[428px] text-center flex-shrink-0' },
       React.createElement(
+        'div',
+        { className: 'mb-4 flex justify-between' },
+        React.createElement(
         'div',
         { className: 'flex items-center' },
         React.createElement('span', { className: 'mr-2' }, 'White off:'),
