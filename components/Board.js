@@ -539,36 +539,56 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'grid grid-cols-12 gap-1 mb-4' },
-      ...points.slice(0, 12).map((_, i) => {
-        const idx = 11 - i;
-        const p = points[idx];
-        return React.createElement(Point, {
-          key: idx,
-          point: p,
-          index: idx,
-          selected: selected === idx,
-          highlighted: possibleMoves.includes(idx),
-          movedFrom: lastMove && lastMove.from === idx,
-          movedTo: lastMove && lastMove.to === idx,
-          onClick: () => handlePointClick(idx),
-        });
-      })
+      { className: 'relative mb-4' },
+      React.createElement(
+        'div',
+        { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
+        React.createElement('div', { className: 'col-span-6' }),
+        React.createElement('div', { className: 'col-span-6 bg-black' })
+      ),
+      React.createElement(
+        'div',
+        { className: 'grid grid-cols-12 gap-1' },
+        ...points.slice(0, 12).map((_, i) => {
+          const idx = 11 - i;
+          const p = points[idx];
+          return React.createElement(Point, {
+            key: idx,
+            point: p,
+            index: idx,
+            selected: selected === idx,
+            highlighted: possibleMoves.includes(idx),
+            movedFrom: lastMove && lastMove.from === idx,
+            movedTo: lastMove && lastMove.to === idx,
+            onClick: () => handlePointClick(idx),
+          });
+        })
+      )
     ),
     React.createElement(
       'div',
-      { className: 'grid grid-cols-12 gap-1' },
-      ...points.slice(12).map((p, i) =>
-        React.createElement(Point, {
-          key: i + 12,
-          point: p,
-          index: i + 12,
-          selected: selected === i + 12,
-          highlighted: possibleMoves.includes(i + 12),
-          movedFrom: lastMove && lastMove.from === i + 12,
-          movedTo: lastMove && lastMove.to === i + 12,
-          onClick: () => handlePointClick(i + 12),
-        })
+      { className: 'relative' },
+      React.createElement(
+        'div',
+        { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
+        React.createElement('div', { className: 'col-span-6' }),
+        React.createElement('div', { className: 'col-span-6 bg-white' })
+      ),
+      React.createElement(
+        'div',
+        { className: 'grid grid-cols-12 gap-1' },
+        ...points.slice(12).map((p, i) =>
+          React.createElement(Point, {
+            key: i + 12,
+            point: p,
+            index: i + 12,
+            selected: selected === i + 12,
+            highlighted: possibleMoves.includes(i + 12),
+            movedFrom: lastMove && lastMove.from === i + 12,
+            movedTo: lastMove && lastMove.to === i + 12,
+            onClick: () => handlePointClick(i + 12),
+          })
+        )
       )
     )
   );
