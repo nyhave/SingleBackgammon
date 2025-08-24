@@ -456,12 +456,12 @@ const Board = () => {
         React.createElement('span', { className: 'mr-2' }, 'White off:'),
         React.createElement(
           'div',
-          { className: 'flex space-x-1' },
+          { className: 'flex space-x-0.5' },
           ...Array.from({ length: offCounts.white }).map((_, i) =>
             React.createElement('div', {
               key: i,
               className:
-                'w-4 h-4 rounded-full border border-gray-800 bg-white',
+                'w-2 h-2 rounded-full border border-gray-800 bg-white',
             })
           )
         )
@@ -472,12 +472,12 @@ const Board = () => {
         React.createElement('span', { className: 'mr-2' }, 'Black off:'),
         React.createElement(
           'div',
-          { className: 'flex space-x-1' },
+          { className: 'flex space-x-0.5' },
           ...Array.from({ length: offCounts.black }).map((_, i) =>
             React.createElement('div', {
               key: i,
               className:
-                'w-4 h-4 rounded-full border border-gray-800 bg-black',
+                'w-2 h-2 rounded-full border border-gray-800 bg-black',
             })
           )
         )
