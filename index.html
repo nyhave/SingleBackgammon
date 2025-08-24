@@ -4,16 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#008000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>SingleBackgammon</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="manifest" href="./manifest.json" />
   <script src="./console-capture.js"></script>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gray-100">
+<body class="min-h-screen bg-gray-100">
   <div id="orientation-warning" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 text-white text-xl">
     Please rotate your device to landscape
   </div>
-  <div id="root"></div>
+  <div id="root" class="w-full"></div>
   <script type="module" src="./app.js"></script>
 </body>
 </html>
