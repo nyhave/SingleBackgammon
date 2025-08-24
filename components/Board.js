@@ -612,7 +612,7 @@ const Board = () => {
   // Right side area for video placeholder and chat
   React.createElement(
     'div',
-    { className: 'w-1/5 p-2 flex flex-col space-y-2 h-full' },
+    { className: 'w-1/5 p-2 flex flex-col space-y-2 h-full min-h-0' },
     React.createElement('div', {
       className: 'w-full aspect-square bg-black border border-gray-400',
     }),
