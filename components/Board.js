@@ -549,7 +549,7 @@ const Board = () => {
         'div',
         { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
         React.createElement('div', { className: 'col-span-6' }),
-        React.createElement('div', { className: 'col-span-6 bg-black' })
+        React.createElement('div', { className: 'col-span-6 bg-gray-700' })
       ),
       React.createElement(
         'div',
@@ -577,7 +577,7 @@ const Board = () => {
         'div',
         { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
         React.createElement('div', { className: 'col-span-6' }),
-        React.createElement('div', { className: 'col-span-6 bg-white' })
+        React.createElement('div', { className: 'col-span-6 bg-gray-300' })
       ),
       React.createElement(
         'div',
