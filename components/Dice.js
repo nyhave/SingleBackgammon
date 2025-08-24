@@ -3,7 +3,7 @@ import React from 'https://esm.sh/react@18.3.1';
 const Dice = ({ values }) =>
   React.createElement(
     'div',
-    { className: 'flex space-x-2 justify-center mt-2' },
+    { className: 'flex space-x-2' },
     values.map((value, i) =>
       React.createElement(
         'div',
