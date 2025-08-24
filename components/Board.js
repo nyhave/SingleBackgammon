@@ -399,23 +399,18 @@ const Board = () => {
       ),
     React.createElement(
       'div',
-      { className: 'mb-4' },
-      `Score - White: ${scores.white} | Black: ${scores.black}`
-    ),
-    React.createElement(
-      'div',
-      { className: 'mb-2 flex justify-center space-x-8' },
+      { className: 'mb-4 bg-green-500 text-white' },
       React.createElement(
         'div',
-        { className: 'flex flex-col items-center' },
-        React.createElement('span', null, `White bar (${bar.white})`),
-        React.createElement(Bar, { color: 'white', count: bar.white })
+        { className: 'text-center font-bold' },
+        'SingleBackgammon'
       ),
       React.createElement(
         'div',
-        { className: 'flex flex-col items-center' },
-        React.createElement('span', null, `Black bar (${bar.black})`),
-        React.createElement(Bar, { color: 'black', count: bar.black })
+        { className: 'flex items-center justify-between px-4 py-1' },
+        React.createElement('span', { className: 'font-bold' }, scores.white),
+        React.createElement(Dice, { values: displayDice }),
+        React.createElement('span', { className: 'font-bold text-black' }, scores.black)
       )
     ),
     React.createElement(
@@ -465,7 +460,6 @@ const Board = () => {
       React.createElement(
         'div',
         { className: 'flex items-center space-x-2 mt-2' },
-        React.createElement(Dice, { values: displayDice }),
         stepPlay &&
           !waitingForRoll &&
           React.createElement(
@@ -590,6 +584,12 @@ const Board = () => {
           });
         })
       )
+    ),
+    React.createElement(
+      'div',
+      { className: 'flex justify-center mb-4 space-x-4' },
+      React.createElement(Bar, { color: 'white', count: bar.white }),
+      React.createElement(Bar, { color: 'black', count: bar.black })
     ),
     React.createElement(
       'div',
