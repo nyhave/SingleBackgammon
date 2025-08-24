@@ -276,6 +276,24 @@ const Board = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [autoPlay, stepPlay, makeAIMove, endTurn, waitingForRoll, rollForCurrentPlayer]);
 
+  const chatPlaceholder = React.createElement(
+    'div',
+    {
+      className:
+        'flex-1 border-2 border-dashed border-gray-400 flex items-center justify-center',
+    },
+    'Chat'
+  );
+
+  const videoPlaceholder = React.createElement(
+    'div',
+    {
+      className:
+        'flex-1 border-2 border-dashed border-gray-400 flex items-center justify-center',
+    },
+    'Video'
+  );
+
   return React.createElement(
     'div',
     { className: 'flex justify-center' },
@@ -605,22 +623,8 @@ const Board = () => {
         className:
           'hidden md:ml-4 md:w-64 md:flex md:flex-col md:space-y-4',
       },
-      React.createElement(
-        'div',
-        {
-          className:
-            'flex-1 border-2 border-dashed border-gray-400 flex items-center justify-center',
-        },
-        'Chat'
-      ),
-      React.createElement(
-        'div',
-        {
-          className:
-            'flex-1 border-2 border-dashed border-gray-400 flex items-center justify-center',
-        },
-        'Video'
-      )
+      chatPlaceholder,
+      videoPlaceholder
     )
   );
 };
