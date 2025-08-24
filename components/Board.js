@@ -497,11 +497,6 @@ const Board = () => {
       { className: 'mb-4 bg-green-500 text-white w-full' },
       React.createElement(
         'div',
-        { className: 'text-center font-bold' },
-        'SingleBackgammon'
-      ),
-      React.createElement(
-        'div',
         {
           className:
             'flex items-center justify-between px-4 py-1 max-w-[428px] mx-auto',
