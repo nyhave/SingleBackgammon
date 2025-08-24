@@ -593,11 +593,11 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'relative' },
+      { className: 'relative bg-green-600' },
       React.createElement(
         'div',
         { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
-        React.createElement('div', { className: 'col-span-6' }),
+        React.createElement('div', { className: 'col-span-6 bg-green-600' }),
         React.createElement('div', { className: 'col-span-6 bg-gray-700' })
       ),
       React.createElement(
@@ -627,11 +627,11 @@ const Board = () => {
     ),
       React.createElement(
         'div',
-        { className: 'relative' },
+        { className: 'relative bg-green-600' },
         React.createElement(
           'div',
           { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
-          React.createElement('div', { className: 'col-span-6' }),
+          React.createElement('div', { className: 'col-span-6 bg-green-600' }),
           React.createElement('div', { className: 'col-span-6 bg-gray-300' })
         ),
         React.createElement(
