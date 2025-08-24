@@ -26,18 +26,7 @@ const Chat = () => {
     },
     React.createElement(
       'div',
-      { className: 'flex-1 overflow-y-auto p-2 space-y-1' },
-      messages.map((msg, i) =>
-        React.createElement(
-          'div',
-          { key: i, className: 'p-1 bg-white rounded shadow whitespace-pre-wrap' },
-          msg
-        )
-      )
-    ),
-    React.createElement(
-      'div',
-      { className: 'flex p-2 space-x-2' },
+      { className: 'flex p-2 space-x-2 border-b border-gray-400' },
       React.createElement('input', {
         className: 'flex-1 border rounded p-1',
         value: input,
@@ -54,6 +43,17 @@ const Chat = () => {
           onClick: sendMessage,
         },
         'Send'
+      )
+    ),
+    React.createElement(
+      'div',
+      { className: 'flex-1 overflow-y-auto p-2 space-y-1' },
+      messages.map((msg, i) =>
+        React.createElement(
+          'div',
+          { key: i, className: 'p-1 bg-white rounded shadow whitespace-pre-wrap' },
+          msg
+        )
       )
     )
   );
