@@ -441,7 +441,54 @@ const Board = () => {
         null,
         `Current player: ${currentPlayer === '0' ? 'White' : 'Black'}`
       ),
-      React.createElement(Dice, { values: displayDice }),
+      React.createElement(
+        'div',
+        { className: 'flex items-center space-x-2 mt-2' },
+        React.createElement(Dice, { values: displayDice }),
+        stepPlay &&
+          !waitingForRoll &&
+          React.createElement(
+            'button',
+            {
+              className: 'px-4 py-2 bg-blue-500 text-white rounded',
+              onClick: () => makeAIMove(),
+            },
+            'Next'
+          ),
+        stepPlay
+          ? React.createElement(
+              'button',
+              {
+                className: 'px-4 py-2 bg-gray-500 text-white rounded',
+                onClick: () => setStepPlay(false),
+              },
+              'Stop'
+            )
+          : React.createElement(
+              'button',
+              {
+                className: 'px-4 py-2 bg-yellow-500 text-white rounded',
+                onClick: () => {
+                  setStepPlay(true);
+                  setAutoPlay(false);
+                },
+                disabled: autoPlay,
+              },
+              'Step'
+            ),
+        React.createElement(
+          'button',
+          {
+            className: 'px-4 py-2 bg-green-500 text-white rounded',
+            onClick: () => {
+              setAutoPlay(true);
+              setStepPlay(false);
+            },
+            disabled: autoPlay,
+          },
+          'Autoplay'
+        )
+      ),
       gameover &&
         React.createElement(
           'div',
@@ -461,15 +508,6 @@ const Board = () => {
             },
             'Roll'
           )
-        : stepPlay
-        ? React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => makeAIMove(),
-            },
-            'Next'
-          )
         : React.createElement(
             'button',
             {
@@ -479,39 +517,6 @@ const Board = () => {
             },
             'End Turn'
           ),
-      stepPlay
-        ? React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-gray-500 text-white rounded',
-              onClick: () => setStepPlay(false),
-            },
-            'Stop'
-          )
-        : React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-yellow-500 text-white rounded',
-              onClick: () => {
-                setStepPlay(true);
-                setAutoPlay(false);
-              },
-              disabled: autoPlay,
-            },
-            'Step'
-          ),
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-green-500 text-white rounded',
-          onClick: () => {
-            setAutoPlay(true);
-            setStepPlay(false);
-          },
-          disabled: autoPlay,
-        },
-        'Autoplay'
-      ),
       React.createElement(
         'button',
         {
