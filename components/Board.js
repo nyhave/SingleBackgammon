@@ -281,12 +281,12 @@ const Board = () => {
     { className: 'flex justify-center' },
     React.createElement(
       'div',
-      { className: 'w-[428px] text-center' },
+      { className: 'w-full max-w-[428px] text-center' },
       showInstructions &&
         React.createElement(
-        'div',
-        {
-          className:
+          'div',
+          {
+            className:
             'fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50',
         },
         React.createElement(
@@ -601,7 +601,10 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'ml-4 w-64 flex flex-col space-y-4' },
+      {
+        className:
+          'hidden md:ml-4 md:w-64 md:flex md:flex-col md:space-y-4',
+      },
       React.createElement(
         'div',
         {
