@@ -18,6 +18,13 @@ const Point = ({
       ? 'border-b-orange-700'
       : 'border-t-orange-700';
   const number = 24 - index;
+  const isWhiteHome = index >= 18;
+  const isBlackHome = index <= 5;
+  const homeClass = isWhiteHome
+    ? 'bg-green-100'
+    : isBlackHome
+    ? 'bg-red-100'
+    : '';
 
   const checkers = [];
   for (let i = 0; i < point.count; i++) {
@@ -37,10 +44,10 @@ const Point = ({
       'data-point': index,
       onClick,
       className: `relative w-8 h-32 flex justify-center items-center cursor-pointer ${
-        selected ? 'bg-green-200' : ''
-      } ${highlighted ? 'bg-blue-200' : ''} ${movedFrom ? 'bg-red-200' : ''} ${
-        movedTo ? 'bg-yellow-200' : ''
-      }`,
+        homeClass
+      } ${selected ? 'bg-green-200' : ''} ${highlighted ? 'bg-blue-200' : ''} ${
+        movedFrom ? 'bg-red-200' : ''
+      } ${movedTo ? 'bg-yellow-200' : ''}`,
     },
     React.createElement('div', {
       className: `absolute w-0 h-0 border-l-[16px] border-r-[16px] ${
