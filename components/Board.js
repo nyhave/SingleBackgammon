@@ -299,7 +299,7 @@ const Board = () => {
     { className: 'flex justify-center' },
     React.createElement(
       'div',
-      { className: 'w-full max-w-[428px] text-center' },
+      { className: 'w-full max-w-[428px] text-center flex-shrink-0' },
       showInstructions &&
         React.createElement(
           'div',
@@ -621,7 +621,7 @@ const Board = () => {
       'div',
       {
         className:
-          'hidden md:ml-4 md:w-64 md:flex md:flex-col md:space-y-4',
+          'ml-2 w-32 flex flex-col space-y-2 md:ml-4 md:w-64 md:space-y-4 flex-shrink-0',
       },
       chatPlaceholder,
       videoPlaceholder
