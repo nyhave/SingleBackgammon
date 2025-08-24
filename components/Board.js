@@ -280,24 +280,6 @@ const Board = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [autoPlay, stepPlay, makeAIMove, endTurn, waitingForRoll, rollForCurrentPlayer]);
 
-  const chatPlaceholder = React.createElement(
-    'div',
-    {
-      className:
-        'flex-1 border-2 border-dashed border-gray-400 flex items-center justify-center',
-    },
-    'Chat'
-  );
-
-  const videoPlaceholder = React.createElement(
-    'div',
-    {
-      className:
-        'flex-1 border-2 border-dashed border-gray-400 flex items-center justify-center',
-    },
-    'Video'
-  );
-
   const controlPanel = React.createElement(
     'div',
     { className: 'w-1/5 p-2 flex flex-col space-y-2' },
@@ -651,12 +633,10 @@ const Board = () => {
         )
       )
     ),
-    React.createElement(
-      'div',
-      { className: 'w-1/5 p-2 flex flex-col space-y-2' },
-      chatPlaceholder,
-      videoPlaceholder
-    )
+    // Keep empty space on the right side for future features
+    React.createElement('div', {
+      className: 'w-1/5 p-2 flex flex-col space-y-2'
+    })
   )
 );
 };
