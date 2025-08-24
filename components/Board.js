@@ -300,331 +300,336 @@ const Board = () => {
 
   return React.createElement(
     'div',
-    { className: 'flex w-full justify-center items-start' },
+    { className: 'flex w-full h-screen' },
     React.createElement(
       'div',
-      { className: 'flex flex-col items-center' },
+      { className: 'w-1/5 flex flex-col items-center space-y-4 p-2' },
+      React.createElement(
+        'div',
+        { className: 'flex flex-col items-center' },
+        React.createElement(
+          'div',
+          null,
+          `Current player: ${currentPlayer === '0' ? 'White' : 'Black'}`
+        ),
+        React.createElement(
+          'div',
+          { className: 'flex flex-col space-y-2 mt-2' },
+          stepPlay &&
+            !waitingForRoll &&
+            React.createElement(
+              'button',
+              {
+                className: 'px-4 py-2 bg-blue-500 text-white rounded',
+                onClick: () => makeAIMove(),
+              },
+              'Next'
+            ),
+          stepPlay
+            ? React.createElement(
+                'button',
+                {
+                  className: 'px-4 py-2 bg-gray-500 text-white rounded',
+                  onClick: () => setStepPlay(false),
+                },
+                'Stop'
+              )
+            : React.createElement(
+                'button',
+                {
+                  className: 'px-4 py-2 bg-yellow-500 text-white rounded',
+                  onClick: () => {
+                    setStepPlay(true);
+                    setAutoPlay(false);
+                  },
+                  disabled: autoPlay,
+                },
+                'Step'
+              ),
+          React.createElement(
+            'button',
+            {
+              className: 'px-4 py-2 bg-green-500 text-white rounded',
+              onClick: () => {
+                setAutoPlay(true);
+                setStepPlay(false);
+              },
+              disabled: autoPlay,
+            },
+            'Autoplay'
+          )
+        ),
+        gameover &&
+          React.createElement(
+            'div',
+            { className: 'mt-2' },
+            `Winner: ${gameover.winner === '0' ? 'White' : 'Black'}`
+          )
+      ),
+      React.createElement(
+        'div',
+        { className: 'flex flex-col space-y-2' },
+        waitingForRoll
+          ? React.createElement(
+              'button',
+              {
+                className: 'px-4 py-2 bg-blue-500 text-white rounded',
+                onClick: () => rollForCurrentPlayer(),
+              },
+              'Roll'
+            )
+          : React.createElement(
+              'button',
+              {
+                className: 'px-4 py-2 bg-blue-500 text-white rounded',
+                onClick: () => endTurn(),
+                disabled: autoPlay,
+              },
+              'End Turn'
+            ),
+        React.createElement(
+          'button',
+          {
+            className: 'px-4 py-2 bg-purple-500 text-white rounded',
+            onClick: newGame,
+          },
+          'New Game'
+        ),
+        React.createElement(
+          'button',
+          {
+            className: 'px-4 py-2 bg-red-500 text-white rounded',
+            onClick: clearCacheAndReload,
+          },
+          'Reload Game'
+        ),
+        React.createElement(
+          'button',
+          {
+            className: 'px-4 py-2 bg-gray-500 text-white rounded',
+            onClick: () => setShowInstructions(true),
+          },
+          'Help'
+        )
+      )
+    ),
+    React.createElement(
+      'div',
+      { className: 'w-3/5 flex flex-col items-center' },
       showInstructions &&
         React.createElement(
           'div',
           {
             className:
               'fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50',
-        },
-        React.createElement(
-          'div',
-          {
-            className:
-              'bg-white p-4 rounded shadow max-w-sm text-left overflow-y-auto max-h-[90vh]',
           },
           React.createElement(
-            'h2',
-            { className: 'text-lg font-bold mb-2' },
-            'How to Play'
-          ),
-          React.createElement(
-            'p',
-            { className: 'mb-2 text-sm' },
-            'Move all your white checkers around the board and bear them off before the computer does.'
-          ),
-          React.createElement(
-            'ol',
-            { className: 'mb-2 list-decimal pl-5 text-sm space-y-1' },
-            React.createElement('li', null, 'Click a white checker to select it.'),
-            React.createElement(
-              'li',
-              null,
-              'Click a destination point that matches one of the dice values.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Hitting a lone opposing checker sends it to the bar.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Checkers on the bar must re-enter before you can move others.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Once all your checkers are in your home board you can bear them off by double-clicking a checker.'
-            )
-          ),
-          React.createElement(
-            'p',
-            { className: 'mb-2 text-sm' },
-            'Buttons above the board provide extra options:'
-          ),
-          React.createElement(
-            'ul',
-            { className: 'mb-4 list-disc pl-5 text-sm space-y-1' },
-            React.createElement(
-              'li',
-              null,
-              'End Turn: roll the dice and pass play to the computer opponent.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Step: watch the computer play one move at a time. Press Next for each move.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Autoplay: let the computer control both sides automatically.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'New Game: reset the board and keep the running score.'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Reload Game: clear cached data and restart the match.'
-            )
-          ),
-          React.createElement(
-            'p',
-            { className: 'mb-4 text-sm' },
-            'First player to bear off all their checkers wins.'
-          ),
-          React.createElement(
-            'button',
+            'div',
             {
-              className: 'mt-2 px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => setShowInstructions(false),
+              className:
+                'bg-white p-4 rounded shadow max-w-sm text-left overflow-y-auto max-h-[90vh]',
             },
-            'Close'
+            React.createElement(
+              'h2',
+              { className: 'text-lg font-bold mb-2' },
+              'How to Play'
+            ),
+            React.createElement(
+              'p',
+              { className: 'mb-2 text-sm' },
+              'Move all your white checkers around the board and bear them off before the computer does.'
+            ),
+            React.createElement(
+              'ol',
+              { className: 'mb-2 list-decimal pl-5 text-sm space-y-1' },
+              React.createElement('li', null, 'Click a white checker to select it.'),
+              React.createElement(
+                'li',
+                null,
+                'Click a destination point that matches one of the dice values.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Hitting a lone opposing checker sends it to the bar.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Checkers on the bar must re-enter before you can move others.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Once all your checkers are in your home board you can bear them off by double-clicking a checker.'
+              )
+            ),
+            React.createElement(
+              'p',
+              { className: 'mb-2 text-sm' },
+              'Buttons above the board provide extra options:'
+            ),
+            React.createElement(
+              'ul',
+              { className: 'mb-4 list-disc pl-5 text-sm space-y-1' },
+              React.createElement(
+                'li',
+                null,
+                'End Turn: roll the dice and pass play to the computer opponent.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Step: watch the computer play one move at a time. Press Next for each move.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Autoplay: let the computer control both sides automatically.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'New Game: reset the board and keep the running score.'
+              ),
+              React.createElement(
+                'li',
+                null,
+                'Reload Game: clear cached data and restart the match.'
+              )
+            ),
+            React.createElement(
+              'p',
+              { className: 'mb-4 text-sm' },
+              'First player to bear off all their checkers wins.'
+            ),
+            React.createElement(
+              'button',
+              {
+                className: 'mt-2 px-4 py-2 bg-blue-500 text-white rounded',
+                onClick: () => setShowInstructions(false),
+              },
+              'Close'
+            )
           )
-        )
-      ),
-    React.createElement(
-      'div',
-      { className: 'mb-4 bg-green-500 text-white w-full' },
-      React.createElement(
-        'div',
-        { className: 'text-center font-bold' },
-        'SingleBackgammon'
-      ),
-      React.createElement(
-        'div',
-        {
-          className:
-            'flex items-center justify-between px-4 py-1 max-w-[428px] mx-auto',
-        },
-        React.createElement(
-          'div',
-          { className: 'flex flex-col items-center' },
-          React.createElement('input', {
-            value: playerNames.white,
-            onChange: (e) =>
-              setPlayerNames((n) => ({ ...n, white: e.target.value })),
-            className:
-              'mb-1 w-24 text-center font-bold bg-transparent border-b border-white text-white placeholder-white',
-            placeholder: 'Christian',
-          }),
-          React.createElement('span', { className: 'font-bold' }, scores.white)
         ),
-        React.createElement(Dice, { values: displayDice }),
+      React.createElement(
+        'div',
+        { className: 'mb-4 bg-green-500 text-white w-full' },
         React.createElement(
           'div',
-          { className: 'flex flex-col items-center text-black' },
-          React.createElement('input', {
-            value: playerNames.black,
-            onChange: (e) =>
-              setPlayerNames((n) => ({ ...n, black: e.target.value })),
-            className:
-              'mb-1 w-24 text-center font-bold bg-transparent border-b border-black text-black placeholder-black',
-            placeholder: 'Marianne',
-          }),
-          React.createElement('span', { className: 'font-bold text-black' }, scores.black)
-        )
-      )
-    ),
-    React.createElement(
-      'div',
-      { className: 'w-[428px] text-center flex-shrink-0' },
-      React.createElement(
-        'div',
-        { className: 'mb-4 flex justify-between' },
-        React.createElement(
-        'div',
-        { className: 'flex items-center' },
-        React.createElement('span', { className: 'mr-2' }, 'White off:'),
+          { className: 'text-center font-bold' },
+          'SingleBackgammon'
+        ),
         React.createElement(
           'div',
-          { className: 'flex space-x-1' },
-          ...Array.from({ length: offCounts.white }).map((_, i) =>
-            React.createElement('div', {
-              key: i,
-              className:
-                'w-4 h-4 rounded-full border border-gray-800 bg-white',
-            })
-          )
-        )
-      ),
-      React.createElement(
-        'div',
-        { className: 'flex items-center' },
-        React.createElement('span', { className: 'mr-2' }, 'Black off:'),
-        React.createElement(
-          'div',
-          { className: 'flex space-x-1' },
-          ...Array.from({ length: offCounts.black }).map((_, i) =>
-            React.createElement('div', {
-              key: i,
-              className:
-                'w-4 h-4 rounded-full border border-gray-800 bg-black',
-            })
-          )
-        )
-      )
-    ),
-    React.createElement(
-      'div',
-      { className: 'mb-4 flex flex-col items-center' },
-      React.createElement(
-        'div',
-        null,
-        `Current player: ${currentPlayer === '0' ? 'White' : 'Black'}`
-      ),
-      React.createElement(
-        'div',
-        { className: 'flex items-center space-x-2 mt-2' },
-        stepPlay &&
-          !waitingForRoll &&
-          React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => makeAIMove(),
-            },
-            'Next'
-          ),
-        stepPlay
-          ? React.createElement(
-              'button',
-              {
-                className: 'px-4 py-2 bg-gray-500 text-white rounded',
-                onClick: () => setStepPlay(false),
-              },
-              'Stop'
-            )
-          : React.createElement(
-              'button',
-              {
-                className: 'px-4 py-2 bg-yellow-500 text-white rounded',
-                onClick: () => {
-                  setStepPlay(true);
-                  setAutoPlay(false);
-                },
-                disabled: autoPlay,
-              },
-              'Step'
-            ),
-        React.createElement(
-          'button',
           {
-            className: 'px-4 py-2 bg-green-500 text-white rounded',
-            onClick: () => {
-              setAutoPlay(true);
-              setStepPlay(false);
-            },
-            disabled: autoPlay,
+            className:
+              'flex items-center justify-between px-4 py-1 max-w-[428px] mx-auto',
           },
-          'Autoplay'
+          React.createElement(
+            'div',
+            { className: 'flex flex-col items-center text-white' },
+            React.createElement('input', {
+              value: playerNames.white,
+              onChange: (e) =>
+                setPlayerNames((n) => ({ ...n, white: e.target.value })),
+              className:
+                'mb-1 w-24 text-center font-bold bg-transparent border-b border-white text-white placeholder-white',
+              placeholder: 'Christian',
+            }),
+            React.createElement('span', { className: 'font-bold text-white' }, scores.white)
+          ),
+          React.createElement(Dice, { values: displayDice }),
+          React.createElement(
+            'div',
+            { className: 'flex flex-col items-center text-black' },
+            React.createElement('input', {
+              value: playerNames.black,
+              onChange: (e) =>
+                setPlayerNames((n) => ({ ...n, black: e.target.value })),
+              className:
+                'mb-1 w-24 text-center font-bold bg-transparent border-b border-black text-black placeholder-black',
+              placeholder: 'Marianne',
+            }),
+            React.createElement('span', { className: 'font-bold text-black' }, scores.black)
+          )
         )
       ),
-      gameover &&
+      React.createElement(
+        'div',
+        { className: 'w-[428px] text-center flex-shrink-0' },
         React.createElement(
           'div',
-          { className: 'mt-2' },
-          `Winner: ${gameover.winner === '0' ? 'White' : 'Black'}`
-        )
-    ),
-    React.createElement(
-      'div',
-      { className: 'mb-4 flex justify-center space-x-2 flex-wrap' },
-      waitingForRoll
-        ? React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => rollForCurrentPlayer(),
-            },
-            'Roll'
-          )
-        : React.createElement(
-            'button',
-            {
-              className: 'px-4 py-2 bg-blue-500 text-white rounded',
-              onClick: () => endTurn(),
-              disabled: autoPlay,
-            },
-            'End Turn'
+          { className: 'mb-4 flex justify-between' },
+          React.createElement(
+            'div',
+            { className: 'flex items-center' },
+            React.createElement('span', { className: 'mr-2' }, 'White off:'),
+            React.createElement(
+              'div',
+              { className: 'flex space-x-1' },
+              ...Array.from({ length: offCounts.white }).map((_, i) =>
+                React.createElement('div', {
+                  key: i,
+                  className:
+                    'w-4 h-4 rounded-full border border-gray-800 bg-white',
+                })
+              )
+            )
           ),
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-purple-500 text-white rounded',
-          onClick: newGame,
-        },
-        'New Game'
-      ),
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-red-500 text-white rounded',
-          onClick: clearCacheAndReload,
-        },
-        'Reload Game'
-      ),
-      React.createElement(
-        'button',
-        {
-          className: 'px-4 py-2 bg-gray-500 text-white rounded',
-          onClick: () => setShowInstructions(true),
-        },
-        'Help'
-      )
-    ),
-    React.createElement(
-      'div',
-      { className: 'relative bg-green-600' },
-      React.createElement(
-        'div',
-        { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
-        React.createElement('div', { className: 'col-span-6 bg-green-600' }),
-        React.createElement('div', { className: 'col-span-6 bg-gray-700' })
+          React.createElement(
+            'div',
+            { className: 'flex items-center' },
+            React.createElement('span', { className: 'mr-2' }, 'Black off:'),
+            React.createElement(
+              'div',
+              { className: 'flex space-x-1' },
+              ...Array.from({ length: offCounts.black }).map((_, i) =>
+                React.createElement('div', {
+                  key: i,
+                  className:
+                    'w-4 h-4 rounded-full border border-gray-800 bg-black',
+                })
+              )
+            )
+          )
+        )
       ),
       React.createElement(
         'div',
-        { className: 'grid grid-cols-12 gap-1' },
-        ...points.slice(0, 12).map((_, i) => {
-          const idx = 11 - i;
-          const p = points[idx];
-          return React.createElement(Point, {
-            key: idx,
-            point: p,
-            index: idx,
-            selected: selected === idx,
-            highlighted: possibleMoves.includes(idx),
-            movedFrom: lastMove && lastMove.from === idx,
-            movedTo: lastMove && lastMove.to === idx,
-            onClick: () => handlePointClick(idx),
-          });
-        })
-      )
-    ),
-    React.createElement(
-      'div',
-      { className: 'flex justify-center space-x-4' },
-      React.createElement(Bar, { color: 'white', count: bar.white }),
-      React.createElement(Bar, { color: 'black', count: bar.black })
-    ),
+        { className: 'relative bg-green-600' },
+        React.createElement(
+          'div',
+          { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
+          React.createElement('div', { className: 'col-span-6 bg-green-600' }),
+          React.createElement('div', { className: 'col-span-6 bg-gray-700' })
+        ),
+        React.createElement(
+          'div',
+          { className: 'grid grid-cols-12 gap-1' },
+          ...points.slice(0, 12).map((_, i) => {
+            const idx = 11 - i;
+            const p = points[idx];
+            return React.createElement(Point, {
+              key: idx,
+              point: p,
+              index: idx,
+              selected: selected === idx,
+              highlighted: possibleMoves.includes(idx),
+              movedFrom: lastMove && lastMove.from === idx,
+              movedTo: lastMove && lastMove.to === idx,
+              onClick: () => handlePointClick(idx),
+            });
+          })
+        )
+      ),
+      React.createElement(
+        'div',
+        { className: 'flex justify-center space-x-4' },
+        React.createElement(Bar, { color: 'white', count: bar.white }),
+        React.createElement(Bar, { color: 'black', count: bar.black })
+      ),
       React.createElement(
         'div',
         { className: 'relative bg-green-600' },
@@ -655,14 +660,12 @@ const Board = () => {
     React.createElement(
       'div',
       {
-        className:
-          'ml-2 w-32 flex flex-col space-y-2 md:ml-4 md:w-64 md:space-y-4 flex-shrink-0',
+        className: 'w-1/5 ml-2 flex flex-col space-y-2 md:ml-4 flex-shrink-0',
       },
       chatPlaceholder,
       videoPlaceholder
     )
-  )
-);
+  );
 };
 
 export default Board;
