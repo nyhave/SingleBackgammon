@@ -20,7 +20,10 @@ const Chat = () => {
 
   return React.createElement(
     'div',
-    { className: 'flex-1 border border-gray-400 bg-gray-200 flex flex-col' },
+    {
+      className:
+        'flex-1 min-h-0 border border-gray-400 bg-gray-200 flex flex-col overflow-hidden',
+    },
     React.createElement(
       'div',
       { className: 'flex-1 overflow-y-auto p-2 space-y-1' },
