@@ -2,6 +2,7 @@ import React from 'https://esm.sh/react@18.3.1';
 import Point from './Point.js';
 import Dice from './Dice.js';
 import Bar from './Bar.js';
+import Rack from './Rack.js';
 import {
   rollDice,
   createInitialPoints,
@@ -532,45 +533,7 @@ const Board = () => {
         )
       )
     ),
-    React.createElement(
-      'div',
-      { className: 'w-[428px] text-center flex-shrink-0' },
-      React.createElement(
-        'div',
-        { className: 'mb-4 flex justify-between' },
-        React.createElement(
-        'div',
-        { className: 'flex items-center' },
-        React.createElement('span', { className: 'mr-2' }, 'White off:'),
-        React.createElement(
-          'div',
-          { className: 'flex space-x-0.5' },
-          ...Array.from({ length: offCounts.white }).map((_, i) =>
-            React.createElement('div', {
-              key: i,
-              className:
-                'w-2 h-2 rounded-full border border-gray-800 bg-white',
-            })
-          )
-        )
-      ),
-      React.createElement(
-        'div',
-        { className: 'flex items-center' },
-        React.createElement('span', { className: 'mr-2' }, 'Black off:'),
-        React.createElement(
-          'div',
-          { className: 'flex space-x-0.5' },
-          ...Array.from({ length: offCounts.black }).map((_, i) =>
-            React.createElement('div', {
-              key: i,
-              className:
-                'w-2 h-2 rounded-full border border-gray-800 bg-black',
-            })
-          )
-        )
-      )
-    ),
+
     // controls moved to left panel
     React.createElement(
       'div',
@@ -606,32 +569,37 @@ const Board = () => {
       React.createElement(Bar, { color: 'white', count: bar.white }),
       React.createElement(Bar, { color: 'black', count: bar.black })
     ),
+    React.createElement(
+      'div',
+      { className: 'relative bg-green-600' },
       React.createElement(
         'div',
-        { className: 'relative bg-green-600' },
-        React.createElement(
-          'div',
-          { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
-          React.createElement('div', { className: 'col-span-6 bg-green-600' }),
-          React.createElement('div', { className: 'col-span-6 bg-gray-300' })
-        ),
-        React.createElement(
-          'div',
-          { className: 'grid grid-cols-12 gap-1' },
-          ...points.slice(12).map((p, i) =>
-            React.createElement(Point, {
-              key: i + 12,
-              point: p,
-              index: i + 12,
-              selected: selected === i + 12,
-              highlighted: possibleMoves.includes(i + 12),
-              movedFrom: lastMove && lastMove.from === i + 12,
-              movedTo: lastMove && lastMove.to === i + 12,
-              onClick: () => handlePointClick(i + 12),
-            })
-          )
+        { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
+        React.createElement('div', { className: 'col-span-6 bg-green-600' }),
+        React.createElement('div', { className: 'col-span-6 bg-gray-300' })
+      ),
+      React.createElement(
+        'div',
+        { className: 'grid grid-cols-12 gap-1' },
+        ...points.slice(12).map((p, i) =>
+          React.createElement(Point, {
+            key: i + 12,
+            point: p,
+            index: i + 12,
+            selected: selected === i + 12,
+            highlighted: possibleMoves.includes(i + 12),
+            movedFrom: lastMove && lastMove.from === i + 12,
+            movedTo: lastMove && lastMove.to === i + 12,
+            onClick: () => handlePointClick(i + 12),
+          })
         )
       )
+    ),
+    React.createElement(
+      'div',
+      { className: 'flex justify-center space-x-4 mt-2' },
+      React.createElement(Rack, { color: 'white', count: offCounts.white }),
+      React.createElement(Rack, { color: 'black', count: offCounts.black })
     ),
     // Keep empty space on the right side for future features
     React.createElement('div', {
