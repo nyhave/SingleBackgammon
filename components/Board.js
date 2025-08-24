@@ -22,14 +22,17 @@ const Board = () => {
   const [stepPlay, setStepPlay] = React.useState(false);
   const [lastMove, setLastMove] = React.useState(null);
   const [scores, setScores] = React.useState({ white: 0, black: 0 });
+  const [bar, setBar] = React.useState({ white: 0, black: 0 });
 
   const offCounts = React.useMemo(() => {
     const counts = { white: 15, black: 15 };
     points.forEach((p) => {
       if (p.color) counts[p.color] -= p.count;
     });
+    counts.white -= bar.white;
+    counts.black -= bar.black;
     return counts;
-  }, [points]);
+  }, [points, bar]);
 
   const endTurn = () => {
     setCurrentPlayer((p) => (p === '0' ? '1' : '0'));
@@ -38,13 +41,14 @@ const Board = () => {
   };
 
   const moveChecker = (from, to) => {
-    const result = applyMove({ points, dice }, currentPlayer, from, to);
+    const result = applyMove({ points, dice, bar }, currentPlayer, from, to);
     if (!result) return;
     setPoints(result.points);
     setDice(result.dice);
+    setBar(result.bar);
     setLastMove({ from, to });
     if (result.dice.length === 0) endTurn();
-    const winner = getWinner(result.points);
+    const winner = getWinner(result.points, result.bar);
     if (winner) {
       setGameover({ winner });
       setScores((s) => ({
@@ -77,6 +81,7 @@ const Board = () => {
     setAutoPlay(false);
     setStepPlay(false);
     setLastMove(null);
+    setBar({ white: 0, black: 0 });
   };
 
   const calculateMoves = React.useCallback(
@@ -84,15 +89,25 @@ const Board = () => {
       const color = currentPlayer === '0' ? 'white' : 'black';
       const direction = currentPlayer === '0' ? 1 : -1;
       const targets = new Set();
-      const inHome = allInHome(points, color);
+      const inHome = allInHome(points, color, bar);
+      if (bar[color] > 0 && from !== (color === 'white' ? -1 : 24)) {
+        return [];
+      }
       dice.forEach((die) => {
-        const dest = from + die * direction;
+        let dest;
+        if (from === -1) {
+          dest = die - 1;
+        } else if (from === 24) {
+          dest = 24 - die;
+        } else {
+          dest = from + die * direction;
+        }
         if (dest >= 0 && dest <= 23) {
           const t = points[dest];
           if (!t.color || t.color === color || t.count === 1) {
             targets.add(dest);
           }
-        } else if (inHome) {
+        } else if (inHome && from !== -1 && from !== 24) {
           if (color === 'white') {
             const noBehind = points.slice(0, from).every((p) => p.color !== 'white');
             if (dest > 23 && noBehind) targets.add(dest);
@@ -106,11 +121,27 @@ const Board = () => {
       });
       return Array.from(targets);
     },
-    [currentPlayer, dice, points]
+    [currentPlayer, dice, points, bar]
   );
+
+  React.useEffect(() => {
+    const color = currentPlayer === '0' ? 'white' : 'black';
+    if (bar[color] > 0) {
+      setSelected(null);
+      setPossibleMoves(calculateMoves(color === 'white' ? -1 : 24));
+    } else {
+      setPossibleMoves([]);
+    }
+  }, [bar, currentPlayer, calculateMoves]);
 
   const handlePointClick = (index) => {
     if (autoPlay || stepPlay || currentPlayer !== '0') return;
+    if (bar.white > 0) {
+      if (possibleMoves.includes(index)) {
+        moveChecker(-1, index);
+      }
+      return;
+    }
     const point = points[index];
     if (selected === null) {
       if (point.color === 'white' && point.count > 0) {
@@ -142,32 +173,45 @@ const Board = () => {
     const color = currentPlayer === '0' ? 'white' : 'black';
     const direction = currentPlayer === '0' ? 1 : -1;
     const possible = [];
-    const inHome = allInHome(points, color);
+    const inHome = allInHome(points, color, bar);
 
-    for (let i = 0; i < 24; i++) {
-      const p = points[i];
-      if (p.color === color && p.count > 0) {
-        dice.forEach((die) => {
-          const dest = i + die * direction;
-          if (dest >= 0 && dest <= 23) {
-            const t = points[dest];
-            if (!t.color || t.color === color || t.count === 1) {
-              possible.push([i, dest]);
-            }
-          } else if (inHome) {
-            if (color === 'white') {
-              const noBehind = points
-                .slice(0, i)
-                .every((pnt) => pnt.color !== 'white');
-              if (dest > 23 && noBehind) possible.push([i, dest]);
-            } else {
-              const noBehind = points
-                .slice(i + 1)
-                .every((pnt) => pnt.color !== 'black');
-              if (dest < 0 && noBehind) possible.push([i, dest]);
-            }
+    if (bar[color] > 0) {
+      const from = color === 'white' ? -1 : 24;
+      dice.forEach((die) => {
+        const dest = color === 'white' ? die - 1 : 24 - die;
+        if (dest >= 0 && dest <= 23) {
+          const t = points[dest];
+          if (!t.color || t.color === color || t.count === 1) {
+            possible.push([from, dest]);
           }
-        });
+        }
+      });
+    } else {
+      for (let i = 0; i < 24; i++) {
+        const p = points[i];
+        if (p.color === color && p.count > 0) {
+          dice.forEach((die) => {
+            const dest = i + die * direction;
+            if (dest >= 0 && dest <= 23) {
+              const t = points[dest];
+              if (!t.color || t.color === color || t.count === 1) {
+                possible.push([i, dest]);
+              }
+            } else if (inHome) {
+              if (color === 'white') {
+                const noBehind = points
+                  .slice(0, i)
+                  .every((pnt) => pnt.color !== 'white');
+                if (dest > 23 && noBehind) possible.push([i, dest]);
+              } else {
+                const noBehind = points
+                  .slice(i + 1)
+                  .every((pnt) => pnt.color !== 'black');
+                if (dest < 0 && noBehind) possible.push([i, dest]);
+              }
+            }
+          });
+        }
       }
     }
 
@@ -177,7 +221,7 @@ const Board = () => {
     } else {
       endTurn();
     }
-  }, [currentPlayer, points, dice, moveChecker, endTurn]);
+  }, [currentPlayer, points, dice, bar, moveChecker, endTurn]);
 
   React.useEffect(() => {
     const isAuto = autoPlay || (!stepPlay && currentPlayer === '1');
@@ -304,6 +348,11 @@ const Board = () => {
       'div',
       { className: 'mb-4' },
       `Score - White: ${scores.white} | Black: ${scores.black}`
+    ),
+    React.createElement(
+      'div',
+      { className: 'mb-2' },
+      `Bar - White: ${bar.white} | Black: ${bar.black}`
     ),
     React.createElement(
       'div',
