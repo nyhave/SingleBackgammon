@@ -626,7 +626,8 @@ const Board = () => {
       chatPlaceholder,
       videoPlaceholder
     )
-  );
+  )
+);
 };
 
 export default Board;
