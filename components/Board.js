@@ -389,7 +389,13 @@ const Board = () => {
 
   return React.createElement(
     'div',
-    { className: 'flex w-full h-screen' },
+    {
+      className: 'flex w-full',
+      style: {
+        height:
+          'calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+      },
+    },
     controlPanel,
     React.createElement(
       'div',
