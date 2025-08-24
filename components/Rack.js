@@ -6,7 +6,7 @@ const Rack = ({ color, count }) => {
     checkers.push(
       React.createElement('div', {
         key: i,
-        className: `w-3 h-3 rounded-full border border-gray-800 ${
+        className: `w-1.5 h-1.5 rounded-full border border-gray-800 ${
           color === 'white' ? 'bg-white' : 'bg-black'
         }`,
       })
@@ -15,7 +15,7 @@ const Rack = ({ color, count }) => {
   return React.createElement(
     'div',
     {
-      className: 'flex flex-row items-center justify-center bg-gray-200 h-4',
+      className: 'flex flex-row items-center justify-center bg-gray-200 h-2',
     },
     ...checkers
   );
