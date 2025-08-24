@@ -278,9 +278,12 @@ const Board = () => {
 
   return React.createElement(
     'div',
-    { className: 'mx-auto text-center' },
-    showInstructions &&
-      React.createElement(
+    { className: 'flex justify-center' },
+    React.createElement(
+      'div',
+      { className: 'w-[428px] text-center' },
+      showInstructions &&
+        React.createElement(
         'div',
         {
           className:
@@ -498,7 +501,7 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'mb-4 flex justify-center space-x-2' },
+      { className: 'mb-4 flex justify-center space-x-2 flex-wrap' },
       waitingForRoll
         ? React.createElement(
             'button',
@@ -594,6 +597,26 @@ const Board = () => {
             onClick: () => handlePointClick(i + 12),
           })
         )
+      )
+    ),
+    React.createElement(
+      'div',
+      { className: 'ml-4 w-64 flex flex-col space-y-4' },
+      React.createElement(
+        'div',
+        {
+          className:
+            'flex-1 border-2 border-dashed border-gray-400 flex items-center justify-center',
+        },
+        'Chat'
+      ),
+      React.createElement(
+        'div',
+        {
+          className:
+            'flex-1 border-2 border-dashed border-gray-400 flex items-center justify-center',
+        },
+        'Video'
       )
     )
   );
