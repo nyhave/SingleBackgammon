@@ -10,6 +10,7 @@ const initialMessages = [
 const Chat = () => {
   const [messages, setMessages] = React.useState(initialMessages);
   const [input, setInput] = React.useState('');
+  const textareaRef = React.useRef(null);
 
   const sendMessage = () => {
     const text = input.trim();
@@ -17,6 +18,15 @@ const Chat = () => {
     setMessages((msgs) => [...msgs, text]);
     setInput('');
   };
+
+  React.useEffect(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = 'auto';
+    const lineHeight = parseFloat(getComputedStyle(ta).lineHeight) || 16;
+    const maxHeight = lineHeight * 3;
+    ta.style.height = Math.min(ta.scrollHeight, maxHeight) + 'px';
+  }, [input]);
 
   return React.createElement(
     'div',
@@ -27,14 +37,21 @@ const Chat = () => {
     React.createElement(
       'div',
       { className: 'flex p-2 space-x-2 border-b border-gray-400' },
-      React.createElement('input', {
-        className: 'flex-1 border rounded p-1',
+      React.createElement('textarea', {
+        ref: textareaRef,
+        className:
+          'flex-1 border rounded p-1 resize-none overflow-y-auto',
         value: input,
         onChange: (e) => setInput(e.target.value),
         onKeyDown: (e) => {
-          if (e.key === 'Enter') sendMessage();
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+          }
         },
-        placeholder: 'Type message',
+        placeholder: 'Ny besked',
+        rows: 1,
+        style: { maxHeight: '4.5rem' },
       }),
       React.createElement(
         'button',
