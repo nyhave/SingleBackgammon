@@ -590,7 +590,7 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'relative mb-4' },
+      { className: 'relative' },
       React.createElement(
         'div',
         { className: 'absolute inset-0 grid grid-cols-12 -z-10' },
@@ -618,7 +618,7 @@ const Board = () => {
     ),
     React.createElement(
       'div',
-      { className: 'flex justify-center mb-4 space-x-4' },
+      { className: 'flex justify-center space-x-4' },
       React.createElement(Bar, { color: 'white', count: bar.white }),
       React.createElement(Bar, { color: 'black', count: bar.black })
     ),
