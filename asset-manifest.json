@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/SingleBackgammon/static/css/main.2ed46099.css",
+    "main.js": "/SingleBackgammon/static/js/main.e692e7ae.js",
+    "index.html": "/SingleBackgammon/index.html",
+    "main.2ed46099.css.map": "/SingleBackgammon/static/css/main.2ed46099.css.map",
+    "main.e692e7ae.js.map": "/SingleBackgammon/static/js/main.e692e7ae.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2ed46099.css",
+    "static/js/main.e692e7ae.js"
+  ]
+}
