@@ -1,0 +1,89 @@
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #3b5976;
+  background-image: 
+    linear-gradient(135deg, #2c4258 25%, transparent 25%),
+    linear-gradient(225deg, #2c4258 25%, transparent 25%),
+    linear-gradient(45deg, #2c4258 25%, transparent 25%),
+    linear-gradient(315deg, #2c4258 25%, #3b5976 25%);
+  background-position: 10px 0, 10px 0, 0 0, 0 0;
+  background-size: 20px 20px;
+  background-repeat: repeat;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+.logo-container {
+  margin-bottom: 30px;
+  background-color: #d4a373;
+  border: 4px solid #8b5a2b;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heart-icon {
+  font-size: 80px;
+  color: #e63946;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.dice-icon {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  font-size: 30px;
+}
+
+.welcome-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.welcome-description {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.login-link {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.primary-button {
+  background: linear-gradient(to bottom, #d4a373, #8b5a2b);
+  border: 2px solid #5c3a21;
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 15px 40px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.4);
+  text-transform: uppercase;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.primary-button:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 3px rgba(0,0,0,0.4);
+}

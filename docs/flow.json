@@ -1,0 +1,142 @@
+{
+  "screens": [
+    {
+      "id": "welcome",
+      "name": "Welcome Screen",
+      "description": "Startskærm hvor brugeren indtaster sit navn og vælger evt. Admin Mode."
+    },
+    {
+      "id": "profile_edit",
+      "name": "Opret/Rediger Profil",
+      "description": "Skærm hvor brugeren indtaster oplysninger om sig selv (bio, alder, niveau)."
+    },
+    {
+      "id": "profile_view",
+      "name": "Vis Profil (Read-only)",
+      "description": "Læsetilstand af en modstanders profil."
+    },
+    {
+      "id": "matchmaking",
+      "name": "Matchmaking (Feed)",
+      "description": "Oversigt over mulige modstandere baseret på dating- og spilkriterier."
+    },
+    {
+      "id": "select_game",
+      "name": "Vælg Spil",
+      "description": "Lader brugeren vælge hvilket spil de vil spille mod modstanderen."
+    },
+    {
+      "id": "game",
+      "name": "Spil (Backgammon)",
+      "description": "Selve backgammon brættet med multiplayer synkronisering."
+    },
+    {
+      "id": "postgame",
+      "name": "Spil Afsluttet",
+      "description": "Viser resultatet af spillet og giver muligheder for næste skridt."
+    },
+    {
+      "id": "stats",
+      "name": "Admin Dashboard",
+      "description": "Viser overordnet platform-statistik og konverteringstragt."
+    }
+  ],
+  "transitions": [
+    {
+      "from": "welcome",
+      "to": "profile_edit",
+      "action": "Opret Ny Profil",
+      "condition": "Bruger trykker 'OPRET NY PROFIL'"
+    },
+    {
+      "from": "welcome",
+      "to": "matchmaking",
+      "action": "Log Ind (Standard)",
+      "condition": "Uden aktivt spil (Game ID)"
+    },
+    {
+      "from": "welcome",
+      "to": "game",
+      "action": "Log Ind (Join Game)",
+      "condition": "Game ID i URL"
+    },
+    {
+      "from": "welcome",
+      "to": "stats",
+      "action": "Se Statistik",
+      "condition": "Admin Mode er aktiveret"
+    },
+    {
+      "from": "profile_edit",
+      "to": "matchmaking",
+      "action": "Gem Profil",
+      "condition": "Profil gemmes succesfuldt"
+    },
+    {
+      "from": "matchmaking",
+      "to": "profile_edit",
+      "action": "Klikker på egen profil",
+      "condition": "Trykker på avatar øverst til højre"
+    },
+    {
+      "from": "matchmaking",
+      "to": "profile_view",
+      "action": "Se Profil",
+      "condition": "Kigger på en mulig modstander"
+    },
+    {
+      "from": "matchmaking",
+      "to": "select_game",
+      "action": "Spil",
+      "condition": "Bruger trykker '[ SPIL ]' på et match"
+    },
+    {
+      "from": "select_game",
+      "to": "game",
+      "action": "Vælger Spil",
+      "condition": "Bruger klikker på et specifikt spil (f.eks. Backgammon)"
+    },
+    {
+      "from": "game",
+      "to": "postgame",
+      "action": "Spil Afsluttes",
+      "condition": "En spiller vinder"
+    },
+    {
+      "from": "postgame",
+      "to": "select_game",
+      "action": "Spil Igen (Udfordring)",
+      "condition": "Går til spilvalg for samme modstander"
+    },
+    {
+      "from": "postgame",
+      "to": "profile_view",
+      "action": "Se Profil",
+      "condition": "Kigger på modstanderens profil"
+    },
+    {
+      "from": "postgame",
+      "to": "matchmaking",
+      "action": "Afslut",
+      "condition": "Afslutter nuværende spil-loop"
+    },
+    {
+      "from": "profile_view",
+      "to": "matchmaking",
+      "action": "Tilbage",
+      "condition": "Går tilbage til feedet"
+    },
+    {
+      "from": "profile_view",
+      "to": "select_game",
+      "action": "Udfordr Igen",
+      "condition": "Starter et nyt spil herfra"
+    },
+    {
+      "from": "stats",
+      "to": "welcome",
+      "action": "Tilbage",
+      "condition": "Går tilbage til startskærm"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+.select-game-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5eedc;
+  font-family: 'Arial', sans-serif;
+}
+
+.select-game-header {
+  background-color: #3b5976;
+  color: white;
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.select-game-content {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.opponent-title {
+  text-align: center;
+  color: #3b2f2f;
+  margin-bottom: 30px;
+  font-weight: normal;
+}
+
+.highlight-name {
+  font-weight: bold;
+  color: #ff4b2b;
+}
+
+.games-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.game-card {
+  background-color: #fcf9f2;
+  border: 2px solid #3b5976;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.game-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.game-card:active {
+  transform: translateY(1px);
+}
+
+.game-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-right: 15px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.game-info {
+  flex: 1;
+}
+
+.game-info h3 {
+  margin: 0 0 5px 0;
+  color: #3b2f2f;
+  font-size: 20px;
+}
+
+.game-info p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.play-arrow {
+  font-size: 24px;
+  color: #ff4b2b;
+  margin-left: 15px;
+}
