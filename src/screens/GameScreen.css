@@ -234,25 +234,32 @@
 
 /* 4 på stribe: scroll-baseret layout så chat er tilgængeligt */
 .connect-four-layout {
-  height: auto;
-  min-height: 100dvh;
+  height: 100%;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .connect-four-layout .game-main-layout {
+  display: block;
+  flex: none;
   overflow: visible;
 }
 
 .connect-four-layout .game-board-side {
+  display: block;
+  flex: none;
   overflow: visible;
 }
 
 .connect-four-layout .board-wrapper {
+  flex: none;
   overflow: visible;
+  min-height: 45vh;
 }
 
 .connect-four-layout .chat-section {
-  height: 320px;
+  height: auto;
+  min-height: 280px;
 }
 
 /* Controls Bar */
