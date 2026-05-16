@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './WelcomeScreen.css';
+import version from '../version.json';
 
 export default function WelcomeScreen({ onNavigate, onLogin }) {
   const [selectedProfile, setSelectedProfile] = useState('Anna');
@@ -113,6 +114,10 @@ export default function WelcomeScreen({ onNavigate, onLogin }) {
       <div className="gd-footer">
         <span className="gd-footer-icon">👥</span>
         <span>Spil sammen. Mød hinanden.</span>
+      </div>
+
+      <div className="gd-version">
+        v{version.build} ({version.commit})
       </div>
     </div>
   );
