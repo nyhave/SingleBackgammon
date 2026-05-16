@@ -254,12 +254,13 @@
 .connect-four-layout .board-wrapper {
   flex: none;
   overflow: visible;
-  min-height: 45vh;
+  min-height: 0;
+  padding: 8px;
 }
 
 .connect-four-layout .chat-section {
   height: auto;
-  min-height: 280px;
+  min-height: 360px;
 }
 
 /* Controls Bar */
