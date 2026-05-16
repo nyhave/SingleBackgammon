@@ -63,17 +63,20 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
 
 
   useEffect(() => {
-    if (autoStart && !gameStarted && !initStarted.current) {
+    if (autoStart && !initStarted.current) {
       initStarted.current = true;
       startGame();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart]);
+
+  useEffect(() => {
     return () => {
       if (syncRef.current) {
         syncRef.current.unsubscribe();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoStart, gameStarted]);
+  }, []);
 
   // Initialize game
   const startGame = async () => {
