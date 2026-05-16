@@ -68,6 +68,6 @@ describe('GameSyncService', () => {
   test('should subscribe to updates', () => {
     const callback = jest.fn();
     service.subscribeToGame(callback);
-    expect(supabase.channel).toHaveBeenCalledWith('games-test-game-id');
+    expect(supabase.channel).toHaveBeenCalledWith(expect.stringMatching(/^game-test-game-id-/));
   });
 });

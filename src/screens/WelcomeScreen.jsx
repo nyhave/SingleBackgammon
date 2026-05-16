@@ -3,7 +3,6 @@ import './WelcomeScreen.css';
 
 export default function WelcomeScreen({ onNavigate, onLogin }) {
   const [selectedProfile, setSelectedProfile] = useState('Anna');
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const savedProfile = localStorage.getItem('lastTestProfile');
@@ -15,7 +14,7 @@ export default function WelcomeScreen({ onNavigate, onLogin }) {
   const handleLogin = () => {
     localStorage.setItem('lastTestProfile', selectedProfile);
     if (onLogin) {
-      onLogin(selectedProfile, isAdmin);
+      onLogin(selectedProfile, false);
     }
   };
 
@@ -48,17 +47,6 @@ export default function WelcomeScreen({ onNavigate, onLogin }) {
           <option value="Casper">Casper</option>
         </select>
         
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px', color: 'white', fontSize: '14px' }}>
-          <input 
-            type="checkbox" 
-            id="adminMode" 
-            checked={isAdmin} 
-            onChange={(e) => setIsAdmin(e.target.checked)} 
-            style={{ marginRight: '8px' }}
-          />
-          <label htmlFor="adminMode" style={{ cursor: 'pointer' }}>Admin Mode (AI Aktiveret)</label>
-        </div>
-
         <button 
           className="primary-button" 
           onClick={handleLogin}
@@ -66,16 +54,6 @@ export default function WelcomeScreen({ onNavigate, onLogin }) {
         >
           LOG IND
         </button>
-
-        {isAdmin && (
-          <button 
-            className="secondary-button" 
-            onClick={() => onNavigate('stats')}
-            style={{ width: '100%', backgroundColor: '#3b5976', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-          >
-            📊 SE STATISTIK
-          </button>
-        )}
       </div>
 
       <div style={{ margin: '10px 0', color: '#888', fontSize: '14px' }}>— eller —</div>

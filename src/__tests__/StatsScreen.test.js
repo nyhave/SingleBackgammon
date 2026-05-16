@@ -17,6 +17,13 @@ jest.mock('../supabaseClient', () => ({
   }
 }));
 
+// Mock ReportService
+jest.mock('../services/ReportService', () => ({
+  getReports: () => Promise.resolve([]),
+  updateStatus: () => Promise.resolve({}),
+  deleteReport: () => Promise.resolve({})
+}));
+
 describe('StatsScreen', () => {
   const mockOnNavigate = jest.fn();
 
@@ -24,7 +31,7 @@ describe('StatsScreen', () => {
     render(<StatsScreen onNavigate={mockOnNavigate} />);
     
     await waitFor(() => {
-      expect(screen.getByText(/Platform Statistik/i)).toBeInTheDocument();
+      expect(screen.getByText(/Admin Dashboard/i)).toBeInTheDocument();
     });
 
     // With 1 game, we should have 2 unique users (Anna and Søren)

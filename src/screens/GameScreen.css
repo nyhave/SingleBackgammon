@@ -1,10 +1,19 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
 .game-screen-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   background-color: #f5eedc;
   font-family: 'Arial', sans-serif;
-  overflow: hidden; /* Prevent scrolling */
+  overflow: hidden;
+  position: relative;
 }
 
 /* Top Bar */
@@ -126,7 +135,7 @@
 
 /* Chat Section */
 .chat-section {
-  height: 180px; /* Fixed height for mobile */
+  height: 150px; /* More compact height for mobile */
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -217,6 +226,8 @@
   display: flex;
   gap: 8px;
   align-items: center;
+  min-width: 150px;
+  justify-content: center;
 }
 
 .mini-die {

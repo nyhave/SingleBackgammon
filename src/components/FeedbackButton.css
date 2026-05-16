@@ -1,0 +1,105 @@
+.feedback-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 80px; /* Over game controls if any */
+  width: 50px;
+  height: 50px;
+  background-color: #3b5976;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 9999;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.feedback-fab:hover {
+  transform: scale(1.1);
+  background-color: #4a7096;
+}
+
+.feedback-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.feedback-modal {
+  background-color: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.feedback-modal h3 {
+  margin-top: 0;
+  color: #3b5976;
+}
+
+.screen-info {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.feedback-modal textarea {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancel {
+  background: none;
+  border: none;
+  color: #666;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.btn-submit {
+  background-color: #3b5976;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-submit:disabled {
+  background-color: #ccc;
+}
+
+.success-msg {
+  padding: 20px;
+  text-align: center;
+  color: #2ecc71;
+  font-weight: bold;
+}

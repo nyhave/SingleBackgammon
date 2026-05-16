@@ -6,6 +6,9 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "gen:flow": "node scripts/generate_flow_diagram.js",
+    "gen:roadmap": "node scripts/generate_roadmap.js",
+    "kill-port": "scripts/kill-port.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -3,7 +3,7 @@
     {
       "id": "welcome",
       "name": "Welcome Screen",
-      "description": "Startskærm hvor brugeren indtaster sit navn og vælger evt. Admin Mode."
+      "description": "Startskærm hvor brugeren indtaster sit navn for at logge ind."
     },
     {
       "id": "profile_edit",
@@ -63,8 +63,8 @@
     {
       "from": "welcome",
       "to": "stats",
-      "action": "Se Statistik",
-      "condition": "Admin Mode er aktiveret"
+      "action": "Admin Login",
+      "condition": "Direkte adgang via /admin URL (Skjult)"
     },
     {
       "from": "profile_edit",
@@ -137,6 +137,12 @@
       "to": "welcome",
       "action": "Tilbage",
       "condition": "Går tilbage til startskærm"
+    },
+    {
+      "from": "stats",
+      "to": "game",
+      "action": "Test AI Spil",
+      "condition": "Trykker på '🤖 TEST SPIL MOD AI'"
     }
   ]
 }

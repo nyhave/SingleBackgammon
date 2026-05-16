@@ -1,7 +1,27 @@
 import React from 'react';
 import './SelectGameScreen.css';
 
-export default function SelectGameScreen({ onNavigate, opponentName, onGameChosen }) {
+export default function SelectGameScreen({ onNavigate, opponentName, onGameChosen, gameId }) {
+  const shareUrl = `${window.location.origin}${window.location.pathname}?gameId=${gameId}`;
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Spil med mig!',
+      text: `Kom og spil mod mig!`,
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Share failed or cancelled:', err);
+      }
+    } else {
+      await navigator.clipboard.writeText(shareUrl);
+      alert('Link kopieret til udklipsholder! 🔗');
+    }
+  };
   const games = [
     {
       id: 'backgammon',
@@ -10,9 +30,13 @@ export default function SelectGameScreen({ onNavigate, opponentName, onGameChose
       description: 'Det klassiske brætspil med taktik og held.',
       color: '#d4a373'
     },
-    // Placeholders for future games:
-    // { id: 'chess', name: 'Skak', emoji: '♟️', description: 'Ren strategi uden terninger.', color: '#3b5976' },
-    // { id: 'ludo', name: 'Ludo', emoji: '🔴', description: 'Sjov og ballade for op til 4 spillere.', color: '#e63946' }
+    {
+      id: 'connect4',
+      name: '4 på stribe',
+      emoji: '🔵',
+      description: 'Hurtig og sjov strategi. Få fire på stribe før din modstander.',
+      color: '#3b5976'
+    }
   ];
 
   return (

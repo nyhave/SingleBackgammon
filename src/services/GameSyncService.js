@@ -15,20 +15,26 @@ export class GameSyncService {
   /**
    * Create a new game in database
    */
-  async createGame(player1Name, player2Name) {
+  async createGame(player1Name, player2Name, initialState = null) {
     try {
+      const defaultState = {
+        board: null,
+        bar: { player1: 0, player2: 0 },
+        borne_off: { player1: 0, player2: 0 },
+        currentPlayer: 'player1',
+        dice: [0, 0],
+        availableDice: [],
+        gameState: 'rolling',
+        moves: []
+      };
+      
       const { data, error } = await supabase
         .from('games')
         .insert({
           player1_name: player1Name,
           player2_name: player2Name,
           status: 'active',
-          game_state: {
-            board: null, // Will be set on first move
-            currentPlayer: 'player1',
-            dice: [0, 0],
-            moves: []
-          },
+          game_state: initialState || defaultState,
           created_at: new Date()
         })
         .select()
@@ -47,8 +53,16 @@ export class GameSyncService {
    */
   subscribeToGame(onUpdate) {
     try {
+      // Ensure we don't subscribe multiple times to the same instance
+      if (this.subscription) {
+        this.unsubscribe();
+      }
+
+      // Use a unique channel name for this instance to avoid conflicts
+      const channelName = `game-${this.gameId}-${Math.random().toString(36).substring(7)}`;
+      
       this.subscription = supabase
-        .channel(`games-${this.gameId}`)
+        .channel(channelName)
         .on(
           'postgres_changes',
           {
@@ -58,10 +72,17 @@ export class GameSyncService {
             filter: `id=eq.${this.gameId}`
           },
           (payload) => {
-            onUpdate(payload.new)
+            if (payload.new) {
+              onUpdate(payload.new)
+            }
           }
         )
-        .subscribe()
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            console.log(`✓ Tilsluttet realtime kanal: ${channelName}`);
+          }
+        })
+
 
       return this.subscription
     } catch (err) {
@@ -89,6 +110,26 @@ export class GameSyncService {
     } catch (err) {
       console.error('Fejl ved opdatering af spiltilstand:', err)
       throw err
+    }
+  }
+
+  /**
+   * Get active games for a player
+   */
+  async getActiveGames(playerName) {
+    try {
+      const { data, error } = await supabase
+        .from('games')
+        .select('*')
+        .or(`player1_name.eq."${playerName}",player2_name.eq."${playerName}"`)
+        .order('updated_at', { ascending: false })
+        .limit(20)
+
+      if (error) throw error
+      return data
+    } catch (err) {
+      console.error('Fejl ved hentning af aktive spil:', err)
+      return []
     }
   }
 
@@ -153,6 +194,24 @@ export class GameSyncService {
       return data[0]
     } catch (err) {
       console.error('Fejl ved afslutning af spil:', err)
+      throw err
+    }
+  }
+
+  /**
+   * Delete a game
+   */
+  async deleteGame(gameId) {
+    try {
+      const { error } = await supabase
+        .from('games')
+        .delete()
+        .eq('id', gameId)
+
+      if (error) throw error
+      return true
+    } catch (err) {
+      console.error('Fejl ved sletning af spil:', err)
       throw err
     }
   }

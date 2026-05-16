@@ -203,18 +203,20 @@ export default function GameBoard({ gameState, onPointClick, selectedPoint, vali
               width: '15px', height: '15px', backgroundColor: '#2ecc71', borderRadius: '50%', boxShadow: '0 0 10px #2ecc71'
             }} />
           )}
+          {/* Top: Player 1 (White) */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 }}>
-            <span style={{ fontSize: '10px', color: '#fff', marginBottom: '5px' }}>P2</span>
-            <div style={{ width: '25px', height: '40px', backgroundColor: '#17202a', border: '1px solid #7f8c8d', borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-              {borne_off.player2}
-            </div>
-          </div>
-          <div style={{ transform: 'rotate(-90deg)', color: '#fff', fontSize: '10px', fontWeight: 'bold', zIndex: 2 }}>UT / OFF</div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 }}>
-            <div style={{ width: '25px', height: '40px', backgroundColor: '#fdfefe', border: '1px solid #7f8c8d', borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000' }}>
+            <div style={{ width: '25px', height: '40px', backgroundColor: '#fdfefe', border: '1px solid #7f8c8d', borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000', fontWeight: 'bold' }}>
               {borne_off.player1}
             </div>
-            <span style={{ fontSize: '10px', color: '#fff', marginTop: '5px' }}>P1</span>
+          </div>
+          
+          <div style={{ transform: 'rotate(-90deg)', color: '#fff', fontSize: '10px', fontWeight: 'bold', zIndex: 2 }}>UT / OFF</div>
+          
+          {/* Bottom: Player 2 (Black) */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 }}>
+            <div style={{ width: '25px', height: '40px', backgroundColor: '#17202a', border: '1px solid #7f8c8d', borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold' }}>
+              {borne_off.player2}
+            </div>
           </div>
         </div>
 

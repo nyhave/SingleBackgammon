@@ -26,18 +26,4 @@ describe('WelcomeScreen', () => {
     
     expect(mockOnLogin).toHaveBeenCalledWith('Søren', false);
   });
-
-  test('shows Admin Mode button when checkbox is checked', () => {
-    render(<WelcomeScreen onLogin={mockOnLogin} onNavigate={mockOnNavigate} />);
-    
-    // Initially not visible
-    expect(screen.queryByText(/SE STATISTIK/i)).not.toBeInTheDocument();
-    
-    // Check admin mode
-    const checkbox = screen.getByLabelText(/Admin Mode/i);
-    fireEvent.click(checkbox);
-    
-    // Now visible
-    expect(screen.getByText(/SE STATISTIK/i)).toBeInTheDocument();
-  });
 });

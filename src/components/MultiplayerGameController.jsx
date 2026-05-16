@@ -8,8 +8,9 @@ import BackgammonGame from '../engine/BackgammonGame'
 import BackgammonAI from '../engine/BackgammonAI'
 import GameSyncService from '../services/GameSyncService'
 import GameBoard from './GameBoard'
+import ReportService from '../services/ReportService'
 
-export default function MultiplayerGameController({ initialPlayer1Name, initialPlayer2Name, autoStart, isAdmin }) {
+export default function MultiplayerGameController({ initialPlayer1Name, initialPlayer2Name, autoStart, isAdmin, onNavigate, gameId }) {
   const [game, setGame] = useState(null)
   const [syncService, setSyncService] = useState(null)
   const [gameState, setGameState] = useState(null)
@@ -20,6 +21,14 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
   const [message, setMessage] = useState('')
   const [dice, setDice] = useState([0, 0])
   const [isAutoPlaying, setIsAutoPlaying] = useState(false)
+  const [autoSpeed, setAutoSpeed] = useState(800); // 1500, 800, 300
+  const [loadTimeout, setLoadTimeout] = useState(false);
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState([
+    { id: 'm1', sender: 'opponent', text: 'Godt træk!' },
+    { id: 'm2', sender: 'me', text: 'Tak! Er du her ofte?' }
+  ]);
+  const syncRef = useRef(null);
   const initStarted = useRef(false);
 
   // Auto-play effect
@@ -46,11 +55,11 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       } else {
         switchPlayer();
       }
-    }, 800); // 800ms delay between actions for visibility
+    }, autoSpeed);
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAutoPlaying, gameState]);
+  }, [isAutoPlaying, gameState, autoSpeed]);
 
 
   useEffect(() => {
@@ -58,14 +67,26 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       initStarted.current = true;
       startGame();
     }
+    return () => {
+      if (syncRef.current) {
+        syncRef.current.unsubscribe();
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoStart, gameStarted]);
 
   // Initialize game
   const startGame = async () => {
+    const timer = setTimeout(() => {
+      if (!gameStarted) {
+        setLoadTimeout(true);
+        ReportService.logError('MultiplayerGameController', new Error('Timeout: Spillet indlæste ikke indenfor 5 sekunder'));
+      }
+    }, 5000);
+
     try {
       const urlParams = new URLSearchParams(window.location.search);
-      const existingGameId = urlParams.get('gameId');
+      const existingGameId = gameId || urlParams.get('gameId');
 
       const newGame = new BackgammonGame()
       setGame(newGame)
@@ -83,7 +104,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
         if (gameData.game_state) {
           newGame.board = gameData.game_state.board || newGame.board;
           newGame.bar = gameData.game_state.bar || newGame.bar;
-          newGame.borne_off = gameData.game_state.borne_off || newGame.borne_off;
+          newGame.borne_off = gameData.game_state.borne_off || { player1: 0, player2: 0 };
           newGame.currentPlayer = gameData.game_state.currentPlayer || newGame.currentPlayer;
           newGame.dice = gameData.game_state.dice || newGame.dice;
           setGameState(gameData.game_state);
@@ -94,11 +115,13 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       } else {
         sync = new GameSyncService(null)
         const createdGame = await sync.createGame(player1Name, player2Name)
-        setGameState(newGame.getGameState())
+        const initialState = newGame.getGameState()
+        setGameState(initialState)
         window.history.pushState({}, '', `?gameId=${createdGame.id}`)
       }
       
       setSyncService(sync)
+      syncRef.current = sync
       
       // Subscribe to updates
       sync.subscribeToGame((updatedState) => {
@@ -109,18 +132,27 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
             setDice(updatedState.game_state.dice);
           }
           
+          if (updatedState.game_state.chat) {
+            setChatMessages(updatedState.game_state.chat);
+          }
+          
           // Keep local game instance in sync
           if (newGame) {
-            newGame.board = updatedState.game_state.board;
-            newGame.bar = updatedState.game_state.bar;
-            newGame.borne_off = updatedState.game_state.borne_off;
-            newGame.currentPlayer = updatedState.game_state.currentPlayer;
-            newGame.dice = updatedState.game_state.dice;
+            newGame.board = updatedState.game_state.board || newGame.board;
+            newGame.bar = updatedState.game_state.bar || newGame.bar;
+            newGame.borne_off = updatedState.game_state.borne_off || { player1: 0, player2: 0 };
+            newGame.currentPlayer = updatedState.game_state.currentPlayer || newGame.currentPlayer;
+            newGame.dice = updatedState.game_state.dice || newGame.dice;
           }
         }
       })
       
-      setGameStarted(true)
+      // Safety check: ensure we actually have a board state before showing the UI
+      if (newGame.board || (gameState && gameState.board)) {
+        setGameStarted(true)
+      } else {
+        throw new Error('Spiltilstand manglede board-data')
+      }
       if (existingGameId) {
         setMessage('Tilsluttet eksisterende spil!')
       } else {
@@ -128,7 +160,10 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       }
     } catch (err) {
       console.error("Fejl i startGame:", err);
+      ReportService.logError('MultiplayerGameController', err);
       setMessage(`Fejl ved start af spil: ${err.message}`)
+    } finally {
+      clearTimeout(timer);
     }
   }
 
@@ -222,15 +257,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
         await syncService.updateGameState(updated)
       }
       
-      setMessage(`✓ Træk udført!`)
       setFromPoint(null)
-
-      // Auto-check for no more moves
-      if (updated.legalMoves.length === 0 && updated.availableDice.length > 0) {
-        setMessage('Ingen flere mulige træk. Tryk på "Næste Spiller".')
-      } else if (updated.availableDice.length === 0) {
-        setMessage('Alle træk brugt. Tryk på "Næste Spiller".')
-      }
     } else {
       setMessage('Ugyldigt træk! Prøv igen.')
       setFromPoint(null)
@@ -249,10 +276,10 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       syncService.updateGameState(updated)
     }
     
-    setMessage(`${game.currentPlayer === 'player1' ? player1Name : player2Name} skal trække`)
     setDice([0, 0])
   }
 
+  // Check win condition and Auto-switch logic
   // Check win condition and Auto-switch logic
   useEffect(() => {
     if (!game || !gameState) return
@@ -261,31 +288,79 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       const winner = game.getWinner()
       const winnerName = winner === 'player1' ? player1Name : player2Name
       setMessage(`🎉 ${winnerName} vinder! Tillykke!`)
+      setIsAutoPlaying(false); // Stop AI
       
       if (syncService) {
         syncService.finishGame(winnerName)
       }
+
+      // Auto-navigate after 3 seconds
+      if (onNavigate) {
+        setTimeout(() => {
+          onNavigate('postgame');
+        }, 3000);
+      }
       return
     }
 
-    // Check if player has no moves left after rolling
-    if (gameState.gameState === 'moving' && gameState.availableDice.length > 0 && gameState.legalMoves.length === 0) {
+    // Dynamic messages based on state
+    if (gameState?.availableDice?.length === 0 && (dice[0] !== 0 || dice[1] !== 0)) {
+      setMessage('Alle træk brugt. Skift spiller.')
+    } else if (gameState?.gameState === 'moving' && (gameState?.availableDice?.length || 0) > 0 && (gameState?.legalMoves?.length || 0) === 0) {
       setMessage('Ingen mulige træk! Skift spiller.')
+    } else if ((gameState?.availableDice?.length || 0) > 0) {
+      setMessage(`${gameState.currentPlayer === 'player1' ? player1Name : player2Name} skal flytte brikker`)
+    } else {
+      setMessage(`${gameState?.currentPlayer === 'player1' ? player1Name : player2Name} skal kaste terninger`)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState])
 
-  // Dummy Chat messages for MVP
-  const chatMessages = [
-    { id: 1, sender: 'opponent', text: 'Godt træk!' },
-    { id: 2, sender: 'me', text: 'Tak! Er du her ofte?' }
-  ];
+  // Handle Chat sending
+  const handleSendMessage = async () => {
+    if (!chatInput.trim()) return;
+
+    const newMessage = {
+      id: Date.now().toString(),
+      senderName: initialPlayer1Name,
+      text: chatInput,
+      timestamp: new Date().toISOString()
+    };
+
+    const updatedChat = [...chatMessages, newMessage];
+    setChatMessages(updatedChat);
+    setChatInput('');
+
+    if (syncService && gameState) {
+      const updatedState = {
+        ...gameState,
+        chat: updatedChat
+      };
+      await syncService.updateGameState(updatedState);
+    }
+  };
 
   if (!gameStarted) {
     return (
-      <div style={{padding: 20}}>
-        <h2>Starter spil...</h2>
-        {message && <div style={{color: 'red', marginTop: 10, padding: 10, backgroundColor: '#fee'}}>{message}</div>}
+      <div style={{padding: 40, textAlign: 'center'}}>
+        <h2>{loadTimeout ? 'Hov! Det tager længere tid end normalt...' : 'Starter spil...'}</h2>
+        {loadTimeout ? (
+          <div>
+            <p style={{color: '#666'}}>Vi har problemer med at forbinde til spillet.</p>
+            <button 
+              onClick={() => window.location.reload()}
+              style={{ padding: '10px 20px', backgroundColor: '#3b5976', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', marginTop: '20px' }}
+            >
+              PRØV IGEN
+            </button>
+          </div>
+        ) : (
+          <div className="loading-spinner" style={{ margin: '20px auto', width: '40px', height: '40px', border: '4px solid #ddd', borderTop: '4px solid #3b5976', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+        )}
+        {message && <div style={{color: '#e63946', marginTop: 20, padding: 15, backgroundColor: '#fee', borderRadius: '8px', border: '1px solid #fca5a5'}}>{message}</div>}
+        <style>{`
+          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        `}</style>
       </div>
     )
   }
@@ -309,7 +384,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
               <span>SPIL & CHAT</span>
             </div>
             <div className="topbar-right">
-              ⚙️
+              {/* Settings gear removed for MVP */}
             </div>
           </div>
 
@@ -354,49 +429,71 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
 
           {/* Controls Bar (Moved from overlay to avoid board overlap) */}
           <div className="game-controls-bar">
-            {isAdmin && (
-              <button 
-                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                style={{ 
-                  backgroundColor: isAutoPlaying ? '#e74c3c' : '#2ecc71', 
-                  color: 'white', border: 'none', padding: '5px 12px', 
-                  borderRadius: '20px', fontSize: '10px', fontWeight: 'bold', 
-                  cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                }}
-              >
-                {isAutoPlaying ? '⏹️ STOP AUTO' : '🤖 AUTO'}
-              </button>
-            )}
+            {/* Slot 1: AI Controls */}
+            <div style={{ width: '100px', display: 'flex', justifyContent: 'center' }}>
+              {isAdmin && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center', height: '45px', justifyContent: 'center' }}>
+                  <button 
+                    onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                    style={{ 
+                      backgroundColor: isAutoPlaying ? '#e74c3c' : '#2ecc71', 
+                      color: 'white', border: 'none', padding: '6px 14px', 
+                      borderRadius: '20px', fontSize: '11px', fontWeight: 'bold', 
+                      cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                      width: '80px'
+                    }}
+                  >
+                    {isAutoPlaying ? '⏹️ STOP' : '🤖 AUTO'}
+                  </button>
+                  {isAutoPlaying && (
+                    <div style={{ display: 'flex', gap: '3px' }}>
+                    <button onClick={() => setAutoSpeed(1500)} style={{ padding: '3px 4px', fontSize: '8px', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: autoSpeed === 1500 ? '#3b5976' : 'white', color: autoSpeed === 1500 ? 'white' : '#333', cursor: 'pointer' }}>x0.5</button>
+                    <button onClick={() => setAutoSpeed(800)} style={{ padding: '3px 4px', fontSize: '8px', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: autoSpeed === 800 ? '#3b5976' : 'white', color: autoSpeed === 800 ? 'white' : '#333', cursor: 'pointer' }}>x1</button>
+                    <button onClick={() => setAutoSpeed(300)} style={{ padding: '3px 4px', fontSize: '8px', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: autoSpeed === 300 ? '#3b5976' : 'white', color: autoSpeed === 300 ? 'white' : '#333', cursor: 'pointer' }}>x2</button>
+                    <button onClick={() => setAutoSpeed(100)} style={{ padding: '3px 4px', fontSize: '8px', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: autoSpeed === 100 ? '#3b5976' : 'white', color: autoSpeed === 100 ? 'white' : '#333', cursor: 'pointer' }}>x3</button>
+                  </div>
+                  )}
+                </div>
+              )}
+            </div>
 
-            {(dice[0] === 0 && dice[1] === 0) ? (
-              <button className="dice-button" onClick={rollDice} style={{ padding: '8px 15px' }}>
-                🎲 KAST
-              </button>
-            ) : (
-              <div className="dice-display-small">
-                {gameState?.availableDice?.map((d, i) => (
-                  <div key={i} className="mini-die">{d}</div>
-                ))}
-                {gameState?.availableDice?.length === 0 && (
-                  <span style={{ color: '#3b5976', fontSize: '10px', fontWeight: 'bold' }}>Færdig!</span>
-                )}
-              </div>
-            )}
+            {/* Slot 2: Dice / "Færdig" */}
+            <div style={{ width: '150px', display: 'flex', justifyContent: 'center' }}>
+              {(dice[0] !== 0 || dice[1] !== 0) && (
+                <div className="dice-display-small">
+                  {gameState?.availableDice?.length > 0 ? (
+                    gameState.availableDice.map((d, i) => (
+                      <div key={i} className="mini-die">{d}</div>
+                    ))
+                  ) : (
+                    <span style={{ color: '#3b5976', fontSize: '10px', fontWeight: 'bold', height: '28px', display: 'flex', alignItems: 'center' }}>Færdig!</span>
+                  )}
+                </div>
+              )}
+            </div>
 
-            {(dice[0] !== 0 || dice[1] !== 0) && game && (
-              <button 
-                className="dice-button" 
-                onClick={switchPlayer} 
-                style={{
-                  fontSize: 10, 
-                  padding: '8px 12px', 
-                  backgroundColor: (gameState?.legalMoves?.length === 0 || gameState?.availableDice?.length === 0) ? '#27ae60' : '#7f8c8d',
-                  color: 'white'
-                }}
-              >
-                Næste
-              </button>
-            )}
+            {/* Slot 3: Primary Action Button (Kast or Næste) */}
+            <div style={{ width: '100px', display: 'flex', justifyContent: 'center' }}>
+              {(dice[0] === 0 && dice[1] === 0) ? (
+                <button className="dice-button" onClick={rollDice} style={{ padding: '8px 15px', width: '85px', fontSize: '11px' }}>
+                  🎲 KAST
+                </button>
+              ) : (
+                <button 
+                  className="dice-button" 
+                  onClick={switchPlayer} 
+                  style={{
+                    fontSize: 11, 
+                    padding: '8px 12px', 
+                    width: '85px',
+                    backgroundColor: (gameState?.legalMoves?.length === 0 || gameState?.availableDice?.length === 0) ? '#27ae60' : '#7f8c8d',
+                    color: 'white'
+                  }}
+                >
+                  Næste
+                </button>
+              )}
+            </div>
 
             {message && !isAutoPlaying && (
               <div className="game-msg-toast">
@@ -415,17 +512,26 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
 
         {/* Chat Section */}
         <div className="chat-section">
+          <div className="chat-header" style={{ padding: '15px', borderBottom: '1px solid #eee', fontWeight: 'bold', color: '#3b5976', fontSize: '14px', backgroundColor: '#fdfefe', borderRadius: '0 12px 0 0' }}>
+            💬 Chat med {myRole === 'player1' ? player2Name : player1Name}
+          </div>
           <div className="chat-messages">
             {chatMessages.map(msg => (
-              <div key={msg.id} className={`chat-bubble ${msg.sender === 'me' ? 'sent' : 'received'}`}>
+              <div key={msg.id} className={`chat-bubble ${msg.senderName === initialPlayer1Name ? 'sent' : 'received'}`}>
                 {msg.text}
               </div>
             ))}
           </div>
           <div className="chat-input-area">
-            <div className="chat-add-btn">+</div>
-            <input type="text" className="chat-input" placeholder="Skriv en besked..." />
-            <button className="chat-send-btn">➤</button>
+            <input 
+              type="text" 
+              className="chat-input" 
+              placeholder="Skriv en besked..." 
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            />
+            <button className="chat-send-btn" onClick={handleSendMessage}>➤</button>
           </div>
         </div>
       </div>

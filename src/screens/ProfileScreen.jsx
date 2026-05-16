@@ -27,6 +27,7 @@ export default function ProfileScreen({ onNavigate, onSave, mode = 'edit', profi
   return (
     <div className="profile-container">
       <h1 className="profile-header">{mode === 'edit' ? 'DIN PROFIL' : `${profile.username.split(',')[0].toUpperCase()}S PROFIL`}</h1>
+      {mode === 'edit' && <p className="profile-subtitle">{profile.username}</p>}
 
       {mode === 'edit' ? (
         <div className="add-photo-btn">

@@ -1,0 +1,66 @@
+{
+  "title": "Backgammon Hearts Roadmap",
+  "components": [
+    {
+      "name": "Matchmaking & Discovery",
+      "features": [
+        { "name": "Basic User Feed", "mvp": "✅", "v1": "✅", "v2": "✅", "note": "Kort-baseret visning af spillere" },
+        { "name": "Filter (Alder, Niveau)", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "Popup til filtrering" },
+        { "name": "Geolocering", "mvp": "❌", "v1": "🚧", "v2": "✅", "note": "Find spillere i nærheden (by-niveau)" },
+        { "name": "AI Match-Score", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Kompatibilitet baseret på spilstil og profil" },
+        { "name": "Live Match Events", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Tidsbegrænsede turneringer" }
+      ]
+    },
+    {
+      "name": "Brugerprofiler",
+      "features": [
+        { "name": "Basic Profil (Navn, Alder)", "mvp": "✅", "v1": "✅", "v2": "✅", "note": "Simpel redigering" },
+        { "name": "Foto Upload", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "Integration med Cloudinary/Supabase Storage" },
+        { "name": "Spil-statistik", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "ELO-rating og win-rate" },
+        { "name": "Video-bios", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "15-sekunders introduktionsvideoer" },
+        { "name": "Interesse-badges", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Tags for interesser (Musik, Sport, etc.)" }
+      ]
+    },
+    {
+      "name": "Spil-motor (Core)",
+      "features": [
+        { "name": "Multiplayer Backgammon", "mvp": "✅", "v1": "✅", "v2": "✅", "note": "Real-time sync via Supabase" },
+        { "name": "Undo Move", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "Fortryd brik-træk inden turen afsluttes" },
+        { "name": "Match-ur (Timer)", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "Forhindrer 'stalling'" },
+        { "name": "Board Skins", "mvp": "❌", "v1": "🚧", "v2": "✅", "note": "Custom designs og brikker" },
+        { "name": "AI Coaching", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Feedback på dine træk efter spillet" },
+        { "name": "Multi-Game Support", "mvp": "🚧", "v1": "✅", "v2": "✅", "note": "Skak, Ludo, etc." }
+      ]
+    },
+    {
+      "name": "Social & Kommunikation",
+      "features": [
+        { "name": "Basic Chat", "mvp": "✅", "v1": "✅", "v2": "✅", "note": "Simpel real-time besked-udveksling" },
+        { "name": "Reaktioner / Emojis", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "Send hjerter eller flammer under spil" },
+        { "name": "Isbryder-spørgsmål", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Automatiske spørgsmål for at starte samtalen" },
+        { "name": "Voice Chat", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Snak sammen mens I spiller" },
+        { "name": "Virtuelle Gaver", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Send en 'virtuel øl' eller 'rose'" }
+      ]
+    },
+    {
+      "name": "Admin & Vækst",
+      "features": [
+        { "name": "Statistik Dashboard", "mvp": "✅", "v1": "✅", "v2": "✅", "note": "Overblik over spil og brugere" },
+        { "name": "User Reporting", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "Anmeld upassende opførsel" },
+        { "name": "A/B Testing system", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Test forskellige UI-varianter" },
+        { "name": "Monetisering (Premium)", "mvp": "❌", "v1": "🚧", "v2": "✅", "note": "Abonnement for ekstra funktioner" }
+      ]
+    },
+    {
+      "name": "Betaling & Monetisering",
+      "features": [
+        { "name": "Annoncefri oplevelse", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "Fjern reklamer for premium brugere" },
+        { "name": "Ubegrænsede Udfordringer", "mvp": "❌", "v1": "✅", "v2": "✅", "note": "Gratis brugere har max 5/dag" },
+        { "name": "Premium Board Skins", "mvp": "❌", "v1": "🚧", "v2": "✅", "note": "Eksklusive bræt-designs" },
+        { "name": "Profile Boost", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Bliv fremhævet i matchmaking-feedet i 24 timer" },
+        { "name": "AI Coaching (Pro)", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Adgang til avanceret analyse af dine spil" },
+        { "name": "Gave-økonomi", "mvp": "❌", "v1": "❌", "v2": "✅", "note": "Køb virtuelle gaver til dine modstandere" }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WelcomeScreen from './screens/WelcomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import MatchmakingScreen from './screens/MatchmakingScreen';
@@ -6,6 +6,9 @@ import GameScreen from './screens/GameScreen';
 import PostGameScreen from './screens/PostGameScreen';
 import StatsScreen from './screens/StatsScreen';
 import SelectGameScreen from './screens/SelectGameScreen';
+import FeedbackButton from './components/FeedbackButton';
+import ReportService from './services/ReportService';
+import GameSyncService from './services/GameSyncService';
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -18,12 +21,47 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [profileMode, setProfileMode] = useState('edit');
   const [viewingProfileName, setViewingProfileName] = useState('');
+  const [fullProfileName, setFullProfileName] = useState('Anna, 28');
   const [selectedGameType, setSelectedGameType] = useState('backgammon');
+  const [activeGameId, setActiveGameId] = useState(null);
+  const [activeGames, setActiveGames] = useState([]);
+  
+  useEffect(() => {
+    const handleError = (event) => {
+      // If it's a generic 'Script error.', it usually means a cross-origin issue or a missing resource
+      let msg = event.message || 'Ukendt script fejl';
+      if (msg === 'Script error.') {
+        msg = `Script Error (Muligvis CORS eller manglende fil): ${event.filename || 'ukendt fil'} på linje ${event.lineno || '?'}`;
+      }
+      
+      const error = event.error || new Error(msg);
+      ReportService.logError(currentScreen, error);
+    };
+
+    window.addEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', (event) => {
+      const error = event.reason instanceof Error ? event.reason : new Error(String(event.reason));
+      ReportService.logError(currentScreen, error);
+    });
+
+    return () => {
+      window.removeEventListener('error', handleError);
+    };
+  }, [currentScreen]);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path.toLowerCase().includes('/admin')) {
+      setIsAdmin(true);
+      setCurrentScreen('stats');
+    }
+  }, []);
 
   const handleProfileSave = (name) => {
     // Extract just the first name if they typed "Anna, 28"
     const firstName = name.split(',')[0].trim();
     setUserName(firstName);
+    setFullProfileName(name);
     
     if (existingGameId) {
       // If we are joining a game via URL, skip matchmaking and go straight to game
@@ -40,13 +78,48 @@ export default function App() {
     setCurrentScreen('select_game');
   };
 
-  const handleGameChosen = (gameType) => {
+  const handleGameChosen = async (gameType) => {
     setSelectedGameType(gameType);
-    setCurrentScreen('game');
+    ReportService.logGameStart(gameType);
+    
+    // Create game in DB to get a valid ID
+    const service = new GameSyncService();
+    try {
+      let initialState = null;
+      if (gameType === 'connect4') {
+        initialState = {
+          board: Array(7).fill(null).map(() => Array(6).fill(null)),
+          currentPlayer: 'player1',
+          isGameOver: false,
+          winner: null,
+          lastMove: null,
+          rows: 6,
+          cols: 7
+        };
+      }
+      
+      const newGame = await service.createGame(userName, opponentName, initialState);
+      setActiveGameId(newGame.id);
+      setCurrentScreen('game');
+    } catch (err) {
+      console.error("Kunne ikke oprette spil:", err);
+      setCurrentScreen('game'); // Fallback to offline/local if DB fails
+    }
+  };
+
+  const fetchActiveGames = async (name) => {
+    if (!name) return;
+    const service = new GameSyncService();
+    const games = await service.getActiveGames(name);
+    setActiveGames(games);
   };
 
   const handleQuickLogin = (name, adminMode = false) => {
     setUserName(name);
+    fetchActiveGames(name);
+    // Add default ages for test users
+    const ages = { 'Anna': '28', 'Søren': '30', 'Matilde': '26', 'Casper': '32' };
+    setFullProfileName(name + (ages[name] ? `, ${ages[name]}` : ''));
     setIsAdmin(adminMode);
     if (existingGameId) {
       setCurrentScreen('game');
@@ -60,6 +133,48 @@ export default function App() {
     setProfileMode('view');
     setCurrentScreen('profile');
   };
+
+  const handleInviteFriend = async () => {
+    const service = new GameSyncService();
+    try {
+      // Create a game with a placeholder opponent name
+      const newGame = await service.createGame(userName, "Venter på ven...");
+      setActiveGameId(newGame.id);
+      
+      setOpponentName("Venter...");
+      setCurrentScreen('select_game');
+    } catch (err) {
+      console.error("Kunne ikke oprette invitations-spil:", err);
+      alert("Der skete en fejl. Prøv igen.");
+    }
+  };
+
+  const handleResumeGame = (game) => {
+    setActiveGameId(game.id);
+    setOpponentName(game.player1_name === userName ? game.player2_name : game.player1_name);
+    setSelectedGameType(game.game_state?.cols === 7 ? 'connect4' : 'backgammon');
+    setCurrentScreen('game');
+  };
+
+  const handleDeleteGame = async (gameId) => {
+    const service = new GameSyncService();
+    try {
+      await service.deleteGame(gameId);
+      fetchActiveGames(userName);
+    } catch (err) {
+      console.error("Kunne ikke slette spil:", err);
+    }
+  };
+
+  useEffect(() => {
+    // Refresh active games every 30 seconds when on matchmaking screen
+    let interval;
+    if (currentScreen === 'matchmaking' && userName) {
+      fetchActiveGames(userName);
+      interval = setInterval(() => fetchActiveGames(userName), 30000);
+    }
+    return () => clearInterval(interval);
+  }, [currentScreen, userName]);
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -76,17 +191,22 @@ export default function App() {
           onNavigate={setCurrentScreen} 
           onSave={handleProfileSave} 
           mode={profileMode}
-          profileName={profileMode === 'edit' ? userName : viewingProfileName}
+          profileName={profileMode === 'edit' ? fullProfileName : viewingProfileName}
         />;
       case 'matchmaking':
         return <MatchmakingScreen 
           onNavigate={setCurrentScreen} 
           onStartGame={handleStartGame} 
+          onResumeGame={handleResumeGame}
+          onDeleteGame={handleDeleteGame}
           onViewProfile={handleViewProfile}
+          onInviteFriend={handleInviteFriend}
           onEditProfile={() => {
             setProfileMode('edit');
             setCurrentScreen('profile');
           }}
+          userDisplayName={fullProfileName}
+          activeGames={activeGames}
         />;
       case 'select_game':
         return <SelectGameScreen 
@@ -95,8 +215,14 @@ export default function App() {
           onGameChosen={handleGameChosen} 
         />;
       case 'game':
-        // Pass selectedGameType if we ever need it in GameScreen
-        return <GameScreen onNavigate={setCurrentScreen} player1Name={userName} player2Name={opponentName} isAdmin={isAdmin} />;
+        return <GameScreen 
+          onNavigate={setCurrentScreen} 
+          player1Name={userName} 
+          player2Name={opponentName} 
+          isAdmin={isAdmin} 
+          gameType={selectedGameType}
+          gameId={activeGameId}
+        />;
       case 'postgame':
         return <PostGameScreen 
           onNavigate={setCurrentScreen} 
@@ -105,7 +231,14 @@ export default function App() {
           onViewProfile={handleViewProfile}
         />;
       case 'stats':
-        return <StatsScreen onNavigate={setCurrentScreen} />;
+        return <StatsScreen 
+          onNavigate={setCurrentScreen} 
+          onStartAIGame={() => {
+            setUserName('Admin (Test)');
+            setOpponentName('Robot-AI');
+            setCurrentScreen('select_game');
+          }}
+        />;
       default:
         return <WelcomeScreen 
           onNavigate={(screen) => {
@@ -119,6 +252,7 @@ export default function App() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f5f5f5', minHeight: '100vh', margin: 0, padding: 0 }}>
       {renderScreen()}
+      <FeedbackButton currentScreen={currentScreen} />
     </div>
   );
 }

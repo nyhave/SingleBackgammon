@@ -1,12 +1,13 @@
 .stats-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   background-color: #f5eedc;
   font-family: 'Arial', sans-serif;
   color: #3b5976;
   padding: 20px;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .stats-header {
@@ -191,4 +192,28 @@
 .fact-value {
   color: #3b5976;
   font-weight: bold;
+}
+
+.toast-notification {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  animation: fadeInOut 2.5s ease forwards;
+  pointer-events: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, 20px); }
+  15% { opacity: 1; transform: translate(-50%, 0); }
+  85% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -20px); }
 }

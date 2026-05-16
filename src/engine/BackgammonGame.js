@@ -183,14 +183,17 @@ export class BackgammonGame {
   }
 
   isGameOver() {
-    return this.borne_off.player1 === POINTS_PER_PLAYER || 
-           this.borne_off.player2 === POINTS_PER_PLAYER
+    const p1 = this.borne_off?.player1 || 0;
+    const p2 = this.borne_off?.player2 || 0;
+    return p1 === POINTS_PER_PLAYER || p2 === POINTS_PER_PLAYER;
   }
 
   getWinner() {
-    if (this.borne_off.player1 === POINTS_PER_PLAYER) return 'player1'
-    if (this.borne_off.player2 === POINTS_PER_PLAYER) return 'player2'
-    return null
+    const p1 = this.borne_off?.player1 || 0;
+    const p2 = this.borne_off?.player2 || 0;
+    if (p1 === POINTS_PER_PLAYER) return 'player1';
+    if (p2 === POINTS_PER_PLAYER) return 'player2';
+    return null;
   }
 
   getGameState() {
