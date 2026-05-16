@@ -26,10 +26,10 @@ export default function GameScreen({ onNavigate, player1Name, player2Name, isAdm
       )}
       
       {/* Temporary button to simulate game over -> next screen */}
-      <div style={{ textAlign: 'center', margin: '20px', position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 100 }}>
-        <button 
+      <div style={{ textAlign: 'center', position: 'absolute', bottom: 8, left: 0, right: 0, zIndex: 100, pointerEvents: 'none' }}>
+        <button
           onClick={() => onNavigate('postgame')}
-          style={{ opacity: 0.3, fontSize: '10px' }}
+          style={{ opacity: 0.3, fontSize: '10px', pointerEvents: 'auto' }}
         >
           Afslut Spil (Test)
         </button>
