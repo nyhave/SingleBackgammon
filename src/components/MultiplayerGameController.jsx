@@ -107,10 +107,22 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
           newGame.borne_off = gameData.game_state.borne_off || { player1: 0, player2: 0 };
           newGame.currentPlayer = gameData.game_state.currentPlayer || newGame.currentPlayer;
           newGame.dice = gameData.game_state.dice || newGame.dice;
-          setGameState(gameData.game_state);
+          // Always use the engine's board so it shows immediately
+          const mergedState = {
+            ...gameData.game_state,
+            board: gameData.game_state.board || newGame.board,
+            bar: gameData.game_state.bar || newGame.bar,
+            borne_off: gameData.game_state.borne_off || newGame.borne_off,
+            availableDice: gameData.game_state.availableDice || [],
+            legalMoves: gameData.game_state.legalMoves || [],
+          };
+          setGameState(mergedState);
           if (gameData.game_state.dice) {
             setDice(gameData.game_state.dice);
           }
+        } else {
+          // No state in DB at all, use fresh engine state
+          setGameState(newGame.getGameState());
         }
       } else {
         sync = new GameSyncService(null)

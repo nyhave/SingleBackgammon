@@ -25,107 +25,101 @@ export default function ProfileScreen({ onNavigate, onSave, mode = 'edit', profi
   };
 
   return (
-    <div className="profile-container">
-      <h1 className="profile-header">{mode === 'edit' ? 'DIN PROFIL' : `${profile.username.split(',')[0].toUpperCase()}S PROFIL`}</h1>
-      {mode === 'edit' && <p className="profile-subtitle">{profile.username}</p>}
+    <div className="gd-profile">
+      <div className="gd-profile-header">
+        <div className="gd-profile-back" onClick={() => onNavigate('matchmaking')}>←</div>
+        <h1 className="gd-profile-title">
+          {mode === 'edit' ? 'Din Profil' : `${profile.username.split(',')[0]}s Profil`}
+        </h1>
+        <div style={{ width: '30px' }}></div>
+      </div>
 
-      {mode === 'edit' ? (
-        <div className="add-photo-btn">
-          [ ] TILFØJ BILLEDE
-        </div>
-      ) : (
-        <div className="add-photo-btn" style={{ border: 'none', fontSize: '60px', padding: '20px' }}>
-          {profile.username.startsWith('Søren') ? '🧑' : '👩'}
-        </div>
+      <div className="gd-profile-photo">
+        {mode === 'edit' ? (
+          <div className="gd-photo-placeholder">
+            <span className="gd-photo-icon">📷</span>
+            <span className="gd-photo-text">Tilføj billede</span>
+          </div>
+        ) : (
+          <div className="gd-photo-avatar">
+            {profile.username.startsWith('Søren') ? '🧑' : '👩'}
+          </div>
+        )}
+      </div>
+
+      {mode === 'edit' && (
+        <p className="gd-profile-subtitle">{profile.username}</p>
       )}
 
-      <div className="form-group">
-        <label className="form-label" htmlFor="username">Brugernavn:</label>
-        {mode === 'edit' ? (
-          <input 
-            type="text" 
-            id="username"
-            name="username"
-            className="form-input" 
-            value={profile.username}
-            onChange={handleChange}
-          />
-        ) : (
-          <div className="view-mode-text" style={{ padding: '12px', color: 'white', backgroundColor: '#3b5976', borderRadius: '8px' }}>{profile.username}</div>
-        )}
-      </div>
+      <div className="gd-form">
+        <div className="gd-form-group">
+          <label className="gd-label" htmlFor="username">Brugernavn</label>
+          {mode === 'edit' ? (
+            <input 
+              type="text" id="username" name="username"
+              className="gd-input" 
+              value={profile.username}
+              onChange={handleChange}
+            />
+          ) : (
+            <div className="gd-view-field">{profile.username}</div>
+          )}
+        </div>
 
-      <div className="form-group">
-        <label className="form-label" htmlFor="bio">Biografi:</label>
-        {mode === 'edit' ? (
-          <input 
-            type="text" 
-            id="bio"
-            name="bio"
-            className="form-input" 
-            value={profile.bio}
-            onChange={handleChange}
-          />
-        ) : (
-          <div className="view-mode-text" style={{ padding: '12px', color: 'white', backgroundColor: '#3b5976', borderRadius: '8px' }}>{profile.bio}</div>
-        )}
-      </div>
+        <div className="gd-form-group">
+          <label className="gd-label" htmlFor="bio">Biografi</label>
+          {mode === 'edit' ? (
+            <input 
+              type="text" id="bio" name="bio"
+              className="gd-input" 
+              value={profile.bio}
+              onChange={handleChange}
+            />
+          ) : (
+            <div className="gd-view-field">{profile.bio}</div>
+          )}
+        </div>
 
-      <div className="form-group">
-        <label className="form-label" htmlFor="level">Niveau:</label>
-        {mode === 'edit' ? (
-          <select 
-            id="level"
-            name="level"
-            className="form-input" 
-            value={profile.level}
-            onChange={handleChange}
-          >
-            <option value="Begynder">Begynder</option>
-            <option value="Mellemliggende">Mellemliggende</option>
-            <option value="Ekspert">Ekspert</option>
-          </select>
-        ) : (
-          <div className="view-mode-text" style={{ padding: '12px', color: 'white', backgroundColor: '#3b5976', borderRadius: '8px' }}>{profile.level}</div>
-        )}
-      </div>
+        <div className="gd-form-group">
+          <label className="gd-label" htmlFor="level">Niveau</label>
+          {mode === 'edit' ? (
+            <select id="level" name="level" className="gd-input gd-select" 
+              value={profile.level} onChange={handleChange}>
+              <option value="Begynder">Begynder</option>
+              <option value="Mellemliggende">Mellemliggende</option>
+              <option value="Ekspert">Ekspert</option>
+            </select>
+          ) : (
+            <div className="gd-view-field">{profile.level}</div>
+          )}
+        </div>
 
-      <div className="form-group">
-        <label className="form-label" htmlFor="seeking">Søger:</label>
-        {mode === 'edit' ? (
-          <input 
-            type="text" 
-            id="seeking"
-            name="seeking"
-            className="form-input" 
-            value={profile.seeking}
-            onChange={handleChange}
-          />
-        ) : (
-          <div className="view-mode-text" style={{ padding: '12px', color: 'white', backgroundColor: '#3b5976', borderRadius: '8px' }}>{profile.seeking}</div>
-        )}
+        <div className="gd-form-group">
+          <label className="gd-label" htmlFor="seeking">Søger</label>
+          {mode === 'edit' ? (
+            <input 
+              type="text" id="seeking" name="seeking"
+              className="gd-input" 
+              value={profile.seeking}
+              onChange={handleChange}
+            />
+          ) : (
+            <div className="gd-view-field">{profile.seeking}</div>
+          )}
+        </div>
       </div>
 
       {mode === 'edit' ? (
-        <button 
-          className="save-button"
-          onClick={handleSave}
-        >
-          [ GEM PROFIL ]
+        <button className="gd-btn-save" onClick={handleSave}>
+          Gem profil
         </button>
       ) : (
-        <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-          <button 
-            onClick={() => onNavigate('matchmaking')}
-            style={{ flex: 1, backgroundColor: 'transparent', color: '#ff4b2b', border: '2px solid #ff4b2b', padding: '15px', borderRadius: '8px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer' }}
-          >
-            TILBAGE
+        <div className="gd-profile-actions">
+          <button className="gd-btn-outline-sm" onClick={() => onNavigate('matchmaking')}>
+            Tilbage
           </button>
-          <button 
-            onClick={() => onNavigate('select_game')}
-            style={{ flex: 1, backgroundColor: '#ff4b2b', color: 'white', border: 'none', padding: '15px', borderRadius: '8px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer' }}
-          >
-            UDFORDR IGEN
+          <button className="gd-btn-primary-sm" onClick={() => onNavigate('select_game')}>
+            Udfordr
           </button>
         </div>
       )}

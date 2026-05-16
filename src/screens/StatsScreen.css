@@ -1,10 +1,16 @@
+/* ===========================
+   GameDate Stats/Admin Screen
+   =========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
 .stats-container {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
-  background-color: #f5eedc;
-  font-family: 'Arial', sans-serif;
-  color: #3b5976;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #1a3a3a 0%, #122828 100%);
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: #fdfefe;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
@@ -15,69 +21,81 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #d4a373;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(212, 163, 115, 0.2);
 }
 
 .stats-title {
   margin: 0;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 24px;
+  font-weight: 600;
+  color: #d4a373;
+  letter-spacing: 1px;
 }
 
 .back-btn {
-  background-color: #3b5976;
-  color: white;
+  background-color: #d4a373;
+  color: #1a3a3a;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 8px 18px;
+  border-radius: 50px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.back-btn:active {
+  transform: scale(0.97);
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  gap: 16px;
   margin-bottom: 30px;
 }
 
 .stat-card {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  border-top: 4px solid #ff4b2b;
+  border-top: 3px solid #d4a373;
 }
 
 .stat-card h3 {
   margin: 0;
-  font-size: 16px;
-  color: #666;
+  font-size: 11px;
+  color: rgba(253, 254, 254, 0.45);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  font-weight: 500;
 }
 
 .stat-value {
-  font-size: 48px;
-  font-weight: bold;
-  color: #3b5976;
-  margin: 10px 0;
+  font-size: 42px;
+  font-weight: 700;
+  color: #d4a373;
+  margin: 8px 0;
 }
 
 .stat-subtext {
-  font-size: 12px;
-  color: #999;
+  font-size: 11px;
+  color: rgba(253, 254, 254, 0.35);
 }
 
 .stats-sections-row {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 @media (min-width: 900px) {
@@ -111,21 +129,21 @@
 }
 
 .funnel-label {
-  font-weight: bold;
-  font-size: 14px;
-  color: #3b5976;
+  font-weight: 500;
+  font-size: 13px;
+  color: rgba(253, 254, 254, 0.7);
 }
 
 .funnel-drop {
   font-size: 11px;
-  color: #27ae60;
-  font-weight: bold;
+  color: #d4a373;
+  font-weight: 600;
 }
 
 .funnel-bar-wrapper {
-  height: 30px;
-  background-color: #eee;
-  border-radius: 4px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
   overflow: hidden;
   width: 100%;
 }
@@ -138,33 +156,36 @@
   padding-right: 15px;
   transition: width 1s ease-in-out;
   min-width: 40px;
+  border-radius: 8px;
 }
 
 .funnel-value {
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
+  color: #1a3a3a;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .insights-card {
-  background-color: #f8f9fa !important;
-  border-left: 4px solid #3b5976;
+  background-color: rgba(212, 163, 115, 0.06) !important;
+  border-left: 3px solid #d4a373;
 }
 
 .dating-stats-section {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border-radius: 16px;
 }
 
 .dating-stats-section h2 {
   margin-top: 0;
-  color: #e63946;
-  font-size: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  color: #d4a373;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
   margin-bottom: 20px;
+  letter-spacing: 0.5px;
 }
 
 .fun-fact-list {
@@ -177,7 +198,7 @@
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px dashed #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .fun-fact-list li:last-child {
@@ -185,13 +206,15 @@
 }
 
 .fact-label {
-  font-weight: bold;
-  color: #666;
+  font-weight: 400;
+  color: rgba(253, 254, 254, 0.5);
+  font-size: 13px;
 }
 
 .fact-value {
-  color: #3b5976;
-  font-weight: bold;
+  color: #d4a373;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .toast-notification {
@@ -199,19 +222,19 @@
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #333;
-  color: white;
+  background-color: rgba(212, 163, 115, 0.9);
+  color: #1a3a3a;
   padding: 12px 24px;
   border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   z-index: 1000;
-  animation: fadeInOut 2.5s ease forwards;
+  animation: statsToastFade 2.5s ease forwards;
   pointer-events: none;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-@keyframes fadeInOut {
+@keyframes statsToastFade {
   0% { opacity: 0; transform: translate(-50%, 20px); }
   15% { opacity: 1; transform: translate(-50%, 0); }
   85% { opacity: 1; transform: translate(-50%, 0); }

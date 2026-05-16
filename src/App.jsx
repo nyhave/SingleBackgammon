@@ -135,17 +135,38 @@ export default function App() {
   };
 
   const handleInviteFriend = async () => {
-    const service = new GameSyncService();
-    try {
-      // Create a game with a placeholder opponent name
-      const newGame = await service.createGame(userName, "Venter på ven...");
-      setActiveGameId(newGame.id);
-      
-      setOpponentName("Venter...");
-      setCurrentScreen('select_game');
-    } catch (err) {
-      console.error("Kunne ikke oprette invitations-spil:", err);
-      alert("Der skete en fejl. Prøv igen.");
+    const appUrl = `${window.location.origin}${window.location.pathname}`;
+    const shareData = {
+      title: 'GameDate',
+      text: 'Prøv GameDate – spil brætspil og mød nye mennesker! 🎲❤️',
+      url: appUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Share cancelled:', err);
+      }
+    } else {
+      try {
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(appUrl);
+        } else {
+          // Fallback for HTTP / older browsers
+          const ta = document.createElement('textarea');
+          ta.value = appUrl;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        alert('Link kopieret til udklipsholder! 🔗');
+      } catch (e) {
+        alert(`Del dette link med din ven:\n${appUrl}`);
+      }
     }
   };
 

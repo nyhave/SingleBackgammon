@@ -3,6 +3,7 @@ import './WelcomeScreen.css';
 
 export default function WelcomeScreen({ onNavigate, onLogin }) {
   const [selectedProfile, setSelectedProfile] = useState('Anna');
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     const savedProfile = localStorage.getItem('lastTestProfile');
@@ -19,52 +20,100 @@ export default function WelcomeScreen({ onNavigate, onLogin }) {
   };
 
   return (
-    <div className="welcome-container">
-      <div className="logo-container">
-        <span className="heart-icon">❤️</span>
-        <span className="dice-icon">🎲</span>
+    <div className="gd-welcome">
+      {/* Background image with circular mask */}
+      <div className="gd-welcome-visual">
+        <div className="gd-circle-mask">
+          <img
+            src={`${process.env.PUBLIC_URL}/assets/welcome_bg.png`}
+            alt="Backgammon ved stearinlys"
+            className="gd-circle-img"
+          />
+        </div>
       </div>
-      
-      <h1 className="welcome-title">
-        Velkommen til<br />Backgammon Hearts!
-      </h1>
-      
-      <p className="welcome-description">
-        Spil Backgammon.<br />
-        Mød Singler.<br />
-        Find Kærligheden.
+
+      {/* Logo */}
+      <div className="gd-logo-area">
+        <div className="gd-split-heart">
+          <svg viewBox="0 0 64 58" className="gd-heart-svg">
+            <path
+              className="heart-left"
+              d="M32 56 C32 56, 2 36, 2 18 C2 8, 10 2, 18 2 C24 2, 29 6, 32 10"
+            />
+            <path
+              className="heart-right"
+              d="M32 56 C32 56, 62 36, 62 18 C62 8, 54 2, 46 2 C40 2, 35 6, 32 10"
+            />
+          </svg>
+        </div>
+        <h1 className="gd-logo-text">GameDate</h1>
+      </div>
+
+      {/* Divider */}
+      <div className="gd-divider">
+        <div className="gd-divider-line"></div>
+        <span className="gd-divider-heart">♡</span>
+        <div className="gd-divider-line"></div>
+      </div>
+
+      {/* Slogan */}
+      <h2 className="gd-slogan">
+        Mød nye mennesker.<br />
+        Spil. Grin. Skab forbindelse.
+      </h2>
+
+      <p className="gd-subtext">
+        En dating app, hvor I mødes<br />
+        om spil og gode samtaler.
       </p>
 
-      <div className="quick-login-section" style={{ margin: '20px 0', width: '100%', maxWidth: '300px' }}>
-        <select 
-          value={selectedProfile} 
-          onChange={(e) => setSelectedProfile(e.target.value)}
-          style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', marginBottom: '10px', fontSize: '16px' }}
+      {/* Actions */}
+      <div className="gd-actions">
+        <button
+          className="gd-btn-primary"
+          onClick={() => onNavigate('profile')}
         >
-          <option value="Anna">Anna</option>
-          <option value="Søren">Søren</option>
-          <option value="Matilde">Matilde</option>
-          <option value="Casper">Casper</option>
-        </select>
-        
-        <button 
-          className="primary-button" 
-          onClick={handleLogin}
-          style={{ width: '100%', backgroundColor: '#ff4b2b', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', marginBottom: '10px' }}
+          Opret profil
+        </button>
+
+        <button
+          className="gd-btn-outline"
+          onClick={() => setShowLogin(!showLogin)}
         >
-          LOG IND
+          Log ind
         </button>
       </div>
 
-      <div style={{ margin: '10px 0', color: '#888', fontSize: '14px' }}>— eller —</div>
+      {/* Quick Login (collapsed by default) */}
+      {showLogin && (
+        <div className="gd-quick-login">
+          <select
+            value={selectedProfile}
+            onChange={(e) => setSelectedProfile(e.target.value)}
+            className="gd-select"
+          >
+            <option value="Anna">Anna</option>
+            <option value="Søren">Søren</option>
+            <option value="Matilde">Matilde</option>
+            <option value="Casper">Casper</option>
+          </select>
+          <button className="gd-btn-login" onClick={handleLogin}>
+            Start →
+          </button>
+          <button
+            className="gd-btn-admin"
+            onClick={() => onLogin('Admin', true)}
+          >
+            Admin
+          </button>
+        </div>
+      )}
 
-      <button 
-        className="secondary-button"
-        onClick={() => onNavigate('profile')}
-        style={{ width: '100%', maxWidth: '300px', backgroundColor: 'transparent', color: '#ff4b2b', border: '2px solid #ff4b2b', padding: '12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px' }}
-      >
-        OPRET NY PROFIL
-      </button>
+      {/* Footer */}
+      <div className="gd-footer">
+        <span className="gd-footer-icon">👥</span>
+        <span>Spil sammen. Mød hinanden.</span>
+      </div>
     </div>
   );
 }

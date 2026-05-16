@@ -1,134 +1,287 @@
-.matchmaking-container {
+/* ===========================
+   GameDate Matchmaking Screen
+   =========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+.gd-matchmaking {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
-  background-color: #f5eedc;
-  font-family: 'Arial', sans-serif;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #1a3a3a 0%, #122828 100%);
+  color: #fdfefe;
+  font-family: 'Inter', -apple-system, sans-serif;
   overflow-y: auto;
+  padding-bottom: 30px;
 }
 
-.matchmaking-header {
-  background-color: #3b5976;
-  color: white;
-  padding: 20px 15px;
+/* Header */
+.gd-mm-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  padding: 20px 20px 15px 20px;
 }
 
-.own-profile-btn {
-  font-size: 24px;
-  cursor: pointer;
-  background-color: #fcf9f2;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.header-title {
-  font-size: 18px;
-  font-weight: bold;
+.gd-mm-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #d4a373;
   margin: 0;
+  letter-spacing: 1px;
 }
 
-.filter-section {
-  padding: 20px;
-  text-align: center;
-}
-
-.filter-badge {
-  background-color: #4a7096;
-  color: white;
-  padding: 5px 15px;
-  border-radius: 15px;
-  font-weight: bold;
-  font-size: 14px;
-  display: inline-block;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-.filter-text {
-  color: #3b5976;
-  font-size: 14px;
-  margin: 0;
-}
-
-.opponents-list {
+.gd-mm-profile {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding: 20px;
-}
-
-.opponent-card {
-  background-color: #fcf9f2;
-  border: 2px solid #d4a373;
-  border-radius: 12px;
-  padding: 15px;
-  display: flex;
   align-items: center;
-  position: relative;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  gap: 3px;
+  cursor: pointer;
 }
 
-.opponent-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  background-color: #e3d5b8;
+.gd-mm-avatar-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(212, 163, 115, 0.15);
+  border: 1.5px solid rgba(212, 163, 115, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
-  margin-right: 15px;
-  border: 2px solid #8b5a2b;
-  overflow: hidden;
+  font-size: 18px;
 }
 
-.opponent-info {
+.gd-mm-profile-name {
+  font-size: 10px;
+  color: rgba(253, 254, 254, 0.5);
+}
+
+/* Invite Card */
+.gd-mm-invite {
+  margin: 0 20px 20px 20px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(212, 163, 115, 0.15) 0%, rgba(212, 163, 115, 0.05) 100%);
+  border: 1px solid rgba(212, 163, 115, 0.2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gd-mm-invite:active {
+  transform: scale(0.98);
+}
+
+.gd-mm-invite-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #d4a373;
+}
+
+.gd-mm-invite-sub {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: rgba(253, 254, 254, 0.5);
+}
+
+.gd-mm-invite-icon {
+  font-size: 22px;
+  opacity: 0.7;
+}
+
+/* Sections */
+.gd-mm-section {
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.gd-mm-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(253, 254, 254, 0.4);
+  letter-spacing: 1.5px;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+}
+
+/* Active Games */
+.gd-mm-active-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gd-active-card {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 16px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 3px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s;
+}
+
+.gd-active-card.my-turn {
+  border-left: 3px solid #d4a373;
+  background-color: rgba(212, 163, 115, 0.08);
+}
+
+.gd-active-opponent {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fdfefe;
+}
+
+.gd-active-meta {
+  font-size: 11px;
+  color: rgba(253, 254, 254, 0.45);
+  margin-top: 3px;
+}
+
+.gd-active-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gd-active-delete {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.gd-active-delete:active {
+  opacity: 1;
+}
+
+.gd-active-play {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fdfefe;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+
+.gd-active-play.turn {
+  background-color: #d4a373;
+  color: #1a3a3a;
+}
+
+/* Opponents Feed */
+.gd-mm-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gd-opp-card {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  position: relative;
+}
+
+.gd-opp-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(212, 163, 115, 0.12);
+  border: 1.5px solid rgba(212, 163, 115, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.gd-opp-info {
   flex: 1;
 }
 
-.opponent-name {
-  font-size: 18px;
-  font-weight: bold;
-  color: #3b2f2f;
-  margin: 0 0 5px 0;
+.gd-opp-name {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  color: #fdfefe;
 }
 
-.opponent-level {
-  font-size: 14px;
-  color: #666;
-  margin: 0 0 10px 0;
+.gd-opp-level {
+  font-size: 12px;
+  color: rgba(253, 254, 254, 0.45);
+  margin: 3px 0 0 0;
 }
 
-.heart-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: #e63946;
-  font-size: 18px;
+.gd-opp-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
 }
 
-.play-button {
-  background: linear-gradient(to bottom, #4a7096, #3b5976);
+.gd-opp-play {
+  flex: 1;
+  padding: 10px;
+  background-color: #d4a373;
+  color: #1a3a3a;
   border: none;
-  border-radius: 6px;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 8px 20px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.2s;
 }
 
-.play-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+.gd-opp-play:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.gd-opp-play:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.gd-opp-profile {
+  flex: 1;
+  padding: 10px;
+  background-color: transparent;
+  color: #d4a373;
+  border: 1px solid rgba(212, 163, 115, 0.3);
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gd-opp-profile:active {
+  background-color: rgba(212, 163, 115, 0.1);
+}
+
+.gd-opp-heart {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  color: #d4a373;
+  font-size: 16px;
+  opacity: 0.4;
 }
