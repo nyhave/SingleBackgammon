@@ -25,11 +25,9 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
   const [loadTimeout, setLoadTimeout] = useState(false);
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
-  const chatRef = useRef([]);
   const syncRef = useRef(null);
+  const chatSubRef = useRef(null);
   const initStarted = useRef(false);
-
-  useEffect(() => { chatRef.current = chatMessages; }, [chatMessages]);
 
   // Auto-play effect
   useEffect(() => {
@@ -72,9 +70,8 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
 
   useEffect(() => {
     return () => {
-      if (syncRef.current) {
-        syncRef.current.unsubscribe();
-      }
+      if (syncRef.current) syncRef.current.unsubscribe();
+      if (chatSubRef.current) chatSubRef.current.unsubscribe();
     };
   }, []);
 
@@ -138,20 +135,13 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       setSyncService(sync)
       syncRef.current = sync
       
-      // Subscribe to updates
+      // Subscribe to game state updates
       sync.subscribeToGame((updatedState) => {
         if (updatedState.game_state) {
           setGameState(updatedState.game_state)
-          
           if (updatedState.game_state.dice) {
             setDice(updatedState.game_state.dice);
           }
-          
-          if (updatedState.game_state.chat) {
-            setChatMessages(updatedState.game_state.chat);
-          }
-          
-          // Keep local game instance in sync
           if (newGame) {
             newGame.board = updatedState.game_state.board || newGame.board;
             newGame.bar = updatedState.game_state.bar || newGame.bar;
@@ -161,6 +151,14 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
           }
         }
       })
+
+      // Load chat history and subscribe to new messages
+      const convId = GameSyncService.getConversationId(player1Name, player2Name);
+      const history = await sync.getChatMessages(convId);
+      setChatMessages(history.map(r => ({ id: r.id, senderName: r.sender_name, text: r.message })));
+      chatSubRef.current = sync.subscribeToChat(convId, (row) => {
+        setChatMessages(prev => [...prev, { id: row.id, senderName: row.sender_name, text: row.message }]);
+      });
       
       // Safety check: ensure we actually have a board state before showing the UI
       if (newGame.board || (gameState && gameState.board)) {
@@ -194,7 +192,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
     setGameState(updated)
     
     if (syncService) {
-      syncService.updateGameState({ ...updated, chat: chatRef.current })
+      syncService.updateGameState(updated)
     }
   }
   // Handle point click - two-click move system
@@ -269,7 +267,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       
       if (syncService) {
         await syncService.logMove(game.currentPlayer === 'player1' ? player1Name : player2Name, { from, to })
-        await syncService.updateGameState({ ...updated, chat: chatRef.current })
+        await syncService.updateGameState(updated)
       }
       
       setFromPoint(null)
@@ -288,7 +286,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
     setGameState(updated)
     
     if (syncService) {
-      syncService.updateGameState({ ...updated, chat: chatRef.current })
+      syncService.updateGameState(updated)
     }
 
     setDice([0, 0])
@@ -333,26 +331,11 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
 
   // Handle Chat sending
   const handleSendMessage = async () => {
-    if (!chatInput.trim()) return;
-
-    const newMessage = {
-      id: Date.now().toString(),
-      senderName: initialPlayer1Name,
-      text: chatInput,
-      timestamp: new Date().toISOString()
-    };
-
-    const updatedChat = [...chatMessages, newMessage];
-    setChatMessages(updatedChat);
+    if (!chatInput.trim() || !syncService) return;
+    const text = chatInput.trim();
     setChatInput('');
-
-    if (syncService && gameState) {
-      const updatedState = {
-        ...gameState,
-        chat: updatedChat
-      };
-      await syncService.updateGameState(updatedState);
-    }
+    const convId = GameSyncService.getConversationId(player1Name, player2Name);
+    await syncService.sendChatMessage(convId, initialPlayer1Name, text);
   };
 
   if (!gameStarted) {
