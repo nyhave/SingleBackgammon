@@ -24,12 +24,12 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
   const [autoSpeed, setAutoSpeed] = useState(800); // 1500, 800, 300
   const [loadTimeout, setLoadTimeout] = useState(false);
   const [chatInput, setChatInput] = useState('');
-  const [chatMessages, setChatMessages] = useState([
-    { id: 'm1', sender: 'opponent', text: 'Godt træk!' },
-    { id: 'm2', sender: 'me', text: 'Tak! Er du her ofte?' }
-  ]);
+  const [chatMessages, setChatMessages] = useState([]);
+  const chatRef = useRef([]);
   const syncRef = useRef(null);
   const initStarted = useRef(false);
+
+  useEffect(() => { chatRef.current = chatMessages; }, [chatMessages]);
 
   // Auto-play effect
   useEffect(() => {
@@ -191,7 +191,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
     setGameState(updated)
     
     if (syncService) {
-      syncService.updateGameState(updated)
+      syncService.updateGameState({ ...updated, chat: chatRef.current })
     }
   }
   // Handle point click - two-click move system
@@ -266,7 +266,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       
       if (syncService) {
         await syncService.logMove(game.currentPlayer === 'player1' ? player1Name : player2Name, { from, to })
-        await syncService.updateGameState(updated)
+        await syncService.updateGameState({ ...updated, chat: chatRef.current })
       }
       
       setFromPoint(null)
@@ -285,9 +285,9 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
     setGameState(updated)
     
     if (syncService) {
-      syncService.updateGameState(updated)
+      syncService.updateGameState({ ...updated, chat: chatRef.current })
     }
-    
+
     setDice([0, 0])
   }
 
