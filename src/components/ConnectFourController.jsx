@@ -119,7 +119,7 @@ export default function ConnectFourController({ initialPlayer1Name, initialPlaye
   };
 
   return (
-    <div className="game-screen-container">
+    <div className="game-screen-container connect-four-layout">
       {/* Top Bar */}
       <div className="game-topbar">
         <div className="topbar-left">

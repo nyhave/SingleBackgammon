@@ -213,14 +213,46 @@
   color: #1a3a3a;
   border: none;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 10px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(212, 163, 115, 0.5);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.chat-send-btn:active {
+  transform: scale(0.93);
+  box-shadow: 0 1px 4px rgba(212, 163, 115, 0.3);
+}
+
+/* 4 på stribe: scroll-baseret layout så chat er tilgængeligt */
+.connect-four-layout {
+  height: auto;
+  min-height: 100dvh;
+  overflow-y: auto;
+}
+
+.connect-four-layout .game-main-layout {
+  overflow: visible;
+}
+
+.connect-four-layout .game-board-side {
+  overflow: visible;
+}
+
+.connect-four-layout .board-wrapper {
+  overflow: visible;
+}
+
+.connect-four-layout .chat-section {
+  height: 320px;
 }
 
 /* Controls Bar */
