@@ -217,6 +217,64 @@ export class GameSyncService {
   }
 
   /**
+   * Derive a stable conversation ID from two player names
+   */
+  static getConversationId(player1, player2) {
+    return [player1, player2].sort().join('__');
+  }
+
+  /**
+   * Send a chat message (stored in chat_messages table, not game_state)
+   */
+  async sendChatMessage(conversationId, senderName, text) {
+    try {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .insert({ conversation_id: conversationId, sender_name: senderName, message: text })
+        .select();
+      if (error) throw error;
+      return data[0];
+    } catch (err) {
+      console.error('Fejl ved afsendelse af besked:', err);
+      throw err;
+    }
+  }
+
+  /**
+   * Load full chat history for a conversation
+   */
+  async getChatMessages(conversationId) {
+    try {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('conversation_id', conversationId)
+        .order('created_at', { ascending: true });
+      if (error) throw error;
+      return data;
+    } catch (err) {
+      console.error('Fejl ved hentning af beskeder:', err);
+      return [];
+    }
+  }
+
+  /**
+   * Subscribe to new chat messages for a conversation
+   */
+  subscribeToChat(conversationId, onMessage) {
+    const channelName = `chat-${conversationId}-${Math.random().toString(36).substring(7)}`;
+    const sub = supabase
+      .channel(channelName)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `conversation_id=eq.${conversationId}` },
+        (payload) => { if (payload.new) onMessage(payload.new); }
+      )
+      .subscribe();
+    return sub;
+  }
+
+  /**
    * Unsubscribe from updates
    */
   unsubscribe() {

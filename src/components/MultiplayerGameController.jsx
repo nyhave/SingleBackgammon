@@ -24,11 +24,9 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
   const [autoSpeed, setAutoSpeed] = useState(800); // 1500, 800, 300
   const [loadTimeout, setLoadTimeout] = useState(false);
   const [chatInput, setChatInput] = useState('');
-  const [chatMessages, setChatMessages] = useState([
-    { id: 'm1', sender: 'opponent', text: 'Godt træk!' },
-    { id: 'm2', sender: 'me', text: 'Tak! Er du her ofte?' }
-  ]);
+  const [chatMessages, setChatMessages] = useState([]);
   const syncRef = useRef(null);
+  const chatSubRef = useRef(null);
   const initStarted = useRef(false);
 
   // Auto-play effect
@@ -63,17 +61,19 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
 
 
   useEffect(() => {
-    if (autoStart && !gameStarted && !initStarted.current) {
+    if (autoStart && !initStarted.current) {
       initStarted.current = true;
       startGame();
     }
-    return () => {
-      if (syncRef.current) {
-        syncRef.current.unsubscribe();
-      }
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoStart, gameStarted]);
+  }, [autoStart]);
+
+  useEffect(() => {
+    return () => {
+      if (syncRef.current) syncRef.current.unsubscribe();
+      if (chatSubRef.current) chatSubRef.current.unsubscribe();
+    };
+  }, []);
 
   // Initialize game
   const startGame = async () => {
@@ -135,20 +135,13 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
       setSyncService(sync)
       syncRef.current = sync
       
-      // Subscribe to updates
+      // Subscribe to game state updates
       sync.subscribeToGame((updatedState) => {
         if (updatedState.game_state) {
           setGameState(updatedState.game_state)
-          
           if (updatedState.game_state.dice) {
             setDice(updatedState.game_state.dice);
           }
-          
-          if (updatedState.game_state.chat) {
-            setChatMessages(updatedState.game_state.chat);
-          }
-          
-          // Keep local game instance in sync
           if (newGame) {
             newGame.board = updatedState.game_state.board || newGame.board;
             newGame.bar = updatedState.game_state.bar || newGame.bar;
@@ -158,6 +151,14 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
           }
         }
       })
+
+      // Load chat history and subscribe to new messages
+      const convId = GameSyncService.getConversationId(player1Name, player2Name);
+      const history = await sync.getChatMessages(convId);
+      setChatMessages(history.map(r => ({ id: r.id, senderName: r.sender_name, text: r.message })));
+      chatSubRef.current = sync.subscribeToChat(convId, (row) => {
+        setChatMessages(prev => [...prev, { id: row.id, senderName: row.sender_name, text: row.message }]);
+      });
       
       // Safety check: ensure we actually have a board state before showing the UI
       if (newGame.board || (gameState && gameState.board)) {
@@ -287,7 +288,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
     if (syncService) {
       syncService.updateGameState(updated)
     }
-    
+
     setDice([0, 0])
   }
 
@@ -330,26 +331,11 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
 
   // Handle Chat sending
   const handleSendMessage = async () => {
-    if (!chatInput.trim()) return;
-
-    const newMessage = {
-      id: Date.now().toString(),
-      senderName: initialPlayer1Name,
-      text: chatInput,
-      timestamp: new Date().toISOString()
-    };
-
-    const updatedChat = [...chatMessages, newMessage];
-    setChatMessages(updatedChat);
+    if (!chatInput.trim() || !syncService) return;
+    const text = chatInput.trim();
     setChatInput('');
-
-    if (syncService && gameState) {
-      const updatedState = {
-        ...gameState,
-        chat: updatedChat
-      };
-      await syncService.updateGameState(updatedState);
-    }
+    const convId = GameSyncService.getConversationId(player1Name, player2Name);
+    await syncService.sendChatMessage(convId, initialPlayer1Name, text);
   };
 
   if (!gameStarted) {

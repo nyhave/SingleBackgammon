@@ -3,7 +3,7 @@
  * Manages multiplayer state and game loop for 4-på-stribe
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ConnectFourEngine from '../engine/ConnectFourEngine';
 import ConnectFourAI from '../engine/ConnectFourAI';
 import ConnectFourBoard from './ConnectFourBoard';
@@ -16,9 +16,8 @@ export default function ConnectFourController({ initialPlayer1Name, initialPlaye
   const [message, setMessage] = useState('');
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [chatInput, setChatInput] = useState('');
-  const [chatMessages, setChatMessages] = useState([
-    { id: 1, sender: 'System', text: 'Velkommen til 4 på stribe! ❤️' }
-  ]);
+  const [chatMessages, setChatMessages] = useState([]);
+  const chatSubRef = useRef(null);
 
   const player1Name = initialPlayer1Name || 'Spiller 1';
   const player2Name = initialPlayer2Name || 'Spiller 2';
@@ -28,8 +27,8 @@ export default function ConnectFourController({ initialPlayer1Name, initialPlaye
   useEffect(() => {
     const id = gameId || new URLSearchParams(window.location.search).get('gameId') || 'c4_default';
     const service = new GameSyncService(id);
-    
     setSyncService(service);
+
     service.subscribeToGame((remoteRow) => {
       if (remoteRow && remoteRow.game_state) {
         game.setGameState(remoteRow.game_state);
@@ -37,7 +36,18 @@ export default function ConnectFourController({ initialPlayer1Name, initialPlaye
       }
     });
 
-    return () => service.unsubscribe();
+    const convId = GameSyncService.getConversationId(player1Name, player2Name);
+    service.getChatMessages(convId).then(rows => {
+      setChatMessages(rows.map(r => ({ id: r.id, senderName: r.sender_name, text: r.message })));
+    });
+    chatSubRef.current = service.subscribeToChat(convId, (row) => {
+      setChatMessages(prev => [...prev, { id: row.id, senderName: row.sender_name, text: row.message }]);
+    });
+
+    return () => {
+      service.unsubscribe();
+      if (chatSubRef.current) chatSubRef.current.unsubscribe();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -100,14 +110,16 @@ export default function ConnectFourController({ initialPlayer1Name, initialPlaye
     }
   };
 
-  const handleSendMessage = () => {
-    if (!chatInput.trim()) return;
-    setChatMessages([...chatMessages, { id: Date.now(), sender: player1Name, text: chatInput }]);
+  const handleSendMessage = async () => {
+    if (!chatInput.trim() || !syncService) return;
+    const text = chatInput.trim();
     setChatInput('');
+    const convId = GameSyncService.getConversationId(player1Name, player2Name);
+    await syncService.sendChatMessage(convId, player1Name, text);
   };
 
   return (
-    <div className="game-screen-container">
+    <div className="game-screen-container connect-four-layout">
       {/* Top Bar */}
       <div className="game-topbar">
         <div className="topbar-left">
@@ -159,15 +171,8 @@ export default function ConnectFourController({ initialPlayer1Name, initialPlaye
           </div>
           <div className="chat-messages" style={{ flex: 1, padding: '10px', overflowY: 'auto' }}>
             {chatMessages.map(msg => (
-              <div key={msg.id} style={{ marginBottom: '10px', textAlign: msg.sender === 'System' ? 'center' : 'left' }}>
-                <span style={{ fontSize: '10px', color: '#888', display: 'block' }}>{msg.sender}</span>
-                <span style={{ 
-                  display: 'inline-block', 
-                  padding: '8px 12px', 
-                  backgroundColor: msg.sender === 'System' ? '#eee' : '#d4f0fa',
-                  borderRadius: '12px',
-                  fontSize: '14px'
-                }}>{msg.text}</span>
+              <div key={msg.id} className={`chat-bubble ${msg.senderName === player1Name ? 'sent' : 'received'}`}>
+                {msg.text}
               </div>
             ))}
           </div>

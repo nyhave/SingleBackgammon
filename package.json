@@ -8,8 +8,10 @@
     "deploy": "gh-pages -d build",
     "gen:flow": "node scripts/generate_flow_diagram.js",
     "gen:roadmap": "node scripts/generate_roadmap.js",
+    "gen:version": "node scripts/generate_version.js",
     "kill-port": "scripts/kill-port.sh",
     "start": "react-scripts start",
+    "prebuild": "node scripts/generate_version.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
