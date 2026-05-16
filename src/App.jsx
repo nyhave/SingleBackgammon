@@ -121,7 +121,9 @@ export default function App() {
     const ages = { 'Anna': '28', 'Søren': '30', 'Matilde': '26', 'Casper': '32' };
     setFullProfileName(name + (ages[name] ? `, ${ages[name]}` : ''));
     setIsAdmin(adminMode);
-    if (existingGameId) {
+    if (adminMode) {
+      setCurrentScreen('stats');
+    } else if (existingGameId) {
       setCurrentScreen('game');
     } else {
       setCurrentScreen('matchmaking');

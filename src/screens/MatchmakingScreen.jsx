@@ -14,13 +14,13 @@ export default function MatchmakingScreen({
 }) {
   const isLimitReached = activeGames.length >= 5;
 
-  const opponents = [
-    { id: 1, name: 'Matilde, 26', level: 'Ekspert', avatar: '👩' },
-    { id: 2, name: 'Søren, 30', level: 'Begynder', avatar: '🧑' },
-    { id: 3, name: 'Malia, 37', level: 'Begynder', avatar: '👩' },
-    { id: 4, name: 'Lars, 42', level: 'Mellemliggende', avatar: '🧔' },
-    { id: 5, name: 'Sofie, 29', level: 'Ekspert', avatar: '👩' }
+  const allOpponents = [
+    { id: 1, name: 'Anna', level: 'Mellemliggende', avatar: '👩' },
+    { id: 2, name: 'Søren', level: 'Begynder', avatar: '🧑' },
+    { id: 3, name: 'Matilde', level: 'Ekspert', avatar: '👩' },
+    { id: 4, name: 'Casper', level: 'Mellemliggende', avatar: '🧔' },
   ];
+  const opponents = allOpponents.filter(o => o.name !== userDisplayName);
 
   return (
     <div className="gd-matchmaking">
