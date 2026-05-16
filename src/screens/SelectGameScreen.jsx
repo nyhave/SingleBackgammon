@@ -53,6 +53,48 @@ export default function SelectGameScreen({ onNavigate, opponentName, onGameChose
           Udfordr <span className="highlight-name">{opponentName || 'Modstander'}</span> i...
         </h2>
 
+        {opponentName === 'Venter...' && (
+          <div className="share-section" style={{ 
+            backgroundColor: '#fff', 
+            padding: '20px', 
+            borderRadius: '12px', 
+            marginBottom: '25px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            textAlign: 'center'
+          }}>
+            <p style={{ margin: '0 0 15px 0', fontSize: '14px', color: '#666' }}>
+              Din ven skal bruge dette link for at deltage:
+            </p>
+            <div style={{ 
+              display: 'flex', 
+              gap: '10px', 
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}>
+              <button 
+                onClick={handleShare}
+                style={{ 
+                  backgroundColor: '#3b5976', 
+                  color: 'white', 
+                  border: 'none', 
+                  padding: '12px 24px', 
+                  borderRadius: '30px', 
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                🔗 DEL LINK NU
+              </button>
+            </div>
+            <p style={{ marginTop: '12px', fontSize: '10px', color: '#999', wordBreak: 'break-all' }}>
+              {shareUrl}
+            </p>
+          </div>
+        )}
+
         <div className="games-list">
           {games.map(game => (
             <div 
