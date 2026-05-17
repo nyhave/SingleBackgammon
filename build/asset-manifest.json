@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/SingleBackgammon/static/css/main.34c282c0.css",
-    "main.js": "/SingleBackgammon/static/js/main.a8775473.js",
+    "main.css": "/SingleBackgammon/static/css/main.a8b4dced.css",
+    "main.js": "/SingleBackgammon/static/js/main.63377b55.js",
     "index.html": "/SingleBackgammon/index.html",
-    "main.34c282c0.css.map": "/SingleBackgammon/static/css/main.34c282c0.css.map",
-    "main.a8775473.js.map": "/SingleBackgammon/static/js/main.a8775473.js.map"
+    "main.a8b4dced.css.map": "/SingleBackgammon/static/css/main.a8b4dced.css.map",
+    "main.63377b55.js.map": "/SingleBackgammon/static/js/main.63377b55.js.map"
   },
   "entrypoints": [
-    "static/css/main.34c282c0.css",
-    "static/js/main.a8775473.js"
+    "static/css/main.a8b4dced.css",
+    "static/js/main.63377b55.js"
   ]
 }
