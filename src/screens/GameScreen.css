@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  background-color: #122828;
+  background-color: var(--bg-2);
   font-family: 'Inter', -apple-system, sans-serif;
   overflow: hidden;
   position: relative;
@@ -20,8 +20,8 @@
 
 /* Top Bar */
 .game-topbar {
-  background-color: #1a3a3a;
-  color: #fdfefe;
+  background-color: var(--bg-1);
+  color: var(--text);
   padding: 10px 15px;
   display: flex;
   justify-content: space-between;
@@ -34,14 +34,14 @@
   display: flex;
   align-items: center;
   font-weight: 500;
-  color: #d4a373;
+  color: var(--gold);
 }
 
 .topbar-back {
   font-size: 20px;
   margin-right: 15px;
   cursor: pointer;
-  color: #d4a373;
+  color: var(--gold);
 }
 
 .topbar-right {
@@ -54,15 +54,15 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 15px;
-  background-color: rgba(212, 163, 115, 0.1);
-  color: #fdfefe;
+  background-color: rgba(var(--gold-rgb), 0.1);
+  color: var(--text);
   font-size: 14px;
   font-weight: 500;
   z-index: 9;
 }
 
 .player-avatar {
-  background-color: rgba(212, 163, 115, 0.2);
+  background-color: rgba(var(--gold-rgb), 0.2);
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -81,7 +81,7 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background-color: #1a3a3a;
+  background-color: var(--bg-1);
   position: relative;
   overflow: hidden;
 }
@@ -92,15 +92,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 5px 20px;
-  background-color: #0e2020;
-  color: rgba(253, 254, 254, 0.7);
+  background-color: var(--bg-3);
+  color: rgba(var(--text-rgb), 0.7);
   font-size: 14px;
   font-weight: 500;
 }
 
 .score-center {
-  background-color: rgba(212, 163, 115, 0.15);
-  color: #d4a373;
+  background-color: rgba(var(--gold-rgb), 0.15);
+  color: var(--gold);
   padding: 2px 10px;
   border-radius: 10px;
   font-weight: 600;
@@ -125,10 +125,10 @@
   .game-main-layout {
     flex-direction: row;
   }
-  
+
   .game-board-side {
     flex: 2;
-    border-right: 1px solid rgba(212, 163, 115, 0.2);
+    border-right: 1px solid rgba(var(--gold-rgb), 0.2);
   }
 
   .chat-section {
@@ -141,10 +141,10 @@
 /* Chat Section */
 .chat-section {
   height: 150px;
-  background-color: #0e2020;
+  background-color: var(--bg-3);
   display: flex;
   flex-direction: column;
-  border-top: 1px solid rgba(212, 163, 115, 0.15);
+  border-top: 1px solid rgba(var(--gold-rgb), 0.15);
 }
 
 .chat-messages {
@@ -164,15 +164,15 @@
 }
 
 .chat-bubble.received {
-  background-color: rgba(212, 163, 115, 0.12);
-  color: rgba(253, 254, 254, 0.8);
+  background-color: rgba(var(--gold-rgb), 0.12);
+  color: rgba(var(--text-rgb), 0.8);
   align-self: flex-start;
   border-bottom-left-radius: 4px;
 }
 
 .chat-bubble.sent {
-  background-color: rgba(212, 163, 115, 0.25);
-  color: #fdfefe;
+  background-color: rgba(var(--gold-rgb), 0.25);
+  color: var(--text);
   align-self: flex-end;
   border-bottom-right-radius: 4px;
 }
@@ -180,37 +180,37 @@
 .chat-input-area {
   display: flex;
   padding: 10px;
-  background-color: #122828;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: var(--bg-2);
+  border-top: 1px solid var(--card-border-faint);
   align-items: center;
 }
 
 .chat-add-btn {
   font-size: 20px;
-  color: rgba(253, 254, 254, 0.3);
+  color: rgba(var(--text-rgb), 0.3);
   margin-right: 10px;
   cursor: pointer;
 }
 
 .chat-input {
   flex: 1;
-  border: 1px solid rgba(212, 163, 115, 0.2);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   border-radius: 20px;
   padding: 8px 15px;
   font-size: 14px;
   outline: none;
-  background-color: rgba(255, 255, 255, 0.06);
-  color: #fdfefe;
+  background-color: var(--card-bg);
+  color: var(--text);
   font-family: 'Inter', sans-serif;
 }
 
 .chat-input::placeholder {
-  color: rgba(253, 254, 254, 0.3);
+  color: rgba(var(--text-rgb), 0.3);
 }
 
 .chat-send-btn {
-  background-color: #d4a373;
-  color: #1a3a3a;
+  background-color: var(--gold);
+  color: var(--gold-on);
   border: none;
   border-radius: 50%;
   width: 44px;
@@ -223,13 +223,13 @@
   cursor: pointer;
   font-weight: bold;
   font-size: 18px;
-  box-shadow: 0 2px 8px rgba(212, 163, 115, 0.5);
+  box-shadow: 0 2px 8px rgba(var(--gold-rgb), 0.5);
   transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .chat-send-btn:active {
   transform: scale(0.93);
-  box-shadow: 0 1px 4px rgba(212, 163, 115, 0.3);
+  box-shadow: 0 1px 4px rgba(var(--gold-rgb), 0.3);
 }
 
 /* 4 på stribe: scroll-baseret layout så chat er tilgængeligt */
@@ -270,8 +270,8 @@
   justify-content: center;
   gap: 15px;
   padding: 10px;
-  background-color: #1a3a3a;
-  border-top: 1px solid rgba(212, 163, 115, 0.15);
+  background-color: var(--bg-1);
+  border-top: 1px solid rgba(var(--gold-rgb), 0.15);
   z-index: 10;
 }
 
@@ -286,15 +286,15 @@
 .mini-die {
   width: 28px;
   height: 28px;
-  background-color: rgba(212, 163, 115, 0.15);
-  border: 1.5px solid #d4a373;
+  background-color: rgba(var(--gold-rgb), 0.15);
+  border: 1.5px solid var(--gold);
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   font-size: 16px;
-  color: #d4a373;
+  color: var(--gold);
 }
 
 .game-msg-toast {
@@ -302,8 +302,8 @@
   top: 100px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(212, 163, 115, 0.9);
-  color: #1a3a3a;
+  background-color: rgba(var(--gold-rgb), 0.9);
+  color: var(--gold-on);
   padding: 8px 15px;
   border-radius: 20px;
   font-size: 12px;
@@ -321,13 +321,13 @@
 }
 
 .dice-button {
-  background-color: #d4a373;
+  background-color: var(--gold);
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
   font-weight: 600;
-  color: #1a3a3a;
-  box-shadow: 0 4px 12px rgba(212, 163, 115, 0.3);
+  color: var(--gold-on);
+  box-shadow: 0 4px 12px rgba(var(--gold-rgb), 0.3);
   cursor: pointer;
   transition: all 0.2s;
   font-family: 'Inter', sans-serif;
@@ -335,5 +335,5 @@
 
 .dice-button:active {
   transform: translateY(2px);
-  box-shadow: 0 2px 6px rgba(212, 163, 115, 0.2);
+  box-shadow: 0 2px 6px rgba(var(--gold-rgb), 0.2);
 }

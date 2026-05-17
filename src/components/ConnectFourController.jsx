@@ -132,8 +132,8 @@ export default function ConnectFourController({ initialPlayer1Name, initialPlaye
       <div className="game-main-layout">
         <div className="game-board-side">
           {/* Message Area */}
-          <div style={{ padding: '15px', textAlign: 'center', backgroundColor: '#fdfefe', borderBottom: '1px solid #eee' }}>
-            <span style={{ fontWeight: 'bold', color: '#3b5976' }}>{message}</span>
+          <div style={{ padding: '15px', textAlign: 'center', backgroundColor: 'var(--bg-2)', borderBottom: '1px solid var(--card-border)' }}>
+            <span style={{ fontWeight: 'bold', color: 'var(--gold)' }}>{message}</span>
           </div>
 
           <div className="board-wrapper">

@@ -7,8 +7,8 @@
   flex-direction: column;
   align-items: center;
   padding: 8px;
-  background-color: rgba(212, 163, 115, 0.12);
-  border: 1px solid rgba(212, 163, 115, 0.2);
+  background-color: rgba(var(--gold-rgb), 0.12);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   width: 80%;
@@ -17,7 +17,7 @@
 }
 
 .c4-board-frame {
-  background-color: #0e2020;
+  background-color: var(--bg-3);
   padding: 8px;
   border-radius: 12px;
   width: 100%;
@@ -35,7 +35,7 @@
 .c4-cell {
   flex: 1;
   aspect-ratio: 1;
-  background-color: #1a3a3a;
+  background-color: var(--bg-1);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -64,8 +64,8 @@
 }
 
 .c4-piece.player1 {
-  background: radial-gradient(circle at 30% 30%, #d4a373, #a67c52);
-  border: 2px solid #8b6340;
+  background: radial-gradient(circle at 30% 30%, var(--gold), rgba(var(--gold-rgb), 0.6));
+  border: 2px solid rgba(var(--gold-rgb), 0.5);
 }
 
 .c4-piece.player2 {
@@ -102,7 +102,7 @@
 .c4-column-picker {
   flex: 1;
   text-align: center;
-  color: #d4a373;
+  color: var(--gold);
   font-weight: 600;
   font-size: 18px;
   cursor: pointer;

@@ -8,8 +8,8 @@
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  background: linear-gradient(180deg, #1a3a3a 0%, #122828 100%);
-  color: #fdfefe;
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color: var(--text);
   font-family: 'Inter', -apple-system, sans-serif;
   overflow-y: auto;
   padding-bottom: 30px;
@@ -27,7 +27,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 26px;
   font-weight: 600;
-  color: #d4a373;
+  color: var(--gold);
   margin: 0;
   letter-spacing: 1px;
 }
@@ -44,8 +44,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: rgba(212, 163, 115, 0.15);
-  border: 1.5px solid rgba(212, 163, 115, 0.3);
+  background-color: rgba(var(--gold-rgb), 0.15);
+  border: 1.5px solid rgba(var(--gold-rgb), 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,15 +54,15 @@
 
 .gd-mm-profile-name {
   font-size: 10px;
-  color: rgba(253, 254, 254, 0.5);
+  color: rgba(var(--text-rgb), 0.5);
 }
 
 /* Invite Card */
 .gd-mm-invite {
   margin: 0 20px 20px 20px;
   padding: 18px 20px;
-  background: linear-gradient(135deg, rgba(212, 163, 115, 0.15) 0%, rgba(212, 163, 115, 0.05) 100%);
-  border: 1px solid rgba(212, 163, 115, 0.2);
+  background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -79,13 +79,13 @@
   margin: 0;
   font-size: 15px;
   font-weight: 500;
-  color: #d4a373;
+  color: var(--gold);
 }
 
 .gd-mm-invite-sub {
   margin: 4px 0 0 0;
   font-size: 12px;
-  color: rgba(253, 254, 254, 0.5);
+  color: rgba(var(--text-rgb), 0.5);
 }
 
 .gd-mm-invite-icon {
@@ -102,7 +102,7 @@
 .gd-mm-section-title {
   font-size: 11px;
   font-weight: 600;
-  color: rgba(253, 254, 254, 0.4);
+  color: rgba(var(--text-rgb), 0.4);
   letter-spacing: 1.5px;
   margin: 0 0 12px 0;
   text-transform: uppercase;
@@ -116,31 +116,31 @@
 }
 
 .gd-active-card {
-  background-color: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
   padding: 14px 16px;
   border-radius: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-left: 3px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--card-border);
   transition: all 0.2s;
 }
 
 .gd-active-card.my-turn {
-  border-left: 3px solid #d4a373;
-  background-color: rgba(212, 163, 115, 0.08);
+  border-left: 3px solid var(--gold);
+  background-color: rgba(var(--gold-rgb), 0.08);
 }
 
 .gd-active-opponent {
   font-size: 14px;
   font-weight: 500;
-  color: #fdfefe;
+  color: var(--text);
 }
 
 .gd-active-meta {
   font-size: 11px;
-  color: rgba(253, 254, 254, 0.45);
+  color: rgba(var(--text-rgb), 0.45);
   margin-top: 3px;
 }
 
@@ -165,8 +165,8 @@
 }
 
 .gd-active-play {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fdfefe;
+  background-color: var(--card-overlay);
+  color: var(--text);
   border: none;
   padding: 7px 14px;
   border-radius: 8px;
@@ -178,8 +178,8 @@
 }
 
 .gd-active-play.turn {
-  background-color: #d4a373;
-  color: #1a3a3a;
+  background-color: var(--gold);
+  color: var(--gold-on);
 }
 
 /* Opponents Feed */
@@ -190,8 +190,8 @@
 }
 
 .gd-opp-card {
-  background-color: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 16px;
   padding: 16px;
   display: flex;
@@ -204,8 +204,8 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: rgba(212, 163, 115, 0.12);
-  border: 1.5px solid rgba(212, 163, 115, 0.25);
+  background-color: rgba(var(--gold-rgb), 0.12);
+  border: 1.5px solid rgba(var(--gold-rgb), 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -221,12 +221,12 @@
   font-size: 16px;
   font-weight: 500;
   margin: 0;
-  color: #fdfefe;
+  color: var(--text);
 }
 
 .gd-opp-level {
   font-size: 12px;
-  color: rgba(253, 254, 254, 0.45);
+  color: rgba(var(--text-rgb), 0.45);
   margin: 3px 0 0 0;
 }
 
@@ -239,8 +239,8 @@
 .gd-opp-play {
   flex: 1;
   padding: 10px;
-  background-color: #d4a373;
-  color: #1a3a3a;
+  background-color: var(--gold);
+  color: var(--gold-on);
   border: none;
   border-radius: 10px;
   font-family: 'Inter', sans-serif;
@@ -263,8 +263,8 @@
   flex: 1;
   padding: 10px;
   background-color: transparent;
-  color: #d4a373;
-  border: 1px solid rgba(212, 163, 115, 0.3);
+  color: var(--gold);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
   border-radius: 10px;
   font-family: 'Inter', sans-serif;
   font-size: 13px;
@@ -274,14 +274,14 @@
 }
 
 .gd-opp-profile:active {
-  background-color: rgba(212, 163, 115, 0.1);
+  background-color: rgba(var(--gold-rgb), 0.1);
 }
 
 .gd-opp-heart {
   position: absolute;
   top: 14px;
   right: 16px;
-  color: #d4a373;
+  color: var(--gold);
   font-size: 16px;
   opacity: 0.4;
 }

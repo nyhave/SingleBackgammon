@@ -8,8 +8,8 @@
   bottom: 80px;
   width: 46px;
   height: 46px;
-  background-color: rgba(212, 163, 115, 0.9);
-  color: #1a3a3a;
+  background-color: rgba(var(--gold-rgb), 0.9);
+  color: var(--gold-on);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -41,8 +41,8 @@
 }
 
 .feedback-modal {
-  background-color: #1a3a3a;
-  border: 1px solid rgba(212, 163, 115, 0.2);
+  background-color: var(--bg-1);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   padding: 24px;
   border-radius: 16px;
   width: 100%;
@@ -52,14 +52,14 @@
 
 .feedback-modal h3 {
   margin-top: 0;
-  color: #d4a373;
+  color: var(--gold);
   font-family: 'Inter', sans-serif;
   font-weight: 500;
 }
 
 .screen-info {
   font-size: 12px;
-  color: rgba(253, 254, 254, 0.4);
+  color: rgba(var(--text-rgb), 0.4);
   margin-bottom: 15px;
 }
 
@@ -67,24 +67,24 @@
   width: 100%;
   height: 120px;
   padding: 14px;
-  border: 1.5px solid rgba(212, 163, 115, 0.25);
+  border: 1.5px solid rgba(var(--gold-rgb), 0.25);
   border-radius: 12px;
   font-size: 14px;
   margin-bottom: 15px;
   box-sizing: border-box;
   resize: vertical;
-  background-color: rgba(255, 255, 255, 0.06);
-  color: #fdfefe;
+  background-color: var(--card-bg);
+  color: var(--text);
   font-family: 'Inter', sans-serif;
 }
 
 .feedback-modal textarea::placeholder {
-  color: rgba(253, 254, 254, 0.3);
+  color: rgba(var(--text-rgb), 0.3);
 }
 
 .feedback-modal textarea:focus {
   outline: none;
-  border-color: #d4a373;
+  border-color: var(--gold);
 }
 
 .modal-actions {
@@ -96,7 +96,7 @@
 .btn-cancel {
   background: none;
   border: none;
-  color: rgba(253, 254, 254, 0.5);
+  color: rgba(var(--text-rgb), 0.5);
   font-weight: 500;
   cursor: pointer;
   padding: 10px;
@@ -104,8 +104,8 @@
 }
 
 .btn-submit {
-  background-color: #d4a373;
-  color: #1a3a3a;
+  background-color: var(--gold);
+  color: var(--gold-on);
   border: none;
   padding: 10px 22px;
   border-radius: 50px;
@@ -126,6 +126,6 @@
 .success-msg {
   padding: 20px;
   text-align: center;
-  color: #d4a373;
+  color: var(--gold);
   font-weight: 500;
 }

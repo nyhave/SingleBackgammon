@@ -1,0 +1,41 @@
+/* ===========================
+   GameDate Theme Variables
+   Dark (default) + Light mode
+   =========================== */
+
+:root {
+  /* Backgrounds */
+  --bg-1: #1a3a3a;
+  --bg-2: #122828;
+  --bg-3: #0e2020;
+
+  /* Text – RGB tuple lets us do rgba(var(--text-rgb), 0.5) */
+  --text-rgb: 253, 254, 254;
+  --text: rgba(var(--text-rgb), 1);
+
+  /* Gold accent */
+  --gold-rgb: 212, 163, 115;
+  --gold: #d4a373;
+  --gold-on: #1a3a3a;   /* text on a gold background */
+
+  /* Cards / overlays */
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-border-faint: rgba(255, 255, 255, 0.05);
+  --card-overlay: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] {
+  --bg-1: #eef3ef;
+  --bg-2: #dce8df;
+  --bg-3: #c9dace;
+  --text-rgb: 22, 54, 54;
+  --text: rgba(var(--text-rgb), 1);
+  --gold-rgb: 165, 100, 35;
+  --gold: #a56423;
+  --gold-on: #fffaf5;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(22, 54, 54, 0.1);
+  --card-border-faint: rgba(22, 54, 54, 0.06);
+  --card-overlay: rgba(22, 54, 54, 0.06);
+}

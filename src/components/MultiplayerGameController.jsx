@@ -510,7 +510,7 @@ export default function MultiplayerGameController({ initialPlayer1Name, initialP
 
         {/* Chat Section */}
         <div className="chat-section">
-          <div className="chat-header" style={{ padding: '15px', borderBottom: '1px solid #eee', fontWeight: 'bold', color: '#3b5976', fontSize: '14px', backgroundColor: '#fdfefe', borderRadius: '0 12px 0 0' }}>
+          <div className="chat-header" style={{ padding: '15px', borderBottom: '1px solid var(--card-border)', fontWeight: 'bold', color: 'var(--gold)', fontSize: '14px', backgroundColor: 'var(--bg-2)', borderRadius: '0 12px 0 0' }}>
             💬 Chat med {myRole === 'player1' ? player2Name : player1Name}
           </div>
           <div className="chat-messages">

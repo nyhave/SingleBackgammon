@@ -18,7 +18,7 @@ export default function SelectGameScreen({ onNavigate, opponentName, onGameChose
   ];
 
   return (
-    <div className="gd-select">
+    <div className="gd-select-screen">
       <div className="gd-select-header">
         <div className="gd-select-back" onClick={() => onNavigate('matchmaking')}>←</div>
         <h1 className="gd-select-title">Vælg Spil</h1>

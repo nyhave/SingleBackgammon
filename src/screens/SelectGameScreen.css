@@ -4,12 +4,12 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-.gd-select {
+.gd-select-screen {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  background: linear-gradient(180deg, #1a3a3a 0%, #122828 100%);
-  color: #fdfefe;
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color: var(--text);
   font-family: 'Inter', -apple-system, sans-serif;
 }
 
@@ -22,7 +22,7 @@
 
 .gd-select-back {
   font-size: 22px;
-  color: #d4a373;
+  color: var(--gold);
   cursor: pointer;
   width: 30px;
 }
@@ -31,7 +31,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 24px;
   font-weight: 600;
-  color: #d4a373;
+  color: var(--gold);
   margin: 0;
   letter-spacing: 1px;
 }
@@ -48,13 +48,13 @@
   text-align: center;
   font-size: 16px;
   font-weight: 300;
-  color: rgba(253, 254, 254, 0.7);
+  color: rgba(var(--text-rgb), 0.7);
   margin-bottom: 35px;
 }
 
 .gd-highlight {
   font-weight: 600;
-  color: #d4a373;
+  color: var(--gold);
 }
 
 .gd-games-list {
@@ -64,8 +64,8 @@
 }
 
 .gd-game-card {
-  background-color: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid rgba(212, 163, 115, 0.2);
+  background-color: var(--card-bg);
+  border: 1.5px solid rgba(var(--gold-rgb), 0.2);
   border-radius: 16px;
   padding: 20px;
   display: flex;
@@ -77,15 +77,15 @@
 
 .gd-game-card:active {
   transform: scale(0.98);
-  background-color: rgba(212, 163, 115, 0.1);
-  border-color: #d4a373;
+  background-color: rgba(var(--gold-rgb), 0.1);
+  border-color: var(--gold);
 }
 
 .gd-game-emoji {
   width: 55px;
   height: 55px;
   border-radius: 14px;
-  background-color: rgba(212, 163, 115, 0.12);
+  background-color: rgba(var(--gold-rgb), 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,18 +101,18 @@
   margin: 0 0 4px 0;
   font-size: 17px;
   font-weight: 500;
-  color: #fdfefe;
+  color: var(--text);
 }
 
 .gd-game-info p {
   margin: 0;
   font-size: 13px;
-  color: rgba(253, 254, 254, 0.45);
+  color: rgba(var(--text-rgb), 0.45);
   line-height: 1.4;
 }
 
 .gd-game-arrow {
   font-size: 20px;
-  color: #d4a373;
+  color: var(--gold);
   opacity: 0.6;
 }

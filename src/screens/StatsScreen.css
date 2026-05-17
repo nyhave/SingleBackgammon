@@ -8,9 +8,9 @@
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  background: linear-gradient(180deg, #1a3a3a 0%, #122828 100%);
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
   font-family: 'Inter', -apple-system, sans-serif;
-  color: #fdfefe;
+  color: var(--text);
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
@@ -22,7 +22,7 @@
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 15px;
-  border-bottom: 1px solid rgba(212, 163, 115, 0.2);
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.2);
 }
 
 .stats-title {
@@ -30,13 +30,13 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 24px;
   font-weight: 600;
-  color: #d4a373;
+  color: var(--gold);
   letter-spacing: 1px;
 }
 
 .back-btn {
-  background-color: #d4a373;
-  color: #1a3a3a;
+  background-color: var(--gold);
+  color: var(--gold-on);
   border: none;
   padding: 8px 18px;
   border-radius: 50px;
@@ -59,8 +59,8 @@
 }
 
 .stat-card {
-  background-color: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
   padding: 20px;
   border-radius: 16px;
   display: flex;
@@ -68,13 +68,13 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  border-top: 3px solid #d4a373;
+  border-top: 3px solid var(--gold);
 }
 
 .stat-card h3 {
   margin: 0;
   font-size: 11px;
-  color: rgba(253, 254, 254, 0.45);
+  color: rgba(var(--text-rgb), 0.45);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 500;
@@ -83,13 +83,13 @@
 .stat-value {
   font-size: 42px;
   font-weight: 700;
-  color: #d4a373;
+  color: var(--gold);
   margin: 8px 0;
 }
 
 .stat-subtext {
   font-size: 11px;
-  color: rgba(253, 254, 254, 0.35);
+  color: rgba(var(--text-rgb), 0.35);
 }
 
 .stats-sections-row {
@@ -131,18 +131,18 @@
 .funnel-label {
   font-weight: 500;
   font-size: 13px;
-  color: rgba(253, 254, 254, 0.7);
+  color: rgba(var(--text-rgb), 0.7);
 }
 
 .funnel-drop {
   font-size: 11px;
-  color: #d4a373;
+  color: var(--gold);
   font-weight: 600;
 }
 
 .funnel-bar-wrapper {
   height: 28px;
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: var(--card-bg);
   border-radius: 8px;
   overflow: hidden;
   width: 100%;
@@ -160,29 +160,29 @@
 }
 
 .funnel-value {
-  color: #1a3a3a;
+  color: var(--gold-on);
   font-weight: 600;
   font-size: 13px;
 }
 
 .insights-card {
-  background-color: rgba(212, 163, 115, 0.06) !important;
-  border-left: 3px solid #d4a373;
+  background-color: rgba(var(--gold-rgb), 0.06) !important;
+  border-left: 3px solid var(--gold);
 }
 
 .dating-stats-section {
-  background-color: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
   padding: 20px;
   border-radius: 16px;
 }
 
 .dating-stats-section h2 {
   margin-top: 0;
-  color: #d4a373;
+  color: var(--gold);
   font-size: 16px;
   font-weight: 500;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--card-border);
   padding-bottom: 12px;
   margin-bottom: 20px;
   letter-spacing: 0.5px;
@@ -198,7 +198,7 @@
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--card-border-faint);
 }
 
 .fun-fact-list li:last-child {
@@ -207,12 +207,12 @@
 
 .fact-label {
   font-weight: 400;
-  color: rgba(253, 254, 254, 0.5);
+  color: rgba(var(--text-rgb), 0.5);
   font-size: 13px;
 }
 
 .fact-value {
-  color: #d4a373;
+  color: var(--gold);
   font-weight: 600;
   font-size: 13px;
 }
@@ -222,8 +222,8 @@
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(212, 163, 115, 0.9);
-  color: #1a3a3a;
+  background-color: rgba(var(--gold-rgb), 0.9);
+  color: var(--gold-on);
   padding: 12px 24px;
   border-radius: 30px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.3);

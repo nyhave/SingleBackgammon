@@ -14,6 +14,15 @@ export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
   const existingGameId = urlParams.get('gameId');
 
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('gamedate-theme');
+    return saved ? saved === 'dark' : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('gamedate-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
+
   // Even if joining a game, start at welcome so they can type their name
   const [currentScreen, setCurrentScreen] = useState('welcome');
   const [userName, setUserName] = useState('Anna');
@@ -273,9 +282,37 @@ export default function App() {
   };
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f5f5f5', minHeight: '100vh', margin: 0, padding: 0 }}>
+    <div
+      data-theme={darkMode ? 'dark' : 'light'}
+      style={{ fontFamily: 'Arial, sans-serif', backgroundColor: 'var(--bg-1)', minHeight: '100vh', margin: 0, padding: 0 }}
+    >
       {renderScreen()}
       <FeedbackButton currentScreen={currentScreen} />
+      <button
+        onClick={() => setDarkMode(d => !d)}
+        title={darkMode ? 'Skift til lystema' : 'Skift til mørkt tema'}
+        style={{
+          position: 'fixed',
+          right: '20px',
+          bottom: '135px',
+          width: '46px',
+          height: '46px',
+          borderRadius: '50%',
+          border: 'none',
+          backgroundColor: 'rgba(var(--gold-rgb), 0.9)',
+          color: 'var(--gold-on)',
+          fontSize: '20px',
+          cursor: 'pointer',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+          transition: 'transform 0.2s',
+        }}
+      >
+        {darkMode ? '☀️' : '🌙'}
+      </button>
     </div>
   );
 }
